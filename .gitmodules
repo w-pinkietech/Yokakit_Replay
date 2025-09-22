@@ -1,0 +1,6 @@
+[submodule "pinkieit"]
+	path = pinkieit
+	url = ./pinkieit
+[submodule "YokaKit"]
+	path = YokaKit
+	url = ./YokaKit
