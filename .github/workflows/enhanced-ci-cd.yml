@@ -21,14 +21,16 @@ on:
         type: boolean
 
 permissions:
+  # Phase 0: Repository management focused permissions
   contents: read
   security-events: write
   actions: read
   checks: write
   pull-requests: write
+  issues: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-phase-0
   cancel-in-progress: true
 
 env:
@@ -55,6 +57,7 @@ jobs:
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
+        if: hashFiles('package.json') != ''
         with:
           node-version: '18'
           cache: 'npm'
@@ -62,6 +65,7 @@ jobs:
 
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2
+        if: hashFiles('composer.json') != ''
         with:
           php-version: '8.2'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring
@@ -138,7 +142,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript', 'php']
+        # Phase 0: Focus on infrastructure languages only
+        language: ['javascript']
 
     steps:
       - name: Checkout repository

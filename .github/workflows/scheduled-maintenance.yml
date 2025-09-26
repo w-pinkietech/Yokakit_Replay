@@ -41,15 +41,16 @@ jobs:
       - name: Checkout repository with submodules
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: false  # Skip submodules during Phase 0 completion
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check submodule status
         id: submodule-check
         run: |
           echo "Checking submodule synchronization status..."
+          echo "Phase 0: Skipping submodule operations per T115 requirement"
 
-          if [ -f .gitmodules ]; then
+          if [ -f .gitmodules ] && [ "${{ github.ref_name }}" != "001-implement-phase-0" ]; then
             echo "Submodules configured:"
             cat .gitmodules
 

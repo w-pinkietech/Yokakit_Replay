@@ -7,24 +7,32 @@ queries:
   - name: security-and-quality
     uses: security-and-quality
 
-# Path filters for constitutional compliance
+# Path filters for Phase 0 constitutional compliance
 paths-ignore:
-  - "docs/"
-  - "*.md"
-  - "test/**"
-  - "tests/**"
-  - "spec/**"
-  - "node_modules/"
-  - "vendor/"
+  # Exclude submodules from CodeQL analysis (T112 requirement)
+  - "YokaKit/**"
+  - "pinkieit/**"
+
+  # Exclude common non-source directories
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.git/**"
+
+  # Exclude temporary and cache files
+  - "**/tmp/**"
+  - "**/temp/**"
+  - "**/.cache/**"
 
 paths:
-  - "app/"
-  - "src/"
-  - "lib/"
-  - "public/"
-  - "resources/"
-  - "config/"
-  - "routes/"
+  # Focus CodeQL analysis on repository infrastructure (Phase 0)
+  - ".github/**"
+  - "docs/**"
+  - "scripts/**"
+  - "specs/**"
+  - "templates/**"
+  - "memory/**"
 
 # Language-specific configurations
 javascript:

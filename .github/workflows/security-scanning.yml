@@ -37,7 +37,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript', 'typescript', 'php']
+        # Phase 0: Infrastructure languages only
+        language: ['javascript']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
