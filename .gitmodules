@@ -1,6 +1,6 @@
 [submodule "pinkieit"]
 	path = pinkieit
-	url = ./pinkieit
+	url = https://github.com/w-pinkietech/pinkieit.git
 [submodule "YokaKit"]
 	path = YokaKit
-	url = ./YokaKit
+	url = https://github.com/w-pinkietech/YokaKit.git
