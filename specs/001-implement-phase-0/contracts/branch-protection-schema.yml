@@ -4,6 +4,13 @@ info:
   version: 1.0.0
   description: Schema for branch protection rule configuration via GitHub API
 
+servers:
+  - url: https://api.github.com
+    description: GitHub API Server
+
+security:
+  - GitHubToken: []
+
 paths:
   /repos/{owner}/{repo}/branches/{branch}/protection:
     put:
@@ -126,3 +133,10 @@ components:
           type: boolean
           description: Require linear history
           default: true
+
+  securitySchemes:
+    GitHubToken:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: GitHub Personal Access Token or GitHub App token with repository administration permissions

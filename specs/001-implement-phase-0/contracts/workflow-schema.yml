@@ -4,6 +4,13 @@ info:
   version: 1.0.0
   description: Schema for GitHub Actions workflow YAML configuration
 
+servers:
+  - url: https://api.github.com
+    description: GitHub API Server
+
+security:
+  - GitHubToken: []
+
 components:
   schemas:
     WorkflowTemplate:
@@ -183,6 +190,13 @@ components:
           type: string
           description: Conditional expression for step execution
 
+  securitySchemes:
+    GitHubToken:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: GitHub Personal Access Token or GitHub App token with Actions workflow management permissions
+
 # Example Workflow Templates
 examples:
   enhanced-ci-cd:
@@ -217,5 +231,5 @@ examples:
           runs-on: ubuntu-latest
           needs: build-and-test
           steps:
-            - uses: github/codeql-action/init@v2
-            - uses: github/codeql-action/analyze@v2
+            - uses: github/codeql-action/init@v3
+            - uses: github/codeql-action/analyze@v3

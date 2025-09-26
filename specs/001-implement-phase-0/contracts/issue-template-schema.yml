@@ -4,6 +4,13 @@ info:
   version: 1.0.0
   description: Schema for GitHub issue template YAML forms
 
+servers:
+  - url: https://api.github.com
+    description: GitHub API Server
+
+security:
+  - GitHubToken: []
+
 components:
   schemas:
     IssueTemplate:
@@ -206,6 +213,13 @@ components:
           type: string
         required:
           type: boolean
+
+  securitySchemes:
+    GitHubToken:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: GitHub Personal Access Token or GitHub App token with repository issue management permissions
 
 # Example Templates
 examples:

@@ -85,22 +85,25 @@ jobs:
             git config user.name "YokaKit Maintenance Bot"
             git config user.email "maintenance@yokakit.com"
             git add .
-            git commit -m "chore: update submodules to latest commits
+            git commit -m "$(cat <<'EOF'
+chore: update submodules to latest commits
 
 Constitutional compliance: Submodule synchronization maintenance
 Phase 0 maintenance cycle - automated submodule updates
 PinkieIt reference: automated-maintenance-$(date +%Y%m%d)
 
 🤖 Generated with Claude Code
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
 
             # Create pull request for submodule updates
             BRANCH_NAME="maintenance/submodule-sync-$(date +%Y%m%d)"
-            git checkout -b "$BRANCH_NAME"
-            git push origin "$BRANCH_NAME"
+            git checkout -b "${BRANCH_NAME}"
+            git push origin "${BRANCH_NAME}"
 
             # Note: Actual PR creation would require gh CLI or GitHub API
-            echo "Submodule updates committed to branch: $BRANCH_NAME"
+            echo "Submodule updates committed to branch: ${BRANCH_NAME}"
           fi
 
   dependency-maintenance:
@@ -150,28 +153,34 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
             fi
           fi
 
-          echo "updates_needed=$UPDATES_NEEDED" >> $GITHUB_OUTPUT
+          echo "updates_needed=${UPDATES_NEEDED}" >> "$GITHUB_OUTPUT"
 
       - name: Generate dependency update report
         if: steps.dependency-check.outputs.updates_needed == 'true'
         run: |
-          echo "## Dependency Update Report" > dependency-report.md
-          echo "Generated: $(date)" >> dependency-report.md
-          echo "" >> dependency-report.md
+          {
+            echo "## Dependency Update Report"
+            echo "Generated: $(date)"
+            echo ""
+          } > dependency-report.md
 
           if [ -f npm-outdated.json ] && [ -s npm-outdated.json ]; then
-            echo "### NPM Dependencies" >> dependency-report.md
-            echo "\`\`\`json" >> dependency-report.md
-            cat npm-outdated.json >> dependency-report.md
-            echo "\`\`\`" >> dependency-report.md
-            echo "" >> dependency-report.md
+            {
+              echo "### NPM Dependencies"
+              echo "\`\`\`json"
+              cat npm-outdated.json
+              echo "\`\`\`"
+              echo ""
+            } >> dependency-report.md
           fi
 
           if [ -f composer-outdated.json ] && [ -s composer-outdated.json ]; then
-            echo "### Composer Dependencies" >> dependency-report.md
-            echo "\`\`\`json" >> dependency-report.md
-            cat composer-outdated.json >> dependency-report.md
-            echo "\`\`\`" >> dependency-report.md
+            {
+              echo "### Composer Dependencies"
+              echo "\`\`\`json"
+              cat composer-outdated.json
+              echo "\`\`\`"
+            } >> dependency-report.md
           fi
 
       - name: Upload dependency reports
@@ -229,9 +238,9 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
           # Check for large files that shouldn't be in repo
           LARGE_FILES=$(find . -type f -size +10M -not -path "./.git/*" 2>/dev/null || true)
-          if [ -n "$LARGE_FILES" ]; then
+          if [ -n "${LARGE_FILES}" ]; then
             echo "⚠ Large files found in repository:"
-            echo "$LARGE_FILES"
+            echo "${LARGE_FILES}"
           else
             echo "✓ No large files detected"
           fi
@@ -250,38 +259,38 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
       - name: Verify YokaKit identity preservation
         run: |
-          echo "## Constitutional Compliance Maintenance Check" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Constitutional Compliance Maintenance Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
 
           # Check for YokaKit branding consistency
           YOKAKIT_REFS=$(grep -r "YokaKit" . --exclude-dir=.git --exclude-dir=node_modules | wc -l)
           PINKIEIT_REFS=$(grep -r "PinkieIt" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=pinkieit | wc -l)
 
-          echo "### Identity Preservation Status:" >> $GITHUB_STEP_SUMMARY
-          echo "- YokaKit references: $YOKAKIT_REFS" >> $GITHUB_STEP_SUMMARY
-          echo "- PinkieIt references in user-facing files: $PINKIEIT_REFS" >> $GITHUB_STEP_SUMMARY
+          echo "### Identity Preservation Status:" >> "$GITHUB_STEP_SUMMARY"
+          echo "- YokaKit references: ${YOKAKIT_REFS}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- PinkieIt references in user-facing files: ${PINKIEIT_REFS}" >> "$GITHUB_STEP_SUMMARY"
 
-          if [ "$PINKIEIT_REFS" -gt 0 ]; then
-            echo "⚠ PinkieIt references found in user-facing files" >> $GITHUB_STEP_SUMMARY
-            grep -r "PinkieIt" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=pinkieit >> $GITHUB_STEP_SUMMARY || true
+          if [ "${PINKIEIT_REFS}" -gt 0 ]; then
+            echo "⚠ PinkieIt references found in user-facing files" >> "$GITHUB_STEP_SUMMARY"
+            grep -r "PinkieIt" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=pinkieit >> "$GITHUB_STEP_SUMMARY" || true
           else
-            echo "✓ YokaKit identity properly preserved" >> $GITHUB_STEP_SUMMARY
+            echo "✓ YokaKit identity properly preserved" >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Verify phase structure integrity
         run: |
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Phase Structure Status:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Phase Structure Status:" >> "$GITHUB_STEP_SUMMARY"
 
           if [ -d specs/ ]; then
             PHASE_SPECS=$(find specs/ -name "*phase*" | wc -l)
-            echo "- Phase specifications found: $PHASE_SPECS" >> $GITHUB_STEP_SUMMARY
+            echo "- Phase specifications found: ${PHASE_SPECS}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [ -f .github/workflows/ci-cd-enhanced.yml ]; then
-            echo "✓ Enhanced CI/CD workflow present" >> $GITHUB_STEP_SUMMARY
+            echo "✓ Enhanced CI/CD workflow present" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "⚠ Enhanced CI/CD workflow missing" >> $GITHUB_STEP_SUMMARY
+            echo "⚠ Enhanced CI/CD workflow missing" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   maintenance-summary:
@@ -292,19 +301,23 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     steps:
       - name: Generate maintenance summary
         run: |
-          echo "## YokaKit_Replay Scheduled Maintenance Summary" >> $GITHUB_STEP_SUMMARY
-          echo "**Maintenance Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
-          echo "**Maintenance Type:** ${{ github.event.inputs.maintenance_type || 'scheduled' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Maintenance Task Results:" >> $GITHUB_STEP_SUMMARY
-          echo "- Submodule Sync: ${{ needs.submodule-synchronization.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Dependency Check: ${{ needs.dependency-maintenance.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Repository Cleanup: ${{ needs.repository-cleanup.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Constitutional Compliance: ${{ needs.constitutional-compliance-check.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Next Scheduled Maintenance:" >> $GITHUB_STEP_SUMMARY
-          echo "- Weekly: Every Sunday at 4 AM UTC" >> $GITHUB_STEP_SUMMARY
-          echo "- Monthly: 1st of each month at 5 AM UTC" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "*Phase 0 Repository Infrastructure - Automated Maintenance*" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## YokaKit_Replay Scheduled Maintenance Summary"
+            echo "**Maintenance Date:** $(date -u)"
+            echo "**Maintenance Type:** ${{ github.event.inputs.maintenance_type || 'scheduled' }}"
+            echo "**Triggered by:** ${{ github.event_name }}"
+            echo ""
+            echo "### Maintenance Task Results:"
+            echo "- Submodule Sync: ${{ needs.submodule-synchronization.result }}"
+            echo "- Dependency Check: ${{ needs.dependency-maintenance.result }}"
+            echo "- Repository Cleanup: ${{ needs.repository-cleanup.result }}"
+            echo "- Constitutional Compliance: ${{ needs.constitutional-compliance-check.result }}"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### Next Scheduled Maintenance:"
+            echo "- Weekly: Every Sunday at 4 AM UTC"
+            echo "- Monthly: 1st of each month at 5 AM UTC"
+            echo ""
+            echo "*Phase 0 Repository Infrastructure - Automated Maintenance*"
+          } >> "$GITHUB_STEP_SUMMARY"
