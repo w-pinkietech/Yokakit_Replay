@@ -1,0 +1,81 @@
+# YokaKit_Replay CODEOWNERS
+# This file defines code ownership for the YokaKit_Replay project
+# Phase-based ownership aligns with constitutional requirements
+
+# Global fallback - repository administrators
+* @w-pinkietech/yokakit-admins
+
+# Constitutional and governance files
+/memory/constitution.md @w-pinkietech/yokakit-admins
+/.specify/ @w-pinkietech/yokakit-admins
+/CLAUDE.md @w-pinkietech/yokakit-admins
+
+# Phase 0: Repository Infrastructure
+/.github/ @w-pinkietech/phase-0-leads @w-pinkietech/yokakit-admins
+/specs/001-implement-phase-0/ @w-pinkietech/phase-0-leads
+/docs/ @w-pinkietech/phase-0-leads @w-pinkietech/documentation-team
+
+# Phase 1: Docker + Laravel (future phase)
+/docker/ @w-pinkietech/phase-1-leads
+/docker-compose*.yml @w-pinkietech/phase-1-leads
+/Dockerfile* @w-pinkietech/phase-1-leads
+
+# Phase 2: CI/CD Pipeline (future phase)
+/.github/workflows/ @w-pinkietech/phase-2-leads @w-pinkietech/phase-0-leads
+/scripts/deployment/ @w-pinkietech/phase-2-leads
+
+# Phase 3: Testing & Quality (future phase)
+/tests/ @w-pinkietech/phase-3-leads
+/phpunit.xml @w-pinkietech/phase-3-leads
+/jest.config.js @w-pinkietech/phase-3-leads
+/.eslintrc* @w-pinkietech/phase-3-leads
+/phpcs.xml @w-pinkietech/phase-3-leads
+
+# Phase 4: WebSocket & MQTT (future phase)
+/websockets/ @w-pinkietech/phase-4-leads
+/mqtt/ @w-pinkietech/phase-4-leads
+/realtime/ @w-pinkietech/phase-4-leads
+
+# Phase 5: Security & Performance (future phase)
+/security/ @w-pinkietech/phase-5-leads
+/performance/ @w-pinkietech/phase-5-leads
+/.github/workflows/security-*.yml @w-pinkietech/phase-5-leads @w-pinkietech/security-team
+
+# Submodules - require constitutional compliance review
+/YokaKit/ @w-pinkietech/yokakit-admins @w-pinkietech/submodule-maintainers
+/pinkieit/ @w-pinkietech/yokakit-admins @w-pinkietech/submodule-maintainers
+/.gitmodules @w-pinkietech/yokakit-admins
+
+# Documentation - requires documentation team review
+README.md @w-pinkietech/documentation-team @w-pinkietech/yokakit-admins
+CHANGELOG.md @w-pinkietech/documentation-team
+/docs/*.md @w-pinkietech/documentation-team
+
+# Package management files
+package.json @w-pinkietech/dependency-managers @w-pinkietech/yokakit-admins
+package-lock.json @w-pinkietech/dependency-managers
+composer.json @w-pinkietech/dependency-managers @w-pinkietech/yokakit-admins
+composer.lock @w-pinkietech/dependency-managers
+
+# Configuration files requiring admin approval
+.env.example @w-pinkietech/yokakit-admins
+.env.* @w-pinkietech/yokakit-admins
+config/ @w-pinkietech/yokakit-admins
+.editorconfig @w-pinkietech/yokakit-admins
+
+# Git configuration
+.gitignore @w-pinkietech/yokakit-admins
+.gitattributes @w-pinkietech/yokakit-admins
+
+# Security sensitive files
+/.github/workflows/security-*.yml @w-pinkietech/security-team @w-pinkietech/yokakit-admins
+/.github/dependabot.yml @w-pinkietech/security-team @w-pinkietech/dependency-managers
+/scripts/security/ @w-pinkietech/security-team
+
+# Emergency override for critical hotfixes
+# These patterns allow emergency commits with broader approval
+/hotfix/ @w-pinkietech/emergency-response @w-pinkietech/yokakit-admins
+
+# Constitutional compliance exceptions
+# Files that preserve PinkieIt historical context (read-only)
+/pinkieit/**/* @w-pinkietech/history-preservers @w-pinkietech/yokakit-admins
