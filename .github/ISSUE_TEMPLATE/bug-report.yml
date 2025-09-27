@@ -1,0 +1,138 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in YokaKit_Replay
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug in YokaKit_Replay! Please provide the following information to help us resolve the issue.
+
+        **Important**: Ensure this bug report aligns with constitutional requirements and YokaKit identity preservation.
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, browser, or development environment
+      placeholder: e.g., Ubuntu 22.04, Chrome 119, PHP 8.2, Node.js 18
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected behavior in detail...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe the actual behavior and any error messages...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to...
+        2. Click on...
+        3. Scroll down to...
+        4. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Development Phase
+      description: Which development phase is affected?
+      options:
+        - "Phase 0: Repository Setup"
+        - "Phase 1: Docker + Laravel"
+        - "Phase 2: CI/CD Pipeline"
+        - "Phase 3: Testing & Quality"
+        - "Phase 4: WebSocket & MQTT"
+        - "Phase 5: Security & Performance"
+        - "Multiple phases"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Bug Priority
+      description: How critical is this bug?
+      options:
+        - "Low - Minor issue, workaround available"
+        - "Medium - Affects functionality but not blocking"
+        - "High - Blocks development or major feature"
+        - "Critical - System down or security issue"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constitutional
+    attributes:
+      label: Constitutional Impact
+      description: Check all constitutional principles that may be affected by this bug
+      options:
+        - label: "Historical Fidelity Replay - Affects PinkieIt commit history processing"
+          required: false
+        - label: "Submodule Synchronization - Impacts YokaKit or PinkieIt submodule management"
+          required: false
+        - label: "Identity Preservation - Affects YokaKit branding or naming"
+          required: false
+        - label: "Sequential Modernization Phases - Impacts phase-based development workflow"
+          required: false
+        - label: "Quality-First Implementation - Affects code quality or testing processes"
+          required: false
+        - label: "GitHub Workflow Management - Impacts branch strategy or PR processes"
+          required: false
+        - label: "Repository Governance - Affects security controls or access management"
+          required: false
+        - label: "Project Management Integration - Impacts issue or milestone tracking"
+          required: false
+
+  - type: input
+    id: pinkieit-reference
+    attributes:
+      label: PinkieIt Reference
+      description: Related commit hash from PinkieIt repository (if applicable)
+      placeholder: e.g., abc123f456d789e
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Screenshots, logs, related issues, or any other relevant information...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: pre-submission
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you have completed these checks
+      options:
+        - label: "I have searched existing issues to ensure this is not a duplicate"
+          required: true
+        - label: "I have provided sufficient information to reproduce the issue"
+          required: true
+        - label: "I have checked that this bug report maintains YokaKit identity"
+          required: true
+        - label: "I have verified this issue aligns with constitutional requirements"
+          required: true

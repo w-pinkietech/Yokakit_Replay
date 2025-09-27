@@ -1,0 +1,183 @@
+name: General Inquiry
+description: General questions about YokaKit_Replay project, documentation, or constitutional requirements
+title: "[INQUIRY] "
+labels: ["question", "documentation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to YokaKit_Replay! Use this template for general questions about the project, constitutional requirements, development processes, or documentation clarifications.
+
+        **Note**: For bug reports, use the Bug Report template. For feature requests, use the Feature Request template.
+
+  - type: dropdown
+    id: inquiry-type
+    attributes:
+      label: Type of Inquiry
+      description: What type of question or inquiry is this?
+      options:
+        - "Project overview and goals"
+        - "Constitutional requirements clarification"
+        - "Development phase questions"
+        - "Submodule management help"
+        - "Workflow and process guidance"
+        - "Documentation improvement"
+        - "Security and permissions"
+        - "Testing and quality assurance"
+        - "CI/CD pipeline questions"
+        - "Contributing guidelines"
+        - "Technical architecture"
+        - "Other general question"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: Please describe your question or inquiry in detail...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: related-phase
+    attributes:
+      label: Related Development Phase
+      description: Which development phase is your question related to? (if applicable)
+      options:
+        - "Not phase-specific"
+        - "Phase 0: Repository Setup"
+        - "Phase 1: Docker + Laravel"
+        - "Phase 2: CI/CD Pipeline"
+        - "Phase 3: Testing & Quality"
+        - "Phase 4: WebSocket & MQTT"
+        - "Phase 5: Security & Performance"
+        - "Multiple phases"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: constitutional-topics
+    attributes:
+      label: Constitutional Topics
+      description: Which constitutional principles does your question relate to? (if applicable)
+      options:
+        - label: "Historical Fidelity Replay - PinkieIt commit history processing"
+          required: false
+        - label: "Submodule Synchronization Management - YokaKit/PinkieIt integration"
+          required: false
+        - label: "Identity Preservation - YokaKit branding and naming requirements"
+          required: false
+        - label: "Sequential Modernization Phases - Phase-based development process"
+          required: false
+        - label: "Quality-First Implementation - Code quality and testing standards"
+          required: false
+        - label: "GitHub Workflow Management - Branch strategy and PR processes"
+          required: false
+        - label: "Repository Governance - Security controls and access management"
+          required: false
+        - label: "Project Management Integration - Issues and milestone tracking"
+          required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Provide any additional context that might help us answer your question
+      placeholder: |
+        - What are you trying to accomplish?
+        - What documentation have you already checked?
+        - Are there specific files or processes you're asking about?
+        - Any relevant background information?
+    validations:
+      required: false
+
+  - type: input
+    id: documentation-reference
+    attributes:
+      label: Documentation Reference
+      description: Have you checked existing documentation? If so, which files?
+      placeholder: e.g., README.md, docs/CONTRIBUTING.md, memory/constitution.md
+    validations:
+      required: false
+
+  - type: dropdown
+    id: user-role
+    attributes:
+      label: Your Role
+      description: What is your role in relation to this project?
+      options:
+        - "New contributor"
+        - "Phase lead"
+        - "Project maintainer"
+        - "Documentation team member"
+        - "Security team member"
+        - "External collaborator"
+        - "Community member"
+        - "Other"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency Level
+      description: How urgent is getting an answer to this question?
+      options:
+        - "Low - General curiosity or future planning"
+        - "Medium - Would help current work but not blocking"
+        - "High - Blocking current development work"
+        - "Critical - Preventing phase completion or constitutional compliance"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: What kind of response or outcome are you hoping for?
+      placeholder: |
+        - A specific answer or clarification
+        - Updated documentation
+        - Process improvement
+        - New feature consideration
+        - etc...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: inquiry-scope
+    attributes:
+      label: Inquiry Scope
+      description: What areas might your question impact?
+      options:
+        - label: "Project documentation needs updating"
+          required: false
+        - label: "Process or workflow clarification needed"
+          required: false
+        - label: "New contributor onboarding improvement"
+          required: false
+        - label: "Constitutional compliance guidance needed"
+          required: false
+        - label: "Technical implementation question"
+          required: false
+        - label: "Community or communication improvement"
+          required: false
+
+  - type: checkboxes
+    id: pre-submission
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you have completed these checks
+      options:
+        - label: "I have searched existing issues and discussions for similar questions"
+          required: true
+        - label: "I have checked the relevant documentation (README, docs/, constitution)"
+          required: true
+        - label: "I have clearly described my question and any relevant context"
+          required: true
+        - label: "I understand this inquiry relates to YokaKit_Replay project goals"
+          required: true

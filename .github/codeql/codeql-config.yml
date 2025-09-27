@@ -1,0 +1,86 @@
+name: "YokaKit_Replay CodeQL Configuration"
+
+# Security-focused CodeQL configuration for constitutional compliance
+queries:
+  - name: security-extended
+    uses: security-extended
+  - name: security-and-quality
+    uses: security-and-quality
+
+# Path filters for Phase 0 constitutional compliance
+paths-ignore:
+  # Exclude submodules from CodeQL analysis (T112 requirement)
+  - "YokaKit/**"
+  - "pinkieit/**"
+
+  # Exclude common non-source directories
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.git/**"
+
+  # Exclude temporary and cache files
+  - "**/tmp/**"
+  - "**/temp/**"
+  - "**/.cache/**"
+
+paths:
+  # Focus CodeQL analysis on repository infrastructure (Phase 0)
+  - ".github/**"
+  - "docs/**"
+  - "scripts/**"
+  - "specs/**"
+  - "templates/**"
+  - "memory/**"
+
+# Language-specific configurations
+javascript:
+  # JavaScript/TypeScript security scanning
+  exclude:
+    - "**/*.min.js"
+    - "**/*.test.js"
+    - "**/*.spec.js"
+  include:
+    - "**/*.js"
+    - "**/*.ts"
+    - "**/*.vue"
+
+# Constitutional compliance settings
+disable-default-path-filters: false
+
+# Security-specific query packs
+packs:
+  - codeql/javascript-queries
+
+# Custom security queries for YokaKit identity preservation
+additional-queries:
+  - name: identity-preservation
+    description: "Check for PinkieIt references that violate constitutional identity preservation"
+    query: |
+      import javascript
+      from StringLiteral s
+      where s.getValue().matches("%PinkieIt%")
+      select s, "Constitutional violation: PinkieIt reference found, should use YokaKit"
+
+# Analysis configuration
+ml-powered-queries: true
+threat-models:
+  - reflected-xss
+  - stored-xss
+  - sql-injection
+  - command-injection
+  - path-injection
+  - unsafe-deserialization
+
+# Performance tuning
+timeout: 20m
+ram: 2048
+
+# Constitutional compliance documentation
+# This configuration ensures:
+# 1. Security-first scanning with comprehensive query coverage
+# 2. Identity preservation through PinkieIt reference detection
+# 3. Quality-first implementation through security-and-quality queries
+# 4. Historical fidelity through proper path inclusion/exclusion
+# 5. Phase-appropriate security scanning for repository infrastructure

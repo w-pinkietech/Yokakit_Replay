@@ -1,0 +1,235 @@
+openapi: 3.0.0
+info:
+  title: GitHub Actions Workflow Schema
+  version: 1.0.0
+  description: Schema for GitHub Actions workflow YAML configuration
+
+servers:
+  - url: https://api.github.com
+    description: GitHub API Server
+
+security:
+  - GitHubToken: []
+
+components:
+  schemas:
+    WorkflowTemplate:
+      type: object
+      required:
+        - name
+        - on
+        - jobs
+      properties:
+        name:
+          type: string
+          description: Workflow name displayed in GitHub UI
+          example: "Enhanced CI/CD Pipeline"
+        on:
+          $ref: '#/components/schemas/WorkflowTriggers'
+        permissions:
+          $ref: '#/components/schemas/WorkflowPermissions'
+        concurrency:
+          $ref: '#/components/schemas/ConcurrencyGroup'
+        jobs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Job'
+
+    WorkflowTriggers:
+      type: object
+      properties:
+        push:
+          type: object
+          properties:
+            branches:
+              type: array
+              items:
+                type: string
+              example: ["main", "phase-*", "feature/*"]
+            paths:
+              type: array
+              items:
+                type: string
+        pull_request:
+          type: object
+          properties:
+            branches:
+              type: array
+              items:
+                type: string
+              example: ["main"]
+            types:
+              type: array
+              items:
+                type: string
+              example: ["opened", "synchronize", "reopened"]
+        schedule:
+          type: array
+          items:
+            type: object
+            properties:
+              cron:
+                type: string
+                description: Cron schedule expression
+                example: "0 2 * * *"
+        workflow_dispatch:
+          type: object
+          properties:
+            inputs:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/WorkflowInput'
+
+    WorkflowInput:
+      type: object
+      properties:
+        description:
+          type: string
+        required:
+          type: boolean
+        default:
+          type: string
+        type:
+          type: string
+          enum: ["string", "boolean", "choice", "environment"]
+        options:
+          type: array
+          items:
+            type: string
+
+    WorkflowPermissions:
+      type: object
+      properties:
+        contents:
+          type: string
+          enum: ["read", "write"]
+        security-events:
+          type: string
+          enum: ["read", "write"]
+        actions:
+          type: string
+          enum: ["read", "write"]
+        checks:
+          type: string
+          enum: ["read", "write"]
+
+    ConcurrencyGroup:
+      type: object
+      properties:
+        group:
+          type: string
+          description: Concurrency group identifier
+        cancel-in-progress:
+          type: boolean
+          description: Cancel in-progress workflows in the same group
+
+    Job:
+      type: object
+      required:
+        - runs-on
+        - steps
+      properties:
+        runs-on:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          example: "ubuntu-latest"
+        timeout-minutes:
+          type: integer
+          minimum: 1
+          maximum: 360
+          default: 60
+        needs:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        if:
+          type: string
+          description: Conditional expression for job execution
+        strategy:
+          $ref: '#/components/schemas/JobStrategy'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+
+    JobStrategy:
+      type: object
+      properties:
+        matrix:
+          type: object
+          additionalProperties: true
+        fail-fast:
+          type: boolean
+        max-parallel:
+          type: integer
+
+    Step:
+      type: object
+      properties:
+        name:
+          type: string
+        uses:
+          type: string
+          description: Action to use (org/repo@version)
+        run:
+          type: string
+          description: Shell command to execute
+        with:
+          type: object
+          additionalProperties: true
+        env:
+          type: object
+          additionalProperties:
+            type: string
+        if:
+          type: string
+          description: Conditional expression for step execution
+
+  securitySchemes:
+    GitHubToken:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: GitHub Personal Access Token or GitHub App token with Actions workflow management permissions
+
+# Example Workflow Templates
+examples:
+  enhanced-ci-cd:
+    summary: Enhanced CI/CD with security scanning
+    value:
+      name: "Enhanced CI/CD Pipeline"
+      on:
+        push:
+          branches: ["main", "phase-*"]
+        pull_request:
+          branches: ["main"]
+        schedule:
+          - cron: "0 2 * * *"
+        workflow_dispatch:
+          inputs:
+            security_scan:
+              description: "Run security scanning"
+              required: false
+              default: "true"
+              type: "boolean"
+      permissions:
+        contents: read
+        security-events: write
+      jobs:
+        build-and-test:
+          runs-on: ubuntu-latest
+          steps:
+            - uses: actions/checkout@v4
+            - name: Run tests
+              run: echo "Test execution"
+        security-scan:
+          runs-on: ubuntu-latest
+          needs: build-and-test
+          steps:
+            - uses: github/codeql-action/init@v3
+            - uses: github/codeql-action/analyze@v3

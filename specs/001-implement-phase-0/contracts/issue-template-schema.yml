@@ -1,0 +1,319 @@
+openapi: 3.0.0
+info:
+  title: GitHub Issue Template Schema
+  version: 1.0.0
+  description: Schema for GitHub issue template YAML forms
+
+servers:
+  - url: https://api.github.com
+    description: GitHub API Server
+
+security:
+  - GitHubToken: []
+
+components:
+  schemas:
+    IssueTemplate:
+      type: object
+      required:
+        - name
+        - description
+        - body
+      properties:
+        name:
+          type: string
+          description: Template name displayed in issue creation UI
+          example: "Bug Report"
+        description:
+          type: string
+          description: Template description shown to users
+          example: "Report a bug or unexpected behavior"
+        title:
+          type: string
+          description: Default issue title
+          example: "[BUG] "
+        labels:
+          type: array
+          description: Labels automatically applied to issues
+          items:
+            type: string
+          example: ["bug", "needs-triage"]
+        assignees:
+          type: array
+          description: Users automatically assigned to issues
+          items:
+            type: string
+        body:
+          type: array
+          description: Form field definitions
+          items:
+            $ref: '#/components/schemas/FormField'
+
+    FormField:
+      oneOf:
+        - $ref: '#/components/schemas/MarkdownField'
+        - $ref: '#/components/schemas/InputField'
+        - $ref: '#/components/schemas/TextareaField'
+        - $ref: '#/components/schemas/DropdownField'
+        - $ref: '#/components/schemas/CheckboxesField'
+
+    MarkdownField:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          type: string
+          enum: ["markdown"]
+        attributes:
+          type: object
+          required:
+            - value
+          properties:
+            value:
+              type: string
+              description: Markdown content to display
+
+    InputField:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          type: string
+          enum: ["input"]
+        id:
+          type: string
+          description: Unique field identifier
+        attributes:
+          type: object
+          required:
+            - label
+          properties:
+            label:
+              type: string
+              description: Field label
+            description:
+              type: string
+              description: Help text for the field
+            placeholder:
+              type: string
+              description: Placeholder text
+            value:
+              type: string
+              description: Default value
+        validations:
+          type: object
+          properties:
+            required:
+              type: boolean
+              description: Whether field is required
+
+    TextareaField:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          type: string
+          enum: ["textarea"]
+        id:
+          type: string
+        attributes:
+          type: object
+          required:
+            - label
+          properties:
+            label:
+              type: string
+            description:
+              type: string
+            placeholder:
+              type: string
+            value:
+              type: string
+            render:
+              type: string
+              description: Rendering hint (e.g., "shell" for code blocks)
+        validations:
+          type: object
+          properties:
+            required:
+              type: boolean
+
+    DropdownField:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          type: string
+          enum: ["dropdown"]
+        id:
+          type: string
+        attributes:
+          type: object
+          required:
+            - label
+            - options
+          properties:
+            label:
+              type: string
+            description:
+              type: string
+            multiple:
+              type: boolean
+              description: Allow multiple selections
+            options:
+              type: array
+              items:
+                type: string
+        validations:
+          type: object
+          properties:
+            required:
+              type: boolean
+
+    CheckboxesField:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          type: string
+          enum: ["checkboxes"]
+        id:
+          type: string
+        attributes:
+          type: object
+          required:
+            - label
+            - options
+          properties:
+            label:
+              type: string
+            description:
+              type: string
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/CheckboxOption'
+
+    CheckboxOption:
+      type: object
+      required:
+        - label
+      properties:
+        label:
+          type: string
+        required:
+          type: boolean
+
+  securitySchemes:
+    GitHubToken:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: GitHub Personal Access Token or GitHub App token with repository issue management permissions
+
+# Example Templates
+examples:
+  bug-report:
+    summary: Bug report issue template
+    value:
+      name: "Bug Report"
+      description: "Report a bug or unexpected behavior in YokaKit_Replay"
+      title: "[BUG] "
+      labels: ["bug", "needs-triage"]
+      assignees: []
+      body:
+        - type: "markdown"
+          attributes:
+            value: |
+              Thank you for reporting a bug in YokaKit_Replay! Please provide the following information to help us resolve the issue.
+        - type: "input"
+          id: "environment"
+          attributes:
+            label: "Environment"
+            description: "Operating system, browser, or development environment"
+            placeholder: "e.g., Ubuntu 22.04, Chrome 119, PHP 8.2"
+          validations:
+            required: true
+        - type: "textarea"
+          id: "expected"
+          attributes:
+            label: "Expected Behavior"
+            description: "What did you expect to happen?"
+            placeholder: "Describe the expected behavior..."
+          validations:
+            required: true
+        - type: "textarea"
+          id: "actual"
+          attributes:
+            label: "Actual Behavior"
+            description: "What actually happened?"
+            placeholder: "Describe the actual behavior..."
+          validations:
+            required: true
+        - type: "dropdown"
+          id: "phase"
+          attributes:
+            label: "Development Phase"
+            description: "Which development phase is affected?"
+            options:
+              - "Phase 0: Repository Setup"
+              - "Phase 1: Docker + Laravel"
+              - "Phase 2: CI/CD Pipeline"
+              - "Phase 3: Testing & Quality"
+              - "Phase 4: WebSocket & MQTT"
+              - "Phase 5: Security & Performance"
+          validations:
+            required: true
+        - type: "checkboxes"
+          id: "constitutional"
+          attributes:
+            label: "Constitutional Impact"
+            description: "Check all constitutional principles that may be affected"
+            options:
+              - label: "Historical Fidelity Replay"
+                required: false
+              - label: "Submodule Synchronization"
+                required: false
+              - label: "Identity Preservation"
+                required: false
+              - label: "Sequential Modernization Phases"
+                required: false
+
+  feature-request:
+    summary: Feature request issue template
+    value:
+      name: "Feature Request"
+      description: "Suggest a feature or enhancement for YokaKit_Replay"
+      title: "[FEATURE] "
+      labels: ["enhancement", "needs-discussion"]
+      body:
+        - type: "textarea"
+          id: "problem"
+          attributes:
+            label: "Problem Statement"
+            description: "What problem does this feature solve?"
+          validations:
+            required: true
+        - type: "textarea"
+          id: "solution"
+          attributes:
+            label: "Proposed Solution"
+            description: "How should this feature work?"
+          validations:
+            required: true
+        - type: "input"
+          id: "pinkieit-reference"
+          attributes:
+            label: "PinkieIt Reference"
+            description: "Commit hash from PinkieIt repository (if applicable)"
+            placeholder: "e.g., abc123f"
