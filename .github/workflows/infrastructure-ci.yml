@@ -1,0 +1,92 @@
+---
+name: Infrastructure CI
+
+on:
+  push:
+    branches: [main, 'phase-*']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  infrastructure-validation:
+    name: Infrastructure Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate YAML files
+        run: |
+          echo "=== YAML Validation ==="
+          # Basic YAML syntax check
+          find .github -name "*.yml" -o -name "*.yaml" | while read file; do
+            echo "Checking $file"
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
+          done
+          echo "✓ All YAML files are valid"
+
+      - name: Validate documentation structure
+        run: |
+          echo "=== Documentation Structure Validation ==="
+          # Check required documentation exists
+          for file in README.md docs/CONTRIBUTING.md docs/SECURITY.md; do
+            if [ -f "$file" ]; then
+              echo "✓ $file exists"
+            else
+              echo "❌ Missing required file: $file"
+              exit 1
+            fi
+          done
+          echo "✓ Documentation structure validated"
+
+      - name: Constitutional compliance check
+        run: |
+          echo "=== Constitutional Compliance Check ==="
+          # Verify YokaKit identity preservation
+          if grep -r "YokaKit" README.md .github/ docs/ > /dev/null; then
+            echo "✓ YokaKit identity preserved"
+          else
+            echo "❌ YokaKit references missing"
+            exit 1
+          fi
+
+          # Check for inappropriate PinkieIt branding (allow documentation context)
+          if grep -r "PinkieIt" .github/ docs/ README.md 2>/dev/null | \
+             grep -v "PinkieIt reference:" | \
+             grep -v "Historical.*PinkieIt" | \
+             grep -v "documentation" | \
+             grep -v "参考" | \
+             grep -v "開発系譜" | \
+             grep -v "リプレイ"; then
+            echo "❌ Inappropriate PinkieIt branding found"
+            exit 1
+          fi
+          echo "✓ Constitutional compliance verified"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"

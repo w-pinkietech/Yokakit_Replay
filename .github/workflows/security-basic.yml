@@ -1,0 +1,49 @@
+---
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Mondays
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Basic secret pattern check
+        run: |
+          echo "=== Secret Pattern Check ==="
+          FOUND_SECRETS=false
+
+          # Check for private keys (exclude workflow files)
+          if find . -type f -not -path "./.git/*" -not -path "./.github/*" \
+             -exec grep -l "BEGIN.*PRIVATE KEY" {} \; 2>/dev/null | grep -q .; then
+            echo "⚠ Private key found"
+            FOUND_SECRETS=true
+          fi
+
+          # Check for API keys
+          if find . -type f -not -path "./.git/*" -not -path "./.github/*" \
+             -exec grep -l "api[_-]key.*[:=].*['\"][a-zA-Z0-9]\{20,\}['\"]" {} \; 2>/dev/null | grep -q .; then
+            echo "⚠ Potential API key found"
+            FOUND_SECRETS=true
+          fi
+
+          if [ "$FOUND_SECRETS" = true ]; then
+            echo "❌ Potential secrets detected"
+            exit 1
+          else
+            echo "✓ No obvious secrets found"
+          fi
