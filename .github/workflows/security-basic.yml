@@ -14,8 +14,8 @@ permissions:
   security-events: write
 
 jobs:
-  secret-scan:
-    name: Secret Scanning
+  dependency-check:
+    name: Dependency Check
     runs-on: ubuntu-latest
 
     steps:
