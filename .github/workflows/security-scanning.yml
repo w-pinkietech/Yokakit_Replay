@@ -106,8 +106,8 @@ jobs:
             FOUND_SECRETS=true
           fi
 
-          # Private keys
-          if grep -r "BEGIN.*PRIVATE KEY" . --exclude-dir=.git; then
+          # Private keys (exclude workflow files to avoid self-detection)
+          if grep -r "BEGIN.*PRIVATE KEY" . --exclude-dir=.git --exclude-dir=.github; then
             echo "⚠ Private key found"
             FOUND_SECRETS=true
           fi
@@ -150,6 +150,12 @@ jobs:
             cat npm-audit.json
           }
 
+      - name: Skip npm audit (no package.json)
+        if: hashFiles('package.json') == ''
+        run: |
+          echo "No package.json found - creating empty npm-audit.json"
+          echo '{"vulnerabilities": {}, "metadata": {"totalDependencies": 0}}' > npm-audit.json
+
       - name: Audit Composer dependencies
         if: hashFiles('composer.json') != ''
         run: |
@@ -157,8 +163,14 @@ jobs:
           composer install --no-dev
           composer audit || {
             echo "⚠ Composer audit found vulnerabilities"
-            composer audit --format=json
+            composer audit --format=json > composer-audit.json
           }
+
+      - name: Skip composer audit (no composer.json)
+        if: hashFiles('composer.json') == ''
+        run: |
+          echo "No composer.json found - creating empty composer-audit.json"
+          echo '{"advisories": {}, "packages": {}}' > composer-audit.json
 
       - name: Upload dependency audit results
         uses: actions/upload-artifact@v4
