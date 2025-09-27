@@ -1,15 +1,15 @@
 <!--
 Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: None (existing principles preserved)
+- Version change: 1.1.0 → 1.2.0
+- Modified principles:
+  * Sequential Modernization Phases (IV) - Updated to include Phase 6
+  * GitHub Workflow Management (VI) - Enhanced with Epic/Story/Task hierarchy
+  * Project Management Integration (VIII) - Added GitHub management structure
 - Added sections:
-  * GitHub Workflow Management (VI)
-  * Repository Governance (VII)
-  * Project Management Integration (VIII)
-  * GitHub Integration section
-  * Security-First Repository Governance section
+  * GitHub Issue Management Hierarchy (IX)
+  * Constitutional Label Requirements (X)
 - Removed sections: None
-- Templates requiring updates: ✅ Updated templates/plan-template.md version reference
+- Templates requiring updates: ✅ Updated GitHub management documentation
 - Follow-up TODOs: None
 -->
 
@@ -27,29 +27,36 @@ Each development phase completion MUST trigger YokaKit submodule updates and com
 YokaKit name MUST be maintained throughout the entire development process. The PinkieIt name change commit (643414f) MUST be skipped during replay. All feature additions and improvements MUST protect existing YokaKit functionality. No breaking changes to core YokaKit identity or established interfaces are permitted.
 
 ### IV. Sequential Modernization Phases
-Development MUST follow the strict phase sequence: Phase 0 (GitHub initialization) → Phase 1 (Docker + Laravel 10.x) → Phase 2 (CI/CD pipeline) → Phase 3 (Testing & Quality) → Phase 4 (WebSocket & MQTT modernization) → Phase 5 (Security & Performance optimization). Each phase MUST be completed before advancing to the next phase.
+Development MUST follow the strict phase sequence: Phase 0 (GitHub initialization) → Phase 1 (Docker Foundation & Development Environment) → Phase 2 (Quality Infrastructure Day) → Phase 3 (Comprehensive Testing) → Phase 4 (Framework Modernization) → Phase 5 (Advanced Docker Optimization) → Phase 6 (CI/CD Integration & Final Polish). Each phase MUST be completed before advancing to the next phase.
 
 ### V. Quality-First Implementation
 Docker containerization, CI/CD pipelines, automated testing, and static code analysis MUST be introduced incrementally across phases. Each quality improvement MUST be validated through functional testing before submodule updates. Quality gates prevent advancement to subsequent phases until current phase quality standards are met.
 
 ### VI. GitHub Workflow Management
-Branch strategy MUST align with phase-based development workflow. Each phase requires dedicated feature branches with mandatory pull request reviews before main branch integration. Branch naming convention MUST follow `phase-{N}-{feature-name}` pattern. All commits MUST reference corresponding PinkieIt commit hashes for audit trail maintenance.
+Branch strategy MUST align with phase-based development workflow. Each phase requires dedicated feature branches with mandatory pull request reviews before main branch integration. Branch naming convention MUST follow `phase-{N}-{feature-name}` pattern. All commits MUST reference corresponding PinkieIt commit hashes for audit trail maintenance. GitHub Issues MUST follow Epic → Story → Task hierarchy with constitutional compliance labeling.
 
 ### VII. Repository Governance
 Security-first repository access controls MUST be enforced with branch protection rules, required status checks, and administrator review requirements. Repository settings MUST prevent direct pushes to main branch. All sensitive operations require two-factor authentication and audit logging for compliance monitoring.
 
 ### VIII. Project Management Integration
-Issues and milestones MUST be aligned with development phases for progress tracking. Each phase completion requires milestone closure and issue resolution verification. GitHub project boards MUST reflect current phase status and remaining tasks. Automated workflows MUST update project status based on pull request and issue state changes.
+Issues and milestones MUST be aligned with development phases for progress tracking. Each phase completion requires milestone closure and issue resolution verification. GitHub project boards MUST reflect current phase status and remaining tasks. Automated workflows MUST update project status based on pull request and issue state changes. All Issues MUST be categorized using the 4-layer label hierarchy (Epic/Story/Task/Constitutional) with mandatory constitutional compliance verification.
+
+### IX. GitHub Issue Management Hierarchy
+GitHub Issues MUST follow a strict 4-layer hierarchy: Epic (Phase-level, 4-16 weeks) → Story (feature groups, 3-10 days) → Task (concrete work, 0.5-3 days) → Constitutional (compliance requirements, all durations). Each Issue level MUST have appropriate scope, timeline, and deliverables. Epic Issues MUST map 1:1 with Phase milestones. Story Issues MUST provide user value and contain multiple Tasks. Task Issues MUST be concrete, measurable, and assignable to individuals.
+
+### X. Constitutional Label Requirements
+All GitHub Issues MUST include appropriate constitutional compliance labels. The `constitutional:identity-preservation` label is NON-NEGOTIABLE and MUST be applied to all Issues affecting YokaKit core functionality. Issues involving PinkieIt pattern replay MUST include `constitutional:historical-fidelity` label. Quality-related Issues MUST include `constitutional:quality-first` label. General constitutional compliance MUST be verified with `constitutional:compliance` label. Issue creation without constitutional labeling is prohibited.
 
 ## Development Workflow
 
 ### Phase Execution Rules
 - Phase 0: GitHub repository initialization with proper submodule setup
-- Phase 1: Docker environment establishment and Laravel 10.x upgrade implementation
-- Phase 2: CI/CD pipeline construction with automated testing integration
-- Phase 3: Comprehensive testing framework and quality management system deployment
-- Phase 4: WebSocket and MQTT protocol modernization and optimization
-- Phase 5: Security hardening and performance optimization implementation
+- Phase 1: Docker Foundation & Development Environment (4 weeks)
+- Phase 2: Quality Infrastructure Day (1 day intensive implementation)
+- Phase 3: Comprehensive Testing (2 weeks)
+- Phase 4: Framework Modernization (Laravel 10.x + PHP 8.2, 1 week)
+- Phase 5: Advanced Docker Optimization (1 week)
+- Phase 6: CI/CD Integration & Final Polish (1 week)
 
 ### Reference Management
 All development decisions MUST reference specific PinkieIt commit hashes for audit trail maintenance. PinkieIt serves as reference repository only; YokaKit remains the primary improvement target. Commit references enable precise tracking of improvement workflow execution and facilitate rollback procedures if needed.
@@ -63,7 +70,7 @@ Main branch MUST remain stable with all changes introduced through phase-specifi
 All pull requests MUST include phase reference, PinkieIt commit hash citations, functional testing results, and submodule impact assessment. Pull request descriptions MUST document constitutional compliance verification. Automated checks MUST validate code quality, security scanning, and test coverage before review approval.
 
 ### Issue Management
-Issues MUST be categorized by development phase and linked to corresponding milestones. Bug reports require phase impact assessment and regression testing verification. Feature requests MUST align with historical fidelity replay principles and reference corresponding PinkieIt functionality.
+Issues MUST be categorized by development phase and linked to corresponding milestones using Epic/Story/Task hierarchy. Bug reports require phase impact assessment and regression testing verification. Feature requests MUST align with historical fidelity replay principles and reference corresponding PinkieIt functionality. All Issues MUST include constitutional compliance labels with `constitutional:identity-preservation` as NON-NEGOTIABLE requirement.
 
 ## Security-First Repository Governance
 
@@ -90,4 +97,4 @@ Constitution compliance verification is required before phase advancement. All i
 ### Amendment Process
 Constitutional amendments require unanimous stakeholder agreement and impact assessment across all development phases. Version control follows semantic versioning with MAJOR changes requiring migration planning. All amendments MUST maintain backward compatibility with existing governance structures.
 
-**Version**: 1.1.0 | **Ratified**: 2025-09-26 | **Last Amended**: 2025-09-26
+**Version**: 1.2.0 | **Ratified**: 2025-09-26 | **Last Amended**: 2025-09-27
