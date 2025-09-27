@@ -1,3 +1,4 @@
+---
 name: Manual Dispatch Operations
 
 on:
@@ -74,7 +75,8 @@ jobs:
       - name: Perform safety checks
         id: safety-check
         run: |
-          echo "Performing pre-flight safety checks for: ${{ github.event.inputs.operation_type }}"
+          operation_type="${{ github.event.inputs.operation_type }}"
+          echo "Performing pre-flight safety checks for: $operation_type"
 
           SAFETY_STATUS="pass"
           OPERATION_APPROVED="true"
@@ -86,7 +88,8 @@ jobs:
           fi
 
           # Check branch protection
-          if [ "${{ github.ref_name }}" = "main" ] && [ "${{ github.event.inputs.operation_type }}" = "emergency-hotfix" ]; then
+          if [ "${{ github.ref_name }}" = "main" ] && \
+             [ "$operation_type" = "emergency-hotfix" ]; then
             echo "⚠ Emergency hotfix on main branch detected"
             SAFETY_STATUS="warning"
           fi
@@ -112,10 +115,12 @@ jobs:
 
       - name: Generate safety report
         run: |
-          echo "## Pre-flight Safety Check Report" >> $GITHUB_STEP_SUMMARY
-          echo "**Operation:** ${{ github.event.inputs.operation_type }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Target Environment:** ${{ github.event.inputs.target_environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Safety Status:** ${{ steps.safety-check.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Pre-flight Safety Check Report"
+            echo "**Operation:** ${{ github.event.inputs.operation_type }}"
+            echo "**Target Environment:** ${{ github.event.inputs.target_environment }}"
+            echo "**Safety Status:** ${{ steps.safety-check.outputs.status }}"
+          } >> $GITHUB_STEP_SUMMARY
           echo "**Operation Approved:** ${{ steps.safety-check.outputs.approved }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
@@ -125,7 +130,8 @@ jobs:
     needs: [pre-flight-checks]
     if: |
       github.event.inputs.operation_type == 'emergency-hotfix' &&
-      (needs.pre-flight-checks.outputs.operation_approved == 'true' || github.event.inputs.skip_checks == 'true')
+      (needs.pre-flight-checks.outputs.operation_approved == 'true' ||
+       github.event.inputs.skip_checks == 'true')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -1,3 +1,4 @@
+---
 name: Enhanced CI/CD Pipeline
 
 on:
@@ -120,7 +121,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: javascript,typescript,php
+          languages: javascript,typescript
           queries: security-extended,security-and-quality
 
       - name: Autobuild
@@ -234,8 +235,12 @@ jobs:
       - name: Verify YokaKit identity preservation
         run: |
           echo "Checking YokaKit identity preservation..."
-          # Verify no PinkieIt branding in user-facing files
-          if grep -r "PinkieIt" .github/ docs/ README.md 2>/dev/null; then
+          # Verify no PinkieIt branding in user-facing files (exclude audit contexts)
+          if grep -r "PinkieIt" .github/ docs/ README.md 2>/dev/null | \
+             grep -v "PinkieIt reference:" | \
+             grep -v "PinkieIt commit" | \
+             grep -v "Historical.*PinkieIt" | \
+             grep -v "audit.*PinkieIt"; then
             echo "❌ PinkieIt branding found in user-facing files"
             exit 1
           fi

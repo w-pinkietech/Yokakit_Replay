@@ -1,3 +1,4 @@
+---
 name: Scheduled Maintenance
 
 on:
@@ -97,7 +98,7 @@ PinkieIt reference: automated-maintenance-$(date +%Y%m%d)
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
-)""
+)"
 
             # Create pull request for submodule updates
             BRANCH_NAME="maintenance/submodule-sync-$(date +%Y%m%d)"
