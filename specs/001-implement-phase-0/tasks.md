@@ -130,7 +130,15 @@
 - [x] T124 [P] Test CodeQL configuration successfully excludes submodule content from analysis
 - [x] T125 Create scripts/validate-phase-0-completion.sh for automated validation of Phase 0 readiness
 
-## Phase 3.23: Constitutional Compliance Final Verification
+## Phase 3.23: Workflow Optimization and Job Name Standardization
+**OPTIMIZATION: Simplify complex workflows based on user feedback and standardize job names**
+- [x] T129 [P] Delete overcomplicated workflow files (ci-cd-enhanced.yml, enhanced-ci-cd.yml, manual-dispatch.yml, scheduled-maintenance.yml, security-scanning.yml)
+- [x] T130 [P] Create simplified infrastructure-ci.yml with build-and-test, security-scan-codeql, code-coverage, lint-validation jobs
+- [x] T131 [P] Create simplified security-basic.yml with dependency-check job
+- [x] T132 [P] Standardize workflow job names to match branch protection required status checks exactly
+- [x] T133 Update branch protection configuration to align with standardized job names
+
+## Phase 3.24: Constitutional Compliance Final Verification
 - [x] T106 [P] Verify YokaKit identity preservation across all GitHub repository settings and configurations
 - [x] T107 [P] Validate historical fidelity maintenance in issue templates and workflow documentation
 - [x] T108 [P] Confirm sequential modernization phase structure in milestones and team permissions

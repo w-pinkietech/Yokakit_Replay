@@ -2,17 +2,31 @@
 
 ## Research Findings
 
-### GitHub Actions Enhanced Triggers
-**Decision**: Multi-trigger workflow configuration with push, pull request, schedule, and workflow dispatch events
+### Workflow Simplification and Job Name Standardization
+**Decision**: Prioritize simplicity over comprehensive automation, standardize job names for branch protection alignment
 **Rationale**:
-- Push events ensure immediate CI/CD on code changes
-- PR events provide validation before merge
-- Scheduled events enable regular security scanning and maintenance
-- Manual dispatch allows on-demand workflow execution for emergency or testing scenarios
+- User feedback: "なんかいらないactionいっぱいしてない？" (Aren't there a lot of unnecessary actions?) led to workflow simplification
+- GitHub branch protection requires exact job name matches for required status checks
+- "Waiting for status to be reported" issue resolved by aligning job names with protection requirements
+- Infrastructure repository needs basic validation, not complex CI/CD pipelines
+**Implementation**:
+- Deleted: ci-cd-enhanced.yml, enhanced-ci-cd.yml, manual-dispatch.yml, scheduled-maintenance.yml, security-scanning.yml
+- Created: infrastructure-ci.yml (build-and-test, security-scan-codeql, code-coverage, lint-validation)
+- Created: security-basic.yml (dependency-check)
+- All job names match branch protection required status checks exactly
+
+### GitHub Actions Workflow Architecture
+**Decision**: Simplified dual-workflow architecture with standardized job names for maintainability
+**Rationale**:
+- User feedback indicated overcomplicated workflows were unnecessary for infrastructure repository
+- Simplified infrastructure-ci.yml and security-basic.yml provide essential functionality
+- Standardized job names (build-and-test, security-scan-codeql, dependency-check, code-coverage, lint-validation) align with branch protection requirements
+- Reduced from 5 complex workflows (1,666 lines) to 2 simple workflows (141 lines) for better maintainability
+- Focus on core functionality rather than comprehensive automation reduces complexity
 **Alternatives considered**:
-- Basic push/PR only triggers (insufficient for comprehensive automation)
-- Webhook-based external triggers (adds complexity, reduces GitHub-native integration)
-- Single trigger per workflow (requires multiple workflow files, harder to maintain)
+- Original enhanced workflow system (rejected due to user feedback on unnecessary complexity)
+- Single monolithic workflow file (would be harder to maintain and understand)
+- Per-feature micro-workflows (would create too many files for simple infrastructure needs)
 
 ### Branch Protection with Phase-Based Permissions
 **Decision**: Dynamic branch protection rules with team-based permissions tied to development phases
