@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: build-and-test
     runs-on: ubuntu-latest
 
     steps:
@@ -67,7 +67,7 @@ jobs:
           echo "✓ Constitutional compliance verified"
 
   security-scan-codeql:
-    name: CodeQL Security Analysis
+    name: security-scan-codeql
     runs-on: ubuntu-latest
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           category: "/language:javascript"
 
   code-coverage:
-    name: Code Coverage Analysis
+    name: code-coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -104,7 +104,7 @@ jobs:
           echo "✓ Infrastructure coverage: 100%"
 
   lint-validation:
-    name: Lint Validation
+    name: lint-validation
     runs-on: ubuntu-latest
 
     steps:

@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   dependency-check:
-    name: Dependency Check
+    name: dependency-check
     runs-on: ubuntu-latest
 
     steps:
