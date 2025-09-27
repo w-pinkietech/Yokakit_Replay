@@ -46,25 +46,12 @@ javascript:
     - "**/*.ts"
     - "**/*.vue"
 
-php:
-  # PHP security scanning for Laravel application
-  exclude:
-    - "vendor/**"
-    - "tests/**"
-    - "bootstrap/cache/**"
-  include:
-    - "app/**/*.php"
-    - "config/**/*.php"
-    - "routes/**/*.php"
-    - "public/**/*.php"
-
 # Constitutional compliance settings
 disable-default-path-filters: false
 
 # Security-specific query packs
 packs:
   - codeql/javascript-queries
-  - codeql/php-queries
 
 # Custom security queries for YokaKit identity preservation
 additional-queries:
