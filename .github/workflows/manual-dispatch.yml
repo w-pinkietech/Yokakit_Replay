@@ -95,13 +95,14 @@ jobs:
           fi
 
           # Check for production operations
-          if [ "${{ github.event.inputs.target_environment }}" = "production" ]; then
+          target_env="${{ github.event.inputs.target_environment }}"
+          if [ "$target_env" = "production" ]; then
             echo "⚠ Production environment operation requested"
             SAFETY_STATUS="warning"
           fi
 
           # Constitutional compliance check
-          if [ "${{ github.event.inputs.operation_type }}" = "phase-transition" ]; then
+          if [ "$operation_type" = "phase-transition" ]; then
             echo "Checking phase transition prerequisites..."
             if [ ! -f specs/001-implement-phase-0/tasks.md ]; then
               echo "❌ Phase 0 tasks not found"
@@ -118,10 +119,11 @@ jobs:
           {
             echo "## Pre-flight Safety Check Report"
             echo "**Operation:** ${{ github.event.inputs.operation_type }}"
-            echo "**Target Environment:** ${{ github.event.inputs.target_environment }}"
+            echo "**Target Environment:** $target_env"
             echo "**Safety Status:** ${{ steps.safety-check.outputs.status }}"
           } >> $GITHUB_STEP_SUMMARY
-          echo "**Operation Approved:** ${{ steps.safety-check.outputs.approved }}" >> $GITHUB_STEP_SUMMARY
+          approved="${{ steps.safety-check.outputs.approved }}"
+          echo "**Operation Approved:** $approved" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
   emergency-hotfix:
@@ -169,7 +171,8 @@ jobs:
     needs: [pre-flight-checks]
     if: |
       github.event.inputs.operation_type == 'phase-transition' &&
-      (needs.pre-flight-checks.outputs.operation_approved == 'true' || github.event.inputs.skip_checks == 'true')
+      (needs.pre-flight-checks.outputs.operation_approved == 'true' ||
+       github.event.inputs.skip_checks == 'true')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -233,7 +236,8 @@ jobs:
     needs: [pre-flight-checks]
     if: |
       github.event.inputs.operation_type == 'security-audit' &&
-      (needs.pre-flight-checks.outputs.operation_approved == 'true' || github.event.inputs.skip_checks == 'true')
+      (needs.pre-flight-checks.outputs.operation_approved == 'true' ||
+       github.event.inputs.skip_checks == 'true')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
