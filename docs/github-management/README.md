@@ -22,7 +22,7 @@ YokaKit_Replay では、**憲法遵守**を基盤とした体系的な GitHub �
 
 ### 4層階層構造
 
-```
+```text
 Epic (Phase レベル) 4-16週間
 ├── Story (機能群) 3-10日
 │   ├── Task (具体作業) 0.5-3日
