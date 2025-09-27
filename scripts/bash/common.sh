@@ -7,7 +7,8 @@ get_repo_root() {
         git rev-parse --show-toplevel
     else
         # Fall back to script location for non-git repos
-        local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        local script_dir
+        script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
         (cd "$script_dir/../../.." && pwd)
     fi
 }
@@ -84,15 +85,18 @@ check_feature_branch() {
 get_feature_dir() { echo "$1/specs/$2"; }
 
 get_feature_paths() {
-    local repo_root=$(get_repo_root)
-    local current_branch=$(get_current_branch)
+    local repo_root
+    repo_root=$(get_repo_root)
+    local current_branch
+    current_branch=$(get_current_branch)
     local has_git_repo="false"
-    
+
     if has_git; then
         has_git_repo="true"
     fi
-    
-    local feature_dir=$(get_feature_dir "$repo_root" "$current_branch")
+
+    local feature_dir
+    feature_dir=$(get_feature_dir "$repo_root" "$current_branch")
     
     cat <<EOF
 REPO_ROOT='$repo_root'
@@ -110,4 +114,4 @@ EOF
 }
 
 check_file() { [[ -f "$1" ]] && echo "  ✓ $2" || echo "  ✗ $2"; }
-check_dir() { [[ -d "$1" && -n $(ls -A "$1" 2>/dev/null) ]] && echo "  ✓ $2" || echo "  ✗ $2"; }
+check_dir() { [[ -d "$1" && -n "$(ls -A "$1" 2>/dev/null)" ]] && echo "  ✓ $2" || echo "  ✗ $2"; }

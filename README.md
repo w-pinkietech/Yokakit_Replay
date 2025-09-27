@@ -82,7 +82,7 @@ PinkieItのgit履歴から以下の改善フェーズが確認できます：
 
 ## 🏗️ アーキテクチャ
 
-```
+```text
 YokaKit_Replay/
 ├── YokaKit/          # 生産進捗管理システム
 │   ├── Laravel 9.x

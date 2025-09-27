@@ -95,7 +95,7 @@ Use appropriate issue templates:
 ### 2. Branch Naming Convention
 
 Follow the phase-based naming pattern:
-```
+```text
 phase-{N}-{feature-name}
 hotfix/{issue-description}
 docs/{documentation-update}
@@ -203,7 +203,7 @@ All contributions are automatically scanned using GitHub native tools:
 
 ### Documentation Structure
 
-```
+```text
 docs/
 ├── CONTRIBUTING.md         # This file
 ├── CODE_OF_CONDUCT.md     # Community guidelines

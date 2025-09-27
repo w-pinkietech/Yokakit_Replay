@@ -44,7 +44,7 @@ YokaKit_Replay is a Phase 0 GitHub repository initialization project focused on 
 - **Phase 5**: Security & Performance optimization
 
 ## Repository Structure
-```
+```text
 .github/
 ├── workflows/           # GitHub Actions automation
 ├── ISSUE_TEMPLATE/      # Structured issue forms

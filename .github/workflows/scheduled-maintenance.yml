@@ -94,9 +94,10 @@ Phase 0 maintenance cycle - automated submodule updates
 PinkieIt reference: automated-maintenance-$(date +%Y%m%d)
 
 🤖 Generated with Claude Code
+
 Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
-)"
+)""
 
             # Create pull request for submodule updates
             BRANCH_NAME="maintenance/submodule-sync-$(date +%Y%m%d)"
