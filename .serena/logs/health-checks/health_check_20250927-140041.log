@@ -1,0 +1,80 @@
+INFO  2025-09-27 14:00:41,881 serena.cli:health_check:557 - Starting health check for project: /mnt/shared_data/YokaKit_Replay
+INFO  2025-09-27 14:00:41,881 serena.cli:health_check:561 - Creating SerenaAgent with disabled dashboard...
+INFO  2025-09-27 14:00:41,893 serena.agent:__init__:204 - Starting Serena server (version=0.1.4-7d58d06e-dirty, process id=228985, parent process id=228966)
+INFO  2025-09-27 14:00:41,893 serena.agent:__init__:205 - Configuration file: None
+INFO  2025-09-27 14:00:41,894 serena.agent:__init__:206 - Available projects: 
+INFO  2025-09-27 14:00:41,894 serena.agent:__init__:207 - Loaded tools (36): read_file, create_text_file, list_dir, find_file, replace_regex, delete_lines, replace_lines, insert_at_line, search_for_pattern, restart_language_server, get_symbols_overview, find_symbol, find_referencing_symbols, replace_symbol_body, insert_after_symbol, insert_before_symbol, write_memory, read_memory, list_memories, delete_memory, execute_shell_command, activate_project, remove_project, switch_modes, get_current_config, check_onboarding_performed, onboarding, think_about_collected_information, think_about_task_adherence, think_about_whether_you_are_done, summarize_changes, prepare_for_new_conversation, initial_instructions, jet_brains_find_symbol, jet_brains_find_referencing_symbols, jet_brains_get_symbols_overview
+INFO  2025-09-27 14:00:41,894 serena.config.serena_config:apply:106 - SerenaAgentContext[name='desktop-app'] included 1 tools: switch_modes
+INFO  2025-09-27 14:00:41,894 serena.agent:__init__:221 - Number of exposed tools: 26
+INFO  2025-09-27 14:00:41,906 serena.agent:_update_active_tools:401 - Active tools (26): activate_project, check_onboarding_performed, create_text_file, delete_memory, execute_shell_command, find_file, find_referencing_symbols, find_symbol, get_current_config, get_symbols_overview, insert_after_symbol, insert_before_symbol, list_dir, list_memories, onboarding, prepare_for_new_conversation, read_file, read_memory, replace_regex, replace_symbol_body, search_for_pattern, switch_modes, think_about_collected_information, think_about_task_adherence, think_about_whether_you_are_done, write_memory
+INFO  2025-09-27 14:00:41,908 serena.util.file_system:start:329 - Loading of .gitignore files starting ...
+INFO  2025-09-27 14:00:41,908 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/.gitignore
+INFO  2025-09-27 14:00:41,908 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/.serena/.gitignore
+INFO  2025-09-27 14:00:41,909 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/.gitignore
+INFO  2025-09-27 14:00:41,909 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/public/.gitignore
+INFO  2025-09-27 14:00:41,910 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/resources/.gitignore
+INFO  2025-09-27 14:00:41,910 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/app/.gitignore
+INFO  2025-09-27 14:00:41,910 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/public/fonts/.gitignore
+INFO  2025-09-27 14:00:41,911 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/YokaKit/resources/views/.gitignore
+INFO  2025-09-27 14:00:41,911 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/database/.gitignore
+INFO  2025-09-27 14:00:41,913 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/bootstrap/cache/.gitignore
+INFO  2025-09-27 14:00:41,913 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/logs/.gitignore
+INFO  2025-09-27 14:00:41,914 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/.gitignore
+INFO  2025-09-27 14:00:41,914 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/app/.gitignore
+INFO  2025-09-27 14:00:41,917 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/views/.gitignore
+INFO  2025-09-27 14:00:41,917 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/testing/.gitignore
+INFO  2025-09-27 14:00:41,917 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/sessions/.gitignore
+INFO  2025-09-27 14:00:41,917 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/cache/.gitignore
+INFO  2025-09-27 14:00:41,917 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/app/public/.gitignore
+INFO  2025-09-27 14:00:41,921 serena.util.file_system:_load_gitignore_files:148 - Processing .gitignore file: /mnt/shared_data/YokaKit_Replay/pinkieit/app/laravel/storage/framework/cache/data/.gitignore
+INFO  2025-09-27 14:00:41,927 serena.util.file_system:stop:336 - Loading of .gitignore files completed in 0.019 seconds
+INFO  2025-09-27 14:00:41,928 serena.agent:load_project_from_path_or_name:476 - Added new project YokaKit_Replay for path /mnt/shared_data/YokaKit_Replay
+INFO  2025-09-27 14:00:41,928 serena.agent:_activate_project:441 - Activating YokaKit_Replay at /mnt/shared_data/YokaKit_Replay
+INFO  2025-09-27 14:00:41,928 serena.agent:_update_active_tools:401 - Active tools (26): activate_project, check_onboarding_performed, create_text_file, delete_memory, execute_shell_command, find_file, find_referencing_symbols, find_symbol, get_current_config, get_symbols_overview, insert_after_symbol, insert_before_symbol, list_dir, list_memories, onboarding, prepare_for_new_conversation, read_file, read_memory, replace_regex, replace_symbol_body, search_for_pattern, switch_modes, think_about_collected_information, think_about_task_adherence, think_about_whether_you_are_done, write_memory
+INFO  2025-09-27 14:00:41,928 serena.agent:issue_task:420 - Scheduling Task-1[init_language_server]
+INFO  2025-09-27 14:00:41,928 serena.agent:start:329 - Task-1[init_language_server] starting ...
+INFO  2025-09-27 14:00:41,928 serena.cli:health_check:564 - SerenaAgent created successfully
+INFO  2025-09-27 14:00:41,928 serena.agent:start:329 - Language server initialization starting ...
+INFO  2025-09-27 14:00:41,928 serena.cli:health_check:567 - Searching for analyzable files...
+INFO  2025-09-27 14:00:41,928 serena.project:create_language_server:303 - Creating language server instance for /mnt/shared_data/YokaKit_Replay.
+INFO  2025-09-27 14:00:42,011 serena.cli:health_check:576 - Found analyzable file: pinkieit/app/laravel/public/index.php
+INFO  2025-09-27 14:00:42,011 serena.cli:health_check:594 - Testing GetSymbolsOverviewTool on file: pinkieit/app/laravel/public/index.php
+INFO  2025-09-27 14:00:42,011 serena.agent:issue_task:420 - Scheduling Task-2[<lambda>]
+INFO  2025-09-27 14:00:42,029 serena.agent:reset_language_server:594 - Starting the language server for YokaKit_Replay
+INFO  2025-09-27 14:00:42,029 solidlsp:start:1622 - Starting language server with language php for /mnt/shared_data/YokaKit_Replay
+INFO  2025-09-27 14:00:42,030 solidlsp:_start_server:163 - Starting Intelephense server process
+INFO  2025-09-27 14:00:42,030 solidlsp.ls_handler:start:189 - Starting language server process via command: /home/pinkie/.serena/language_servers/static/Intelephense/php-lsp/node_modules/.bin/intelephense --stdio
+INFO  2025-09-27 14:00:42,059 solidlsp:_start_server:167 - Sending initialize request from LSP client to LSP server and awaiting response
+INFO  2025-09-27 14:00:42,336 solidlsp:window_log_message:153 - LSP: window/logMessage: {"type": 3, "message": "Initialising intelephense 1.14.4"}
+INFO  2025-09-27 14:00:42,338 solidlsp:window_log_message:153 - LSP: window/logMessage: {"type": 3, "message": "Reading state from /tmp/intelephense/ceb6507."}
+INFO  2025-09-27 14:00:42,428 solidlsp:window_log_message:153 - LSP: window/logMessage: {"type": 3, "message": "Initialised in 92 ms"}
+INFO  2025-09-27 14:00:42,428 solidlsp:_start_server:172 - After sent initialize params
+INFO  2025-09-27 14:00:42,429 serena.agent:stop:336 - Language server initialization completed in 0.500 seconds
+INFO  2025-09-27 14:00:42,429 serena.agent:stop:336 - Task-1[init_language_server] completed in 0.500 seconds
+INFO  2025-09-27 14:00:42,429 serena.agent:start:329 - Task-2[<lambda>] starting ...
+INFO  2025-09-27 14:00:42,447 solidlsp:window_log_message:153 - LSP: window/logMessage: {"type": 3, "message": "Searching file:///home/pinkie/.serena/language_servers/static/Intelephense/php-lsp/node_modules/intelephense/lib/stub for files to index."}
+INFO  2025-09-27 14:00:42,448 serena.agent:stop:336 - Task-2[<lambda>] completed in 0.020 seconds
+INFO  2025-09-27 14:00:42,448 serena.cli:health_check:597 - GetSymbolsOverviewTool returned 6 symbols
+INFO  2025-09-27 14:00:42,449 serena.cli:health_check:618 - No class or function found, using first available symbol
+INFO  2025-09-27 14:00:42,449 serena.cli:health_check:622 - Using symbol for testing: LARAVEL_START (kind: 14)
+INFO  2025-09-27 14:00:42,449 serena.cli:health_check:625 - Testing FindSymbolTool for symbol: LARAVEL_START
+INFO  2025-09-27 14:00:42,449 serena.agent:issue_task:420 - Scheduling Task-3[<lambda>]
+INFO  2025-09-27 14:00:42,449 serena.agent:start:329 - Task-3[<lambda>] starting ...
+INFO  2025-09-27 14:00:42,453 solidlsp:window_log_message:153 - LSP: window/logMessage: {"type": 3, "message": "Searching file:///mnt/shared_data/YokaKit_Replay for files to index."}
+INFO  2025-09-27 14:00:42,457 serena.agent:stop:336 - Task-3[<lambda>] completed in 0.009 seconds
+INFO  2025-09-27 14:00:42,457 serena.cli:health_check:630 - FindSymbolTool found 1 matches for symbol LARAVEL_START
+INFO  2025-09-27 14:00:42,457 serena.cli:health_check:633 - Testing FindReferencingSymbolsTool for symbol: LARAVEL_START
+INFO  2025-09-27 14:00:42,457 serena.agent:issue_task:420 - Scheduling Task-4[<lambda>]
+INFO  2025-09-27 14:00:42,457 serena.agent:start:329 - Task-4[<lambda>] starting ...
+WARNING 2025-09-27 14:00:45,491 solidlsp:request_referencing_symbols:1294 - Could not find containing symbol for YokaKit/public/index.php:5:0. Returning file symbol instead
+WARNING 2025-09-27 14:00:45,492 solidlsp:request_referencing_symbols:1294 - Could not find containing symbol for pinkieit/app/laravel/public/index.php:5:0. Returning file symbol instead
+INFO  2025-09-27 14:00:45,492 serena.agent:stop:336 - Task-4[<lambda>] completed in 3.035 seconds
+INFO  2025-09-27 14:00:45,492 serena.cli:health_check:637 - FindReferencingSymbolsTool found 2 references for symbol LARAVEL_START
+INFO  2025-09-27 14:00:45,492 serena.cli:health_check:643 - Testing SearchForPatternTool for pattern: LARAVEL_START
+INFO  2025-09-27 14:00:45,492 serena.agent:issue_task:420 - Scheduling Task-5[<lambda>]
+INFO  2025-09-27 14:00:45,492 serena.agent:start:329 - Task-5[<lambda>] starting ...
+INFO  2025-09-27 14:00:45,540 serena.text_utils:search_files:326 - Processing 875 files.
+INFO  2025-09-27 14:00:45,642 serena.text_utils:search_files:367 - Found 2 total matches across 875 files
+INFO  2025-09-27 14:00:45,643 serena.agent:stop:336 - Task-5[<lambda>] completed in 0.150 seconds
+INFO  2025-09-27 14:00:45,643 serena.cli:health_check:650 - SearchForPatternTool found 2 pattern matches for LARAVEL_START
+INFO  2025-09-27 14:00:45,643 serena.cli:health_check:664 - Health check completed successfully

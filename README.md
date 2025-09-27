@@ -17,68 +17,132 @@ PinkieItはYokaKitをベースに開発されたより進化したシステム�
 
 ## 🎯 リプレイ目標
 
-### 📈 PinkieIt開発履歴から抽出される改善工程
-PinkieItのgit履歴から以下の改善フェーズが確認できます：
+### 📊 分析結果に基づく戦略的アプローチ
+`docs/analysis/` の詳細分析により、以下の戦略的アプローチが確立されました：
 
-**⚠️ 注意**: PinkieItではコミット `643414f` でYokaKit→PinkieItに名前変更していますが、この**リプレイプロジェクトではYokaKitの名前を最後まで維持**します。
+#### **🔍 現状分析結果** ([技術ベースライン](./docs/analysis/current-state/yokakit-current-state-analysis.md))
+- **YokaKit**: 9年間の製造業ドメイン専門知識を持つ Laravel 9.x MES システム
+- **主要課題**: モデル配置問題（`app/Http/Requests/` に誤配置）、テスト未構築、Docker未対応
+- **強み**: 93 PHP ファイル、45 マイグレーション、完全な IoT・MQTT 統合
 
-1. **初期Docker化** (`a5d3b77` - `3f0687b`)
-   - Dockerfile, docker-compose.yml追加
-   - MQTT コンテナ統合
-   - ⚠️ 名前変更は**スキップ**
+#### **📈 実証済み改善パターン** ([PinkieIt開発履歴](./docs/analysis/timeline/pinkieit-development-timeline.md))
+PinkieIt の 189 コミットから抽出された実証済み改善工程：
 
-2. **CI/CD構築** (`3f0687b` - `25af011`)
-   - GitHub Actions ワークフロー
-   - マルチアーキテクチャビルド対応
+**⚠️ 憲法遵守**: PinkieIt コミット `643414f` の名前変更は**スキップ**し、YokaKit アイデンティティを維持
 
-3. **開発環境改善** (`0cc0475` - `bec10e3`)
-   - VS Code DevContainer
-   - GitHub Codespaces対応
+1. **Phase 1: Docker Foundation** (2024-07-01 パターン)
+   - Docker + MariaDB 基盤構築
+   - 構造修正（models を `app/Models/` へ移動）
+   - DevContainer 開発環境
 
-4. **コード品質向上** (`f10e4ba` - `b9deaf4`)
-   - semistandard導入
-   - Laravel Pint統合
-   - PHPUnit + カバレッジ設定
+2. **Phase 2: Quality Infrastructure Day** (2025-06-13 単日実装パターン)
+   - PHPUnit + PCOV テストフレームワーク
+   - Larastan 静的解析
+   - SonarQube 品質監視
 
-5. **Laravel モダナイゼーション** (`5b63757` - `adeab2b`)
-   - Laravel 10.x アップグレード
-   - PHP 8.2 対応
-   - Laravel Reverb 移行
+3. **Phase 3: Comprehensive Testing** (2025-06-14-15 パターン)
+   - レイヤー別テスト実装
+   - 並列実行最適化（66% 改善）
+   - カバレッジ向上
 
-6. **Docker最適化** (`b980f1e` - `6bb70e1`)
-   - multi-stage Dockerfile
-   - マルチアーキテクチャ対応
+4. **Phase 4: Framework Modernization** (2025-06-16-24 パターン)
+   - PHP 8.2 + Laravel 10.x アップグレード
+   - Laravel Reverb WebSocket 移行
+   - 依存関係モダナイゼーション
 
-### 🔧 段階的アップデート手順
+5. **Phase 5: Docker Optimization** (2025-06-26 - 2025-07-02 パターン)
+   - Multi-stage Dockerfile
+   - Multi-architecture ビルド (AMD64/ARM64)
+   - パフォーマンス最適化
 
-#### Phase 0: GitHubリポジトリ初期化
-- **ラベル・マイルストーン設定**: issue管理体制構築
-- **ワークフローテンプレート**: GitHub Actions準備
-- **ドキュメント構造**: README, CONTRIBUTING, docs/構築
+6. **Phase 6: CI/CD Integration** (2025-07-03+ パターン)
+   - 包括的 CI/CD パイプライン
+   - Bootstrap 5 UI モダナイゼーション
+   - セキュリティスキャン統合
 
-#### Phase 1: Docker環境構築 + Laravel 10.x アップグレード
-- **Dockerfile作成**: multi-stage builds
-- **docker-compose設定**: 開発環境構築
-- **Laravel フレームワーク更新**: 9.x → 10.x
+### 🎯 戦略的実装計画 ([戦略マスタープラン](./docs/analysis/timeline/development-timeline-analysis.md))
 
-#### Phase 2: CI/CD パイプライン構築
-- **GitHub Actions**: docker-build.yml, sonarqube.yml
-- **SonarQube Cloud**: コード品質・カバレッジ連携
-- **セキュリティスキャン**: 脆弱性検出自動化
+#### **成功確率: 85%+** (実証済みパターンによる高信頼性)
 
-#### Phase 3: テスト・品質管理ツール統合
-- **PHPUnit + PCOV**: テストカバレッジ測定
-- **Laravel Pint**: コード整形自動化
-- **Larastan (PHPStan)**: 静的解析導入
+#### **Phase 0: GitHub Repository Infrastructure** ✅ **完了**
+- ブランチ保護・ワークフロー自動化
+- Issue テンプレート・マイルストーン構造
+- 憲法遵守フレームワーク
 
-#### Phase 4: WebSocket・リアルタイム機能モダナイズ
-- **Laravel Reverb**: WebSocket サーバー移行
-- **MQTT統合**: IoTデバイス通信最適化
+#### **Phase 1: Docker Foundation & Development Environment** (4週間)
+**Week 1**: Docker Foundation (PinkieIt 2024-07-01 パターン)
+- 基本 Docker セットアップ + MariaDB
+- コンテナ検証・ポート設定
 
-#### Phase 5: セキュリティ・パフォーマンス最適化
-- **PHP 8.2対応**: パフォーマンス向上
-- **依存関係更新**: セキュリティパッチ適用
-- **DevContainer**: VS Code, GitHub Codespaces対応
+**Week 2**: Development Environment (PinkieIt 2025-03 パターン)
+- DevContainer VS Code 環境
+- Claude 統合・Linting 設定
+
+**Week 3**: Structural Cleanup (重要な構造修正)
+- Models を `app/Http/Requests/` → `app/Models/` へ移動
+- 名前空間修正・オートローダー再生成
+
+**Week 4**: Quality Infrastructure Foundation
+- PHPUnit + ファクトリー設定
+- 基本 CI/CD パイプライン
+
+#### **Phase 2: Quality Infrastructure Day** (1日集中実装)
+**Timeline**: 1日集中実装
+**Pattern Source**: PinkieIt 2025-06-13 (8 PRs in single day)
+
+**午前 (06:00-12:00)**:
+- Test Infrastructure (PHPUnit complete setup)
+- Coverage Configuration (PCOV for fast reporting)
+- Static Analysis (Larastan setup)
+
+**午後 (12:00-18:00)**:
+- SonarQube Integration (code quality monitoring)
+- CI/CD Pipeline (automated quality pipeline)
+- Database Testing (test connectivity)
+
+**夕方 (18:00-21:00)**:
+- Laravel Upgrade Planning (strategic preparation)
+- Quality Validation (all systems operational)
+
+#### **Phase 3: Comprehensive Testing** (2週間)
+**Timeline**: 2週間
+**Pattern Source**: PinkieIt June 14-15, 2025
+
+**Week 1: Core Testing Implementation**
+- Day 1-2: Model Tests (comprehensive unit tests)
+- Day 3-4: Service/Repository Tests (business logic coverage)
+- Day 5: Controller Tests (HTTP layer coverage)
+
+**Week 2: Testing Optimization**
+- Day 1-2: Extended Controller Tests
+- Day 3: Test Performance (parallel execution - 66% improvement target)
+- Day 4-5: Test Cleanup (remove redundant cases)
+
+#### **Phase 4: Framework Modernization** (1週間)
+**Timeline**: 1週間
+**Pattern Source**: PinkieIt June 16-24, 2025
+
+- Day 1: PHP 8.2 Upgrade (infrastructure platform)
+- Day 2-3: Laravel 10.x Migration (major framework upgrade)
+- Day 4: Dependency Updates (composer modernization)
+- Day 5: Laravel Reverb (WebSocket modernization)
+
+#### **Phase 5: Advanced Docker Optimization** (1週間)
+**Timeline**: 1週間
+**Pattern Source**: PinkieIt June 26 - July 2, 2025
+
+- Day 1-2: Docker Baseline Metrics (performance measurement)
+- Day 3: Multi-stage Consolidation (single Dockerfile architecture)
+- Day 4: Multi-Architecture Support (AMD64/ARM64)
+- Day 5: DevContainer Optimization (development environment integration)
+
+#### **Phase 6: CI/CD Integration & Final Polish** (1週間)
+**Timeline**: 1週間
+**Pattern Source**: PinkieIt July 3, 2025 + ongoing
+
+- Day 1-3: Comprehensive CI/CD (multi-architecture builds, security scanning)
+- Day 4: Bootstrap 5 Migration (UI framework modernization)
+- Day 5: Final Quality Validation (all systems integration test)
 
 ## 🏗️ アーキテクチャ
 
@@ -112,19 +176,22 @@ YokaKit_Replay/
 
 ### Issue・マイルストーン管理
 
-#### ラベル体系
-- **Phase**: `phase-0`, `phase-1`, `phase-2`, `phase-3`, `phase-4`, `phase-5`
-- **種別**: `enhancement`, `bug`, `documentation`, `question`
-- **優先度**: `priority-high`, `priority-medium`, `priority-low`
-- **状態**: `blocked`, `in-review`, `needs-info`
+#### ラベル体系 (4層階層構造)
+- **Epic レベル**: `epic:phase-0` ～ `epic:phase-6` (Phase レベルの大規模機能群)
+- **Story レベル**: `story:feature`, `story:security`, `story:ci-cd`, `story:integration`, `story:documentation`
+- **Task レベル**: `task:implementation`, `task:validation`, `task:testing`
+- **Constitutional**: `constitutional:identity-preservation` (必須), `constitutional:historical-fidelity`, `constitutional:quality-first`, `constitutional:compliance`
+- **ステータス**: `status:needs-triage`, `status:in-progress`, `status:blocked`
+- **標準**: `enhancement`, `bug`, `documentation`, `question`
 
 #### マイルストーン
 - **Phase 0**: GitHubリポジトリ初期化 (v0.1.0)
-- **Phase 1**: Docker環境構築 + Laravel 10.x (v0.2.0)
-- **Phase 2**: CI/CDパイプライン構築 (v0.3.0)
-- **Phase 3**: テスト・品質管理ツール統合 (v0.4.0)
-- **Phase 4**: WebSocket・リアルタイム機能モダナイズ (v0.5.0)
-- **Phase 5**: セキュリティ・パフォーマンス最適化 (v1.0.0)
+- **Phase 1**: Docker Foundation & Development Environment (v0.2.0)
+- **Phase 2**: Quality Infrastructure Day (v0.3.0)
+- **Phase 3**: Comprehensive Testing (v0.4.0)
+- **Phase 4**: Framework Modernization (Laravel 10.x + PHP 8.2) (v0.5.0)
+- **Phase 5**: Advanced Docker Optimization (v0.6.0)
+- **Phase 6**: CI/CD Integration & Final Polish (v1.0.0)
 
 ### サブモジュール管理
 - **YokaKit更新**: 各Phase完了時に必須
@@ -232,6 +299,25 @@ docker compose exec web-app ./vendor/bin/phpstan analyse
 - `/memory/` - 共有メモリ・憲法
 - `/templates/` - 開発テンプレート
 
+### 分析・ドキュメント
+```text
+docs/analysis/
+├── README.md                           # 分析文書概要
+├── RESPONSIBILITY_MATRIX.md           # 文書責任分離マトリックス
+├── current-state/                     # 技術ベースライン
+│   └── yokakit-current-state-analysis.md
+├── timeline/                          # 戦略・履歴
+│   ├── development-timeline-analysis.md    # 戦略マスタープラン
+│   └── pinkieit-development-timeline.md   # PinkieIt開発履歴
+└── quality-assurance/                 # 品質保証
+    └── document-inconsistencies-analysis.md
+
+docs/github-management/
+├── LABEL_GUIDE.md                     # ラベル体系と使用ガイドライン
+├── ISSUE_MILESTONE_GUIDE.md           # Epic/Story/Task定義
+└── README.md                          # GitHub管理概要
+```
+
 ### Git管理
 - サブモジュール構成
 - 統合ワークフロー対応
@@ -246,6 +332,18 @@ docker compose exec web-app ./vendor/bin/phpstan analyse
 
 ## 📚 ドキュメント
 
+### 分析・戦略文書
+- [分析文書概要](./docs/analysis/README.md) - 分析文書の全体構造と使用方法
+- [YokaKit技術ベースライン](./docs/analysis/current-state/yokakit-current-state-analysis.md) - 現在のシステム詳細分析
+- [戦略マスタープラン](./docs/analysis/timeline/development-timeline-analysis.md) - 段階的実装戦略
+- [PinkieIt開発履歴](./docs/analysis/timeline/pinkieit-development-timeline.md) - 実証済み改善パターン
+- [文書品質保証](./docs/analysis/quality-assurance/document-inconsistencies-analysis.md) - 分析文書の精度検証
+
+### GitHub管理・運用
+- [ラベル管理ガイド](./docs/github-management/LABEL_GUIDE.md) - 4層階層ラベル体系と使用方法
+- [Issue & Milestone ガイド](./docs/github-management/ISSUE_MILESTONE_GUIDE.md) - Epic/Story/Task の使い分け
+
+### 技術詳細
 - [PinkieIt詳細](./pinkieit/README.md)
 - [YokaKit詳細](./YokaKit/README.md)
 - [CI/CDワークフロー](./pinkieit/docs/CI_CD_WORKFLOW.md)
