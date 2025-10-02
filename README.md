@@ -471,13 +471,110 @@ docs/github-management/
 - [CI/CDワークフロー](./pinkieit/docs/CI_CD_WORKFLOW.md)
 - [Claude Code設定](./pinkieit/CLAUDE.md)
 
+## 📐 Spec作成ガイドライン（重要：Phase 1の教訓）
+
+### MUST: PinkieItの実際のコミット履歴を必ず確認
+
+**仮定に基づく計画は禁止**。PinkieItの実際のコミットを**必ず確認**してから計画を作成する。
+
+#### Phase 1で学んだ教訓
+
+**初期の誤り** ❌:
+```
+想定: "Docker Foundation" = 単純なDockerfile + docker-compose.yml
+想定: "モデル移動" = app/Http/Requests → app/Models
+結果: 仮定ベースで48タスク作成 → 不正確
+```
+
+**現実確認** ✅:
+```bash
+cd pinkieit
+git log --oneline --reverse a5d3b77..13b40d1
+
+実態:
+a5d3b77: 初期Docker（想定通り）
+643414f: YokaKit→PinkieItリネーム（スキップ必須）
+fad82e6: app/全体をapp/laravel/に移動（大規模！）
+bfd075e: docker-compose洗練（network, healthcheck）
+3a0f1cd: volume調整
+13b40d1: MQTTコンテナ追加
+```
+
+**修正後のアプローチ** ✅:
+- 各コミットを`git show {hash} --stat`で分析
+- 実際のファイル変更を理解（fad82e6は200+ファイル！）
+- コミット単位のリプレイタスク作成（47タスク）
+- 正確な期間: 2-3週間（4週間ではない）
+
+### 全フェーズ共通の必須ワークフロー
+
+#### ステップ1: 関連するPinkieItコミットを特定
+```bash
+# Phase 2（品質基盤）の例
+cd pinkieit
+git log --oneline --grep="test\|quality\|phpunit\|coverage" --reverse
+
+# または日付範囲で検索（timeline analysisから判明している場合）
+git log --oneline --after="2025-06-13" --before="2025-06-14" --reverse
+```
+
+#### ステップ2: 各コミットを詳細分析
+```bash
+git show {hash} --stat        # ファイルリスト
+git show {hash}               # 完全なdiff
+git show {hash}:path/to/file  # 特定ファイルの内容
+```
+
+#### ステップ3: 憲法要件とのマッピング
+```
+各コミットに対して:
+  IF YokaKit→PinkieItリネーム:
+    → スキップ（憲法要件III）
+  ELSE IF PinkieItブランディング追加:
+    → YokaKit名前で適応
+  ELSE:
+    → YokaKitアイデンティティ保持してリプレイ
+```
+
+#### ステップ4: コミットベースのtasks.md作成
+```markdown
+## COMMIT REPLAY 1: {hash} - {説明}
+**PinkieIt Commit**: `{完全hash}`
+**Tasks**: T001-T00X
+
+各コミットの実際の変更に基づくタスク生成
+```
+
+#### ステップ5: GitHub Issue作成前の検証
+- [ ] 全コミット分析済み？（最初と最後だけではダメ）
+- [ ] 憲法スキップ文書化済み？（643414f等）
+- [ ] 命名適応計画済み？（pinkieit → yokakit）
+- [ ] ファイルパス正確？（実際のdiff確認）
+- [ ] 依存関係明確？（コミット順序重要）
+
+### Phase 1の具体例
+
+**修正前**: Week 1-4の週ベース計画（不正確）
+**修正後**: CR1, CR3, CR4-6, PVのコミットベース（正確）
+
+```
+Story #20: CR1 (a5d3b77) - 初期Docker基盤
+Story #21: CR3 (fad82e6) - app/laravel/構造 ⚠️大規模
+Story #22: CR4-6 - 洗練とMQTT
+Story #23: PV - 検証と品質
+```
+
 ## 🤝 コントリビューション
 
-1. フィーチャーブランチ作成
-2. コード実装・テスト
-3. プルリクエスト作成
-4. CI/CD自動チェック通過
-5. コードレビュー・マージ
+### 実装フロー
+1. PinkieItコミット履歴確認（**必須**）
+2. コミットベースのタスク作成
+3. YokaKitリポジトリでGitHub Issue作成
+4. フィーチャーブランチで実装
+5. プルリクエスト作成（PinkieItコミット参照）
+6. CI/CD自動チェック通過
+7. コードレビュー・マージ
+8. YokaKit_Replayサブモジュール更新
 
 ## 📄 ライセンス
 

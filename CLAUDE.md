@@ -291,12 +291,144 @@ YokaKit/                 # Submodule - target for improvements
 ./scripts/validation/development-quality.sh
 ```
 
+## Spec Creation Guidelines (CRITICAL - Learned from Phase 1)
+
+### ALWAYS Verify PinkieIt Actual Commit History First
+
+**DO NOT assume** what PinkieIt did based on high-level descriptions. **ALWAYS check actual commits.**
+
+#### Phase 1 Lesson Learned
+
+**Initial Mistake** ❌:
+- Assumed "Docker Foundation" meant simple Dockerfile + docker-compose.yml
+- Assumed "Model relocation" was app/Http/Requests → app/Models
+- Created 48 tasks based on assumptions
+
+**Reality Check** ✅:
+```bash
+# Check actual PinkieIt commits
+cd pinkieit
+git log --oneline --reverse a5d3b77..13b40d1
+
+# Discovered:
+a5d3b77: Initial Docker (correct assumption)
+643414f: Rename YokaKit→PinkieIt (MUST SKIP - constitutional)
+fad82e6: app/ → app/laravel/ (MASSIVE - not just models!)
+bfd075e: Enhanced docker-compose (networking, healthcheck)
+3a0f1cd: Volume refinements
+13b40d1: MQTT container addition
+```
+
+**Corrected Approach** ✅:
+- Analyzed each commit with `git show {hash} --stat`
+- Understood actual file changes (200+ files in fad82e6!)
+- Created commit-by-commit replay tasks (47 tasks)
+- Accurate timeline: 2-3 weeks (not 4 weeks)
+
+### Mandatory Workflow for All Future Phases
+
+#### Step 1: Identify Relevant PinkieIt Commits
+```bash
+# For Phase 2 (Quality Infrastructure)
+cd pinkieit
+git log --oneline --grep="test\|quality\|phpunit\|coverage" --reverse
+
+# Or by date range (if known from timeline analysis)
+git log --oneline --after="2025-06-13" --before="2025-06-14" --reverse
+```
+
+#### Step 2: Analyze Each Commit in Detail
+```bash
+# For each commit, check what was actually changed
+git show {commit_hash} --stat        # File list
+git show {commit_hash}               # Full diff
+git show {commit_hash}:path/to/file  # Specific file content
+```
+
+#### Step 3: Map Commits to Constitutional Requirements
+```
+FOR EACH COMMIT:
+  IF commit renames YokaKit → PinkieIt:
+    → SKIP (constitutional requirement III)
+  ELSE IF commit adds PinkieIt branding:
+    → ADAPT with YokaKit naming
+  ELSE:
+    → REPLAY with YokaKit identity preserved
+```
+
+#### Step 4: Create Commit-Based tasks.md
+```markdown
+## COMMIT REPLAY 1: {hash} - {description}
+**PinkieIt Commit**: `{full_hash}`
+**Date**: {date}
+**Files Changed**: {count} files
+
+### Tasks
+- [ ] T001: Validate {commit changes}
+- [ ] T002: Implement {commit changes}
+- [ ] T003: Test {commit result}
+- [ ] T004: Commit with reference to {hash}
+```
+
+#### Step 5: Verify Before Creating GitHub Issues
+- [ ] All commits analyzed? (not just first/last)
+- [ ] Constitutional skips documented? (643414f, etc.)
+- [ ] Naming adaptations planned? (pinkieit → yokakit)
+- [ ] File paths accurate? (check actual commit diffs)
+- [ ] Dependencies clear? (commit order matters)
+
+### PinkieIt Analysis Commands Reference
+
+```bash
+# Get commit sequence for a feature
+git log --oneline --grep="keyword" --reverse
+
+# Check commit details
+git show {hash} --stat                    # Summary
+git show {hash} --name-only               # File list only
+git show {hash}                           # Full diff
+
+# Find commits by date
+git log --oneline --after="YYYY-MM-DD" --before="YYYY-MM-DD"
+
+# Find commits by file
+git log --oneline -- path/to/file
+
+# Check file content at specific commit
+git show {hash}:path/to/file
+```
+
+### Red Flags (Indicators You Need to Check Commits)
+
+🚩 **Vague descriptions**: "structural improvements", "modernization", "cleanup"
+🚩 **Large file counts**: If timeline mentions "200+ files", check what actually changed
+🚩 **Multiple related commits**: Sequential commits often refine each other
+🚩 **Timeline gaps**: If commits span months, check what happened between
+🚩 **Merge commits**: Check the PR commits, not just the merge
+
+### Constitutional Compliance in Spec Creation
+
+#### ALWAYS Document Skipped Commits
+```markdown
+## COMMIT REPLAY X: {hash} - CONSTITUTIONAL SKIP
+**PinkieIt Commit**: `{hash}` - {description}
+**Action**: SKIP (Constitutional requirement: {reason})
+**No tasks generated for this commit.**
+```
+
+#### ALWAYS Adapt Naming
+```markdown
+## Constitutional Adaptations
+- pinkieit → yokakit (all service names)
+- PinkieIt → YokaKit (all documentation)
+- DB name "yokakit" preserved (if exists in original)
+```
+
 ## Next Steps
-- **Complete Phase 1 Tasks**: Execute `/tasks` command to generate implementation tasks
-- **GitHub Management**: Apply YokaKit_Replay label hierarchy to YokaKit repository
-- **Docker Implementation**: Follow proven PinkieIt patterns while preserving YokaKit identity
-- **Structural Improvements**: Safely relocate models from app/Http/Requests to app/Models
-- **Quality Integration**: Implement validation scripts for constitutional compliance
+- **Begin Implementation**: Start with Story #20 (CR1: a5d3b77 Docker Foundation)
+- **Follow Commits**: Execute tasks in chronological order (CR1 → CR3 → CR4-6 → PV)
+- **Validate Continuously**: Constitutional compliance at every commit
+- **Document Progress**: Update Epic #1 as stories complete
 
 ---
-*Updated: 2025-09-28 | Constitution: v1.2.0 | Phase 1 Plan Complete | Ready for /tasks*
+*Updated: 2025-10-02 | Constitution: v1.2.0 | Phase 1 Commit-Based Plan Ready | Lesson: Always Check Actual Commits!*
