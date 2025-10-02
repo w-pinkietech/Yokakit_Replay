@@ -1,0 +1,169 @@
+{
+  "// Contract": "VS Code DevContainer Configuration for YokaKit Development",
+  "// Purpose": "Development environment integration with required tools and settings",
+  "// Validation": "Implementation must include all required extensions and settings",
+
+  "// REQUIRED: Container identification",
+  "name": "YokaKit Development Environment",
+
+  "// REQUIRED: Docker Compose integration",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "web-app",
+  "workspaceFolder": "/var/www/html",
+
+  "// REQUIRED: Container lifecycle management",
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+
+  "// REQUIRED: VS Code extensions for Laravel development",
+  "customizations": {
+    "vscode": {
+      "// REQUIRED: PHP and Laravel extensions",
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",  // PHP IntelliSense
+        "codingyu.laravel-goto-view",           // Laravel view navigation
+        "ryannaddy.laravel-artisan",            // Laravel Artisan commands
+        "bradlc.vscode-tailwindcss",            // Tailwind CSS support
+        "ms-vscode.vscode-json",                // JSON support
+        "EditorConfig.EditorConfig",            // EditorConfig support
+        "esbenp.prettier-vscode",               // Code formatting
+        "ms-azuretools.vscode-docker",          // Docker integration
+        "eamodio.gitlens",                      // Git integration
+        "gruntfuggly.todo-tree"                 // TODO tracking
+      ],
+
+      "// REQUIRED: Development settings",
+      "settings": {
+        "// PHP Configuration": "",
+        "php.suggest.basic": false,
+        "php.validate.enable": true,
+        "intelephense.files.maxSize": 5000000,
+        "intelephense.environment.includePaths": ["/var/www/html/vendor"],
+
+        "// Laravel Configuration": "",
+        "laravel.artisan": "/var/www/html/artisan",
+        "laravel-goto-view.folders": {
+          "default": "/var/www/html/resources/views"
+        },
+
+        "// Editor Configuration": "",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+
+        "// File Configuration": "",
+        "files.associations": {
+          "*.blade.php": "blade",
+          ".env*": "dotenv"
+        },
+        "files.exclude": {
+          "**/vendor/**": true,
+          "**/node_modules/**": true,
+          "**/storage/framework/**": true,
+          "**/storage/logs/**": true
+        },
+
+        "// Terminal Configuration": "",
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.cwd": "/var/www/html",
+
+        "// Git Configuration": "",
+        "git.defaultCloneDirectory": "/workspace",
+        "git.enableSmartCommit": true,
+
+        "// Constitutional Compliance": "",
+        "todo-tree.general.tags": [
+          "TODO",
+          "FIXME",
+          "YOKAKIT",
+          "CONSTITUTIONAL",
+          "PINKIEIT-REF"
+        ],
+        "todo-tree.highlights.customHighlight": {
+          "CONSTITUTIONAL": {
+            "icon": "law",
+            "type": "text",
+            "foreground": "#8b5cf6",
+            "background": "#faf5ff"
+          },
+          "YOKAKIT": {
+            "icon": "organization",
+            "type": "text",
+            "foreground": "#059669",
+            "background": "#f0fdf4"
+          }
+        }
+      }
+    }
+  },
+
+  "// REQUIRED: Development features",
+  "features": {
+    "// Enable Docker-in-Docker for container management": "",
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+
+    "// Enable Git for version control": "",
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+
+    "// Enable GitHub CLI for repository management": "",
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
+  },
+
+  "// REQUIRED: Port forwarding for development",
+  "forwardPorts": [
+    18080,  // Web application (YokaKit standard)
+    3306,   // Database (optional access)
+    5173,   // Vite dev server (if using)
+    8000    // Laravel serve (alternative)
+  ],
+  "portsAttributes": {
+    "18080": {
+      "label": "YokaKit Web Application",
+      "requireLocalPort": false,
+      "protocol": "http"
+    },
+    "3306": {
+      "label": "MariaDB Database",
+      "requireLocalPort": false
+    }
+  },
+
+  "// REQUIRED: Container initialization",
+  "postCreateCommand": "composer install && php artisan key:generate && php artisan migrate",
+
+  "// REQUIRED: Post-start validation",
+  "postStartCommand": "php artisan config:cache && php artisan route:cache",
+
+  "// REQUIRED: User configuration",
+  "remoteUser": "www-data",
+  "containerEnv": {
+    "YOKAKIT_ENV": "development",
+    "CONSTITUTIONAL_COMPLIANCE": "true",
+    "HISTORICAL_FIDELITY": "pinkieit-patterns"
+  },
+
+  "// REQUIRED: Mount configuration for development workflow",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.git,target=/var/www/html/.git,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/.env,target=/var/www/html/.env,type=bind"
+  ],
+
+  "// VALIDATION RULES": [
+    "1. All extensions MUST be Laravel and PHP development focused",
+    "2. Settings MUST support YokaKit naming conventions",
+    "3. Port forwarding MUST use YokaKit standard port 18080",
+    "4. Post-creation commands MUST initialize Laravel properly",
+    "5. TODO highlighting MUST include constitutional compliance markers",
+    "6. Git integration MUST support audit trail maintenance",
+    "7. Docker-in-Docker MUST be enabled for container management",
+    "8. Remote user MUST have appropriate permissions for Laravel"
+  ]
+}
