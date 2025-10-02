@@ -46,14 +46,14 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR1.1: Pre-Implementation Validation (TDD)
 
-- [ ] **T001** [P] Create Dockerfile validation test
+- [x] **T001** [P] Create Dockerfile validation test
   - **File**: YokaKit/tests/docker/test_dockerfile_a5d3b77.sh
   - **Description**: Validate Dockerfile structure matches a5d3b77 pattern
   - **Validation**: Test for PHP 8.2-apache, required extensions, Apache mod_rewrite
   - **Must**: This test MUST FAIL before T003 implementation
   - **Reference**: PinkieIt commit a5d3b77 Dockerfile (43 lines)
 
-- [ ] **T002** [P] Create docker-compose validation test
+- [x] **T002** [P] Create docker-compose validation test
   - **File**: YokaKit/tests/docker/test_compose_a5d3b77.sh
   - **Description**: Validate docker-compose.yml structure matches a5d3b77 pattern
   - **Validation**: Test for app service, db service, basic networking
@@ -62,7 +62,7 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR1.2: Dockerfile Implementation (a5d3b77 pattern)
 
-- [ ] **T003** Create Dockerfile in repository root
+- [x] **T003** Create Dockerfile in repository root
   - **File**: YokaKit/Dockerfile
   - **Description**: Create single-stage Dockerfile with PHP 8.2-apache base
   - **Content**: Exact a5d3b77 pattern with YokaKit naming
@@ -74,7 +74,7 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR1.3: Docker Compose Implementation (a5d3b77 pattern)
 
-- [ ] **T004** Create docker-compose.yml in repository root
+- [x] **T004** Create docker-compose.yml in repository root
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Create basic Docker Compose with app + db services
   - **Services**:
@@ -88,19 +88,19 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR1.4: Apache Configuration (a5d3b77 pattern)
 
-- [ ] **T005** [P] Create docker directory structure
+- [x] **T005** [P] Create docker directory structure
   - **Directories**: YokaKit/docker/, YokaKit/docker/apache/, YokaKit/docker/php/
   - **Description**: Create directory structure for Docker configuration
   - **Validation**: Directories exist with proper permissions
 
-- [ ] **T006** [P] Create Apache VirtualHost configuration
+- [x] **T006** [P] Create Apache VirtualHost configuration
   - **File**: YokaKit/docker/apache/sites-available/000-default.conf
   - **Description**: Create Apache configuration per a5d3b77 pattern
   - **Content**: DocumentRoot /var/www/html/public, AllowOverride All
   - **Validation**: Apache config syntax valid
   - **Reference**: PinkieIt commit a5d3b77 Apache config (13 lines)
 
-- [ ] **T007** [P] Create PHP configuration overrides
+- [x] **T007** [P] Create PHP configuration overrides
   - **File**: YokaKit/docker/php/local.ini
   - **Description**: Create PHP ini overrides per a5d3b77 pattern
   - **Content**: upload_max_filesize, post_max_size, memory_limit settings
@@ -109,14 +109,14 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR1.5: Validation & Commit
 
-- [ ] **T008** Test Docker environment (a5d3b77 baseline)
+- [x] **T008** Test Docker environment (a5d3b77 baseline)
   - **Command**: docker-compose up -d && curl http://localhost:18080
   - **Description**: Verify basic Docker environment works
   - **Validation**: Services start, application accessible on port 18080
   - **Validation**: Database named "yokakit" (verify with docker-compose exec db mysql -e "SHOW DATABASES;")
   - **Milestone**: CR1 Complete - a5d3b77 pattern established
 
-- [ ] **T009** Commit CR1 changes
+- [x] **T009** Commit CR1 changes
   - **Command**: git add Dockerfile docker-compose.yml docker/
   - **Commit Message**: "feat: add Docker foundation (PinkieIt commit: a5d3b77)"
   - **Validation**: Commit references a5d3b77ad98f34afae9ac7c6cd6be55770a4309c
@@ -143,14 +143,14 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR3.1: Pre-Reorganization Validation
 
-- [ ] **T010** Create application structure audit report
+- [x] **T010** Create application structure audit report
   - **File**: YokaKit/docs/APP_LARAVEL_REORGANIZATION_PLAN.md
   - **Description**: Document current app/ structure before reorganization
   - **Content**: File inventory, path mappings (app/ → app/laravel/app/), validation checklist
   - **Validation**: Complete inventory of files to be moved
   - **Reference**: PinkieIt commit fad82e6 file changes (200+ file moves)
 
-- [ ] **T011** [P] Create structure validation test
+- [x] **T011** [P] Create structure validation test
   - **File**: YokaKit/tests/structure/test_app_laravel_structure.sh
   - **Description**: Validate app/laravel/ structure after reorganization
   - **Validation**: Test checks all files in correct locations
@@ -158,12 +158,12 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR3.2: Application Reorganization Execution
 
-- [ ] **T012** Create app/laravel/ directory structure
+- [x] **T012** Create app/laravel/ directory structure
   - **Command**: mkdir -p app/laravel
   - **Description**: Create target directory for Laravel application
   - **Validation**: Directory created with proper permissions
 
-- [ ] **T013** Move Laravel application to app/laravel/
+- [x] **T013** Move Laravel application to app/laravel/
   - **Source Paths**: app/, artisan, bootstrap/, composer.json, composer.lock, config/, database/, lang/, package.json, package-lock.json, phpunit.xml, public/, resources/
   - **Target Path**: app/laravel/
   - **Command**: git mv app app/laravel/app && git mv artisan app/laravel/artisan && ... (all files)
@@ -173,7 +173,7 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
   - **Reference**: PinkieIt commit fad82e6e17ed98e82434295fbae4690836206dda
   - **WARNING**: This is a MASSIVE structural change - careful execution required
 
-- [ ] **T014** Create .env.example in repository root
+- [x] **T014** Create .env.example in repository root
   - **File**: YokaKit/.env.example
   - **Description**: Create environment variable template per fad82e6 pattern
   - **Content**: 65 lines with comprehensive Laravel + Docker configuration
@@ -183,26 +183,26 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR3.3: Post-Reorganization Validation
 
-- [ ] **T015** Update Dockerfile for app/laravel/ structure
+- [x] **T015** Update Dockerfile for app/laravel/ structure
   - **File**: YokaKit/Dockerfile
   - **Description**: Update COPY paths to reflect app/laravel/ structure
   - **Changes**: COPY app/laravel /var/www/html, update paths
   - **Validation**: docker build succeeds with new structure
   - **Reference**: Next commits will further refine this
 
-- [ ] **T016** Update docker-compose.yml for app/laravel/ structure
+- [x] **T016** Update docker-compose.yml for app/laravel/ structure
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Update volume mounts and working directory for app/laravel/
   - **Changes**: Adjust paths to app/laravel/, update working_dir
   - **Validation**: docker-compose config validates
 
-- [ ] **T017** Validate application functionality post-reorganization
+- [x] **T017** Validate application functionality post-reorganization
   - **Command**: docker-compose up -d && docker-compose exec app php artisan about
   - **Description**: Verify Laravel application works after reorganization
   - **Validation**: T011 structure test PASSES, application loads
   - **Validation**: Routes accessible, no path errors
 
-- [ ] **T018** Commit CR3 changes
+- [x] **T018** Commit CR3 changes
   - **Command**: git add app/ .env.example Dockerfile docker-compose.yml
   - **Commit Message**: "refactor: reorganize to app/laravel/ structure (PinkieIt commit: fad82e6)"
   - **Validation**: Commit references fad82e6e17ed98e82434295fbae4690836206dda
@@ -220,7 +220,7 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
 
 ### Phase CR4.1: Service Enhancement
 
-- [ ] **T019** Rename services and add YokaKit-specific naming
+- [x] **T019** Rename services and add YokaKit-specific naming
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Update service names, container names, network name
   - **Changes**:
@@ -232,34 +232,34 @@ bfd075e (2025-02-01 13:13): update docker-compose.yml (network, healthcheck, nam
   - **Constitutional**: Replace PinkieIt naming from bfd075e with YokaKit naming
   - **Reference**: PinkieIt commit bfd075e (adapted for YokaKit)
 
-- [ ] **T020** Add healthcheck to database service
+- [x] **T020** Add healthcheck to database service
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Add MariaDB healthcheck configuration
   - **Content**: mysqladmin ping test, 10s interval, 5 retries
   - **Validation**: Healthcheck defined per Docker Compose spec
   - **Reference**: PinkieIt commit bfd075e healthcheck pattern
 
-- [ ] **T021** Add depends_on with service_healthy condition
+- [x] **T021** Add depends_on with service_healthy condition
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Make web-app depend on db healthcheck
   - **Content**: depends_on: db: condition: service_healthy
   - **Validation**: Web-app waits for database to be healthy
   - **Reference**: PinkieIt commit bfd075e dependency pattern
 
-- [ ] **T022** Add environment variables to docker-compose
+- [x] **T022** Add environment variables to docker-compose
   - **File**: YokaKit/docker-compose.yml
   - **Description**: Use environment variables from .env file
   - **Content**: DB_DATABASE, DB_USERNAME, DB_PASSWORD from ${...}
   - **Validation**: Environment variables properly referenced
   - **Reference**: PinkieIt commit bfd075e environment pattern
 
-- [ ] **T023** Update Dockerfile path to docker/base/Dockerfile
+- [x] **T023** Update Dockerfile path to docker/base/Dockerfile
   - **Files**: YokaKit/docker-compose.yml, create YokaKit/docker/base/Dockerfile
   - **Description**: Move Dockerfile from root to docker/base/ and update compose reference
   - **Validation**: Build context updated, dockerfile path correct
   - **Reference**: PinkieIt commit bfd075e Dockerfile relocation
 
-- [ ] **T024** Commit CR4 changes
+- [x] **T024** Commit CR4 changes
   - **Command**: git add docker-compose.yml docker/base/Dockerfile
   - **Commit Message**: "chore: enhance docker-compose with healthcheck and networking (PinkieIt commit: bfd075e)"
   - **Validation**: Commit references bfd075e7e7d9038cbbced99fc052c982b00058f9
