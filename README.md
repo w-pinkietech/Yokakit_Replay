@@ -89,8 +89,8 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 
 1. **Phase 1: Docker Foundation** (2024-07-01 パターン)
    - Docker + MariaDB 基盤構築
-   - 構造修正（models を `app/Models/` へ移動）
-   - DevContainer 開発環境
+   - 構造修正（app/ → app/laravel/ 大規模リファクタリング）
+   - MQTT コンテナ統合
 
 2. **Phase 2: Docker Architecture Optimization** (2025-06-26 パターン)
    - Multi-stage Dockerfile 統合
@@ -102,7 +102,8 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
    - 並列実行最適化（66% 改善）
    - カバレッジ向上
 
-4. **Phase 4: Framework Modernization** (2025-06-16-24 パターン)
+4. **Phase 4: Framework Modernization & DevContainer** (2025-02-20, 2025-06-16-24 パターン)
+   - DevContainer 実装 (commit 0cc0475, 2025-02-20)
    - PHP 8.2 + Laravel 10.x アップグレード
    - Laravel Reverb WebSocket 移行
    - 依存関係モダナイゼーション
@@ -126,22 +127,27 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 - Issue テンプレート・マイルストーン構造
 - 憲法遵守フレームワーク
 
-#### **Phase 1: Docker Foundation & Development Environment** (4週間)
-**Week 1**: Docker Foundation (PinkieIt 2024-07-01 パターン)
-- 基本 Docker セットアップ + MariaDB
-- コンテナ検証・ポート設定
+#### **Phase 1: Docker Foundation** ✅ **完了**
+**Timeline**: 2-3 weeks (commit-based replay)
+**Pattern Source**: PinkieIt 2024-07-01 (commits a5d3b77..13b40d1)
+**Spec**: [specs/002-phase-1-docker/](./specs/002-phase-1-docker/)
 
-**Week 2**: Development Environment (PinkieIt 2025-03 パターン)
-- DevContainer VS Code 環境
-- Claude 統合・Linting 設定
+**CR1 (a5d3b77)**: Initial Docker Foundation
+- docker-compose.yml (3-container stack: web-app, db, mqtt)
+- Dockerfile (PHP 8.2 + Apache base)
+- Basic environment configuration
 
-**Week 3**: Structural Cleanup (重要な構造修正)
-- Models を `app/Http/Requests/` → `app/Models/` へ移動
-- 名前空間修正・オートローダー再生成
+**CR3 (fad82e6)**: Application Structure Reorganization
+- app/ → app/laravel/ migration (200+ files)
+- Namespace restructuring
+- Autoloader regeneration
 
-**Week 4**: Quality Infrastructure Foundation
-- PHPUnit + ファクトリー設定
-- 基本 CI/CD パイプライン
+**CR4-6 (bfd075e, 3a0f1cd, 13b40d1)**: Docker Refinement
+- docker-compose.yml enhancements (networking, healthcheck)
+- Volume optimizations
+- MQTT container integration
+
+**Note**: DevContainer implementation deferred to Phase 4 (actual PinkieIt timeline: commit 0cc0475, 2025-02-20)
 
 #### **Phase 2: Docker Architecture Optimization** ✅ **計画完了**
 **Timeline**: 4-6 hours
@@ -181,10 +187,16 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 - Day 3: Test Performance (parallel execution - 66% improvement target)
 - Day 4-5: Test Cleanup (remove redundant cases)
 
-#### **Phase 4: Framework Modernization** (1週間)
-**Timeline**: 1週間
-**Pattern Source**: PinkieIt June 16-24, 2025
+#### **Phase 4: DevContainer & Framework Modernization** (1-2週間)
+**Timeline**: 1-2週間
+**Pattern Source**: PinkieIt Feb 20, 2025 (DevContainer) + June 16-24, 2025 (Framework)
 
+**Week 1: DevContainer Implementation**
+- Day 1-2: DevContainer configuration (commit 0cc0475)
+- Day 3: VS Code integration and extensions
+- Day 4-5: Development workflow optimization
+
+**Week 2: Framework Modernization**
 - Day 1: PHP 8.2 Upgrade (infrastructure platform)
 - Day 2-3: Laravel 10.x Migration (major framework upgrade)
 - Day 4: Dependency Updates (composer modernization)
@@ -194,10 +206,9 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 **Timeline**: 1週間
 **Pattern Source**: PinkieIt June 26 - July 2, 2025
 
-- Day 1-2: Docker Baseline Metrics (performance measurement)
-- Day 3: Multi-stage Consolidation (single Dockerfile architecture)
-- Day 4: Multi-Architecture Support (AMD64/ARM64)
-- Day 5: DevContainer Optimization (development environment integration)
+- Day 1-2: Docker Performance Baseline (metrics and monitoring)
+- Day 3: Multi-Architecture Support (AMD64/ARM64)
+- Day 4-5: Production Optimization (security, efficiency)
 
 #### **Phase 6: CI/CD Integration & Final Polish** (1週間)
 **Timeline**: 1週間
