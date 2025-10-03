@@ -20,7 +20,8 @@ YokaKit_Replay is a strategic planning and analysis repository that orchestrates
 YokaKit_Replay/
 ├── specs/                    # Implementation plans for each phase
 │   ├── 001-implement-phase-0/
-│   └── 002-phase-1-docker/  # Current: Phase 1 planning
+│   ├── 002-phase-1-docker/
+│   └── 003-phase-2-docker/  # Current: Phase 2 planning
 ├── docs/                     # Analysis and guidance documents
 │   ├── analysis/timeline/   # PinkieIt pattern extraction
 │   └── github-management/   # Label/Issue/Milestone guides
@@ -121,7 +122,7 @@ This architecture ensures:
 - Audit trail maintenance through submodule references
 - YokaKit identity preservation throughout
 
-## Current Status: Phase 1 Docker Foundation & Development Environment IN PROGRESS 🚧
+## Current Status: Phase 2 Docker Architecture Optimization - PLANNING COMPLETE ✅
 
 ### Phase 0 Completion Status ✅
 - **CodeQL Submodule Exclusion**: ✅ YokaKit and pinkieit submodules excluded from analysis
@@ -130,12 +131,21 @@ This architecture ensures:
 - **Constitutional Compliance**: ✅ YokaKit identity preserved, audit trail maintained
 - **Submodule Management**: ✅ Absolute GitHub URLs configured, .gitmodules fixed
 
-### Phase 1 Implementation Plan ✅
+### Phase 1 Completion Status ✅
 - **GitHub Management Setup**: ✅ Label migration, milestone structure, Epic issue creation
-- **Docker Foundation**: 🚧 PHP 8.2 + Apache + MariaDB containerization (PinkieIt a5d3b77 pattern)
-- **Development Environment**: 🚧 DevContainer integration, VS Code configuration
-- **Structural Improvements**: 🚧 Model relocation from app/Http/Requests to app/Models
-- **Quality Infrastructure**: 🚧 Validation scripts, constitutional compliance automation
+- **Docker Foundation**: ✅ PHP 8.2 + Apache + MariaDB containerization (PinkieIt a5d3b77 pattern)
+- **Development Environment**: ✅ DevContainer integration, VS Code configuration
+- **Structural Improvements**: ✅ Model relocation from app/Http/Requests to app/Models
+- **Quality Infrastructure**: ✅ Validation scripts, constitutional compliance automation
+
+### Phase 2 Implementation Plan ✅
+- **Spec Generation**: ✅ spec.md with 4 PinkieIt commits (b980f1e..08ac389)
+- **Planning**: ✅ plan.md, research.md, data-model.md, contracts/, quickstart.md
+- **Task Breakdown**: ✅ tasks.md with 24 commit-based tasks (CR1-CR4)
+- **Multi-Stage Dockerfile**: 📋 Consolidation of docker/base + docker/app
+- **BuildKit Optimization**: 📋 Cache mounts for composer and npm
+- **Docker Compose v2**: 📋 Migration to compose.yml naming
+- **Constitutional Compliance**: 📋 pinkieit → yokakit adaptations (CR2)
 
 ### Technical Stack
 - **Containerization**: Docker + Docker Compose with multi-stage builds
@@ -167,8 +177,8 @@ This architecture ensures:
 
 ### Phase Structure
 - **Phase 0**: GitHub repository initialization ✅ COMPLETED
-- **Phase 1**: Docker Foundation & Development Environment (4 weeks)
-- **Phase 2**: Quality Infrastructure Day (1 day intensive)
+- **Phase 1**: Docker Foundation & Development Environment ✅ COMPLETED
+- **Phase 2**: Docker Architecture Optimization (4-6 hours) 📋 PLANNING COMPLETE
 - **Phase 3**: Comprehensive Testing (2 weeks)
 - **Phase 4**: Framework Modernization (Laravel 10.x + PHP 8.2) (1 week)
 - **Phase 5**: Advanced Docker Optimization (1 week)
@@ -225,10 +235,13 @@ memory/
 
 ## Recent Context
 - **Phase 0 Completed**: GitHub repository infrastructure with constitutional compliance
+- **Phase 1 Completed**: Docker Foundation & Development Environment with commit-based replay
+- **Phase 2 Planning Complete**: Docker Architecture Optimization (4 commits, 24 tasks)
 - **Analysis Documentation**: Comprehensive analysis in `docs/analysis/` with 0% content overlap
 - **Strategic Planning**: 4-month implementation roadmap with 85%+ success probability
 - **Document Structure**: Responsibility matrix with clear authority separation
 - **PinkieIt Pattern Analysis**: 189 commits of proven modernization extracted
+- **Commit-Based Workflow**: Learned to verify actual commits before planning (Phase 1 lesson)
 
 ## Analysis Documentation Structure
 - **Technical Baseline**: Current YokaKit system assessment (93 PHP files, 45 migrations)
@@ -242,53 +255,64 @@ memory/
 - **Milestone Structure**: Phase 0-6 with clear completion criteria
 - **Workflow Management**: needs-triage → in-progress → blocked → closed
 
-## Phase 1 Docker Foundation Context
+## Phase 2 Docker Architecture Optimization Context
 
 ### Implementation Approach
-- **PinkieIt Pattern Reference**: commit a5d3b77ad98f34afae9ac7c6cd6be55770a4309c (2024-07-01 Docker foundation)
-- **YokaKit Repository Preparation**: GitHub label migration, milestone setup, Epic issue creation
-- **Docker Infrastructure**: Single-stage foundation → multi-stage evolution path
-- **Development Environment**: DevContainer with hot-reload and quality tools integration
-- **Constitutional Compliance**: Automated validation for identity preservation and historical fidelity
+- **PinkieIt Pattern Reference**: 4 commits (b980f1e..08ac389) from 2025-06-26
+- **Commit Replay Strategy**: CR1 → CR2 → CR3 → CR4 (sequential execution required)
+- **Multi-Stage Consolidation**: docker/base + docker/app → single Dockerfile
+- **BuildKit Optimization**: Cache mounts for composer and npm dependencies
+- **Constitutional Compliance**: pinkieit → yokakit naming adaptations (CR2)
 
 ### Key Implementation Files
-- **Plan**: `specs/002-phase-1-docker/plan.md` - Complete implementation strategy
-- **Research**: `specs/002-phase-1-docker/research.md` - Technical decisions and PinkieIt analysis
-- **Data Model**: `specs/002-phase-1-docker/data-model.md` - Entity definitions and relationships
-- **Contracts**: `specs/002-phase-1-docker/contracts/` - Configuration specifications
-- **Quickstart**: `specs/002-phase-1-docker/quickstart.md` - 15-minute developer setup guide
+- **Spec**: `specs/003-phase-2-docker/spec.md` - 4 commits with constitutional clarifications
+- **Plan**: `specs/003-phase-2-docker/plan.md` - Commit-by-commit implementation strategy
+- **Research**: `specs/003-phase-2-docker/research.md` - Detailed commit analysis (4 commits)
+- **Data Model**: `specs/003-phase-2-docker/data-model.md` - Docker infrastructure entities
+- **Contracts**: `specs/003-phase-2-docker/contracts/` - Dockerfile, compose.yml, .dockerignore contracts
+- **Tasks**: `specs/003-phase-2-docker/tasks.md` - 24 tasks across 4 commit replays
 
-### Docker Environment Structure
+### Docker Architecture Evolution
 ```text
 YokaKit/                 # Submodule - target for improvements
-├── docker/              # NEW: Docker infrastructure
-│   ├── php/Dockerfile   # PHP 8.2 + Apache configuration
-│   ├── apache/          # Web server configuration
-│   └── mariadb/         # Database initialization
-├── .devcontainer/       # NEW: VS Code integration
-├── docker-compose.yml   # NEW: Development orchestration
-└── scripts/validation/  # NEW: Constitutional compliance automation
+├── Dockerfile           # NEW: Multi-stage (base → build → production)
+├── .dockerignore        # NEW: 124 lines, build context optimization
+├── compose.yml          # RENAMED: from docker-compose.yml (Docker Compose v2)
+├── .devcontainer/
+│   └── docker-compose.extend.yml  # UPDATED: yokakit-web-app image reference
+└── docker/              # DEPRECATED: Consolidated into root Dockerfile
+    ├── base/            # (content moved to Dockerfile)
+    └── app/             # (content moved to Dockerfile)
 ```
 
-### Constitutional Requirements for Phase 1
-- **Identity Preservation**: All containers, volumes, networks use YokaKit naming
-- **Historical Fidelity**: Reference PinkieIt commit a5d3b77 for Docker foundation patterns
-- **Quality First**: Validation scripts enforce constitutional compliance at each step
-- **Sequential Phases**: Complete GitHub setup before technical implementation
+### Commit Replay Structure
+- **CR1** (b980f1e): .dockerignore + CLAUDE.md (5 tasks)
+- **CR2** (f9340aa): Multi-stage Dockerfile + compose.yml + naming (8 tasks)
+- **CR3** (fe2acac): BuildKit cache mounts (6 tasks)
+- **CR4** (08ac389): Final consolidation (5 tasks)
+
+### Constitutional Requirements for Phase 2
+- **Identity Preservation**: yokakit-web-app (NOT pinkieit-web-app) in all Docker configs
+- **Historical Fidelity**: All 4 commits reference full PinkieIt hashes (40-char)
+- **Naming Adaptations**: CR2 requires pinkieit → yokakit changes (Dockerfile, compose.yml, devcontainer)
+- **BuildKit Requirement**: DOCKER_BUILDKIT=1 environment variable for CR3-CR4
 
 ### Validation Commands
 ```bash
+# BuildKit requirement
+export DOCKER_BUILDKIT=1
+
+# Build multi-stage Dockerfile
+docker build -t yokakit-web-app .
+
 # Constitutional compliance check
-./scripts/validation/constitutional-compliance.sh
+grep -ri "pinkieit" . --exclude-dir=vendor --exclude-dir=node_modules
+# Expected: No results
 
-# Docker environment health
-./scripts/validation/docker-environment.sh
-
-# Laravel structure validation
-./scripts/validation/laravel-structure.sh
-
-# Development quality verification
-./scripts/validation/development-quality.sh
+# Service startup test
+docker compose up -d
+docker compose ps | grep "Up"
+# Expected: All services healthy
 ```
 
 ## Spec Creation Guidelines (CRITICAL - Learned from Phase 1)
@@ -425,10 +449,13 @@ git show {hash}:path/to/file
 ```
 
 ## Next Steps
-- **Begin Implementation**: Start with Story #20 (CR1: a5d3b77 Docker Foundation)
-- **Follow Commits**: Execute tasks in chronological order (CR1 → CR3 → CR4-6 → PV)
-- **Validate Continuously**: Constitutional compliance at every commit
-- **Document Progress**: Update Epic #1 as stories complete
+- **Phase 2 Implementation**: Execute tasks.md (24 tasks across CR1-CR4)
+- **Start with T001**: CR1 Analysis (b980f1e - Docker baseline)
+- **Sequential Execution**: CR1 (T001-T005) → CR2 (T006-T013) → CR3 (T014-T019) → CR4 (T020-T024)
+- **BuildKit Required**: Enable DOCKER_BUILDKIT=1 for CR3-CR4
+- **Constitutional Validation**: Zero pinkieit references after CR2 completion
+- **GitHub Issues**: Create Epic and Stories in YokaKit repository
+- **Submodule Update**: After Phase 2 completion, update YokaKit_Replay submodule reference
 
 ---
-*Updated: 2025-10-02 | Constitution: v1.2.0 | Phase 1 Commit-Based Plan Ready | Lesson: Always Check Actual Commits!*
+*Updated: 2025-10-03 | Constitution: v1.2.0 | Phase 2 Planning Complete (4 commits, 24 tasks) | Ready for Implementation*

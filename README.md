@@ -68,7 +68,7 @@ PinkieItはYokaKitをベースに開発されたより進化したシステム�
 
 | コンポーネント | 役割 | リポジトリタイプ | 状態 |
 |---------------|------|----------------|------|
-| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | 🚧 Phase 1計画完了 |
+| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | 🚧 Phase 2計画完了 |
 | **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | 🔄 アップデート中 (Laravel 9.x → 10.x) |
 | **PinkieIt** | 実証済みパターン参照 | 読み取り専用サブモジュール | ✅ 完成済み (Laravel 10.x, Docker, CI/CD) |
 
@@ -92,10 +92,10 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
    - 構造修正（models を `app/Models/` へ移動）
    - DevContainer 開発環境
 
-2. **Phase 2: Quality Infrastructure Day** (2025-06-13 単日実装パターン)
-   - PHPUnit + PCOV テストフレームワーク
-   - Larastan 静的解析
-   - SonarQube 品質監視
+2. **Phase 2: Docker Architecture Optimization** (2025-06-26 パターン)
+   - Multi-stage Dockerfile 統合
+   - BuildKit キャッシュ最適化
+   - 本番対応 Docker アーキテクチャ
 
 3. **Phase 3: Comprehensive Testing** (2025-06-14-15 パターン)
    - レイヤー別テスト実装
@@ -143,23 +143,29 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 - PHPUnit + ファクトリー設定
 - 基本 CI/CD パイプライン
 
-#### **Phase 2: Quality Infrastructure Day** (1日集中実装)
-**Timeline**: 1日集中実装
-**Pattern Source**: PinkieIt 2025-06-13 (8 PRs in single day)
+#### **Phase 2: Docker Architecture Optimization** ✅ **計画完了**
+**Timeline**: 4-6 hours
+**Pattern Source**: PinkieIt 2025-06-26 (4 commits: b980f1e..08ac389)
+**Spec**: [specs/003-phase-2-docker/](./specs/003-phase-2-docker/)
 
-**午前 (06:00-12:00)**:
-- Test Infrastructure (PHPUnit complete setup)
-- Coverage Configuration (PCOV for fast reporting)
-- Static Analysis (Larastan setup)
+**CR1 (b980f1e)**: Docker Baseline
+- .dockerignore (124 lines, build context optimization)
+- CLAUDE.md updates (Docker optimization guidance)
 
-**午後 (12:00-18:00)**:
-- SonarQube Integration (code quality monitoring)
-- CI/CD Pipeline (automated quality pipeline)
-- Database Testing (test connectivity)
+**CR2 (f9340aa)**: Multi-Stage Consolidation
+- Dockerfile creation (129 lines, base/build/production stages)
+- docker-compose.yml → compose.yml (Docker Compose v2)
+- Constitutional adaptations: pinkieit → yokakit naming
 
-**夕方 (18:00-21:00)**:
-- Laravel Upgrade Planning (strategic preparation)
-- Quality Validation (all systems operational)
+**CR3 (fe2acac)**: BuildKit Cache Optimization
+- BuildKit cache mounts (composer, npm)
+- Development vs production targets
+- Performance optimization (rebuild time reduction)
+
+**CR4 (08ac389)**: Final Consolidation
+- Dockerfile simplification (96 lines)
+- Stage optimization (fewer stages, better caching)
+- Production-ready architecture
 
 #### **Phase 3: Comprehensive Testing** (2週間)
 **Timeline**: 2週間
@@ -207,8 +213,9 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 ```text
 YokaKit_Replay/                    # メタリポジトリ（計画・分析）
 ├── specs/                         # 実装計画（Phase毎）
-│   ├── 001-implement-phase-0/     # Phase 0計画
-│   └── 002-phase-1-docker/        # Phase 1計画 ← 現在
+│   ├── 001-implement-phase-0/     # Phase 0計画 ✅
+│   ├── 002-phase-1-docker/        # Phase 1計画 ✅
+│   └── 003-phase-2-docker/        # Phase 2計画 ← 現在
 ├── docs/                          # 分析・ガイダンス
 │   ├── analysis/timeline/         # PinkieItパターン抽出
 │   └── github-management/         # ラベル/Issue/マイルストーンガイド
