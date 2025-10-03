@@ -66,93 +66,149 @@ Parse JSON output for:
 
 ### 5. Generate Initial spec.md
 
+**IMPORTANT**: Follow `.specify/templates/spec-template.md` structure with Phase-specific adaptations.
+
 Write to SPEC_FILE using this structure:
 
 ```markdown
-# Phase {N}: {Phase Name}
+# Feature Specification: Phase {N} {Phase Name}
 
-## Overview
+**Feature Branch**: `{branch_name}`
+**Created**: {YYYY-MM-DD}
+**Status**: Draft
+**Input**: User description: "Phase {N}: {start_commit}..{end_commit} - {description}"
 
-{Brief description of what this phase achieves based on commit analysis}
-
-**PinkieIt Commit Range**: `{start_commit}..{end_commit}`
-**Total Commits**: {count}
-**Estimated Duration**: {based on commit dates}
-
-## PinkieIt Reference Commits
-
-### Chronological Commit Sequence
-
-{For each commit:}
-
-#### Commit {N}: {short_hash} ({date})
-**Full Hash**: `{full_hash}`
-**Message**: {commit_message}
-**Files Changed**: {count} files
-
-**Key Changes**:
-- {file1}: {purpose}
-- {file2}: {purpose}
-...
-
-**YokaKit Adaptations**:
-- {naming_change_1}
-- {naming_change_2}
-...
+## Execution Flow (main)
+```text
+1. Parse PinkieIt commit range from Input
+   → Range: {start_commit}..{end_commit} ({count} commits)
+2. Analyze each commit for technical changes
+   → Identify: files changed, purpose, YokaKit adaptations
+3. Identify constitutional issues:
+   → Rename commits: SKIP
+   → Branding commits: ADAPT with YokaKit naming
+4. Extract user scenarios from commit deliverables
+   → Developer workflow improvements
+5. Generate functional requirements from commits
+   → Each requirement maps to commit deliverable
+6. Identify key entities (infrastructure/code components)
+7. Run constitutional compliance check
+   → Verify: Identity preservation, historical fidelity
+8. Return: SUCCESS (spec ready for planning)
+```
 
 ---
 
-## Constitutional Handling
+## ⚡ Quick Guidelines
+- ✅ Focus on WHAT optimizations/features achieve and WHY
+- ❌ Avoid specific implementation (defer to /plan and /tasks)
+- 👥 Written for technical stakeholders understanding replay methodology
 
-### Commits to Skip
+### PinkieIt Commit Range
+**Start**: `{full_start_hash}` ({start_date})
+**End**: `{full_end_hash}` ({end_date})
+**Total Commits**: {count}
+**Estimated Duration**: {duration based on timestamps}
 
-{List commits that must be skipped:}
+---
 
-- **{commit_hash}**: {reason} (e.g., "Rename YokaKit to PinkieIt - Identity Preservation")
+## User Scenarios & Testing *(mandatory)*
 
-### Commits Requiring Adaptation
+### Primary User Story
+As a YokaKit developer, I need {phase_goal} so that {benefit}, following proven patterns from PinkieIt's {phase_name} phase.
 
-{List commits needing YokaKit-specific changes:}
+### Acceptance Scenarios
+1. **Given** {precondition from Phase N-1}, **When** {Phase N changes applied}, **Then** {observable outcome from commits}
+2. **Given** {development workflow}, **When** {feature from commits used}, **Then** {improved capability}
+{Add more scenarios based on actual commit deliverables}
 
-- **{commit_hash}**: {adaptation} (e.g., "Replace pinkieit with yokakit in all configs")
+### Edge Cases
+- What happens when {edge_case_from_commits}?
+- How does system handle {failure_scenario}?
 
-## Initial Scope Analysis
+## Requirements *(mandatory)*
 
-**Features Identified** (from actual commits):
-- {feature_1} (commit {hash})
-- {feature_2} (commit {hash})
-...
+### Functional Requirements
 
-**Files Affected** (total unique files across all commits):
-- {category_1}: {count} files
-- {category_2}: {count} files
-...
+**From Commit {hash1} ({description})**:
+- **FR-001**: System MUST {specific capability from commit}
+- **FR-002**: System MUST {another capability from commit}
 
-**Dependencies** (from previous phases):
-- Phase {N-1}: {dependency}
-...
+**From Commit {hash2} ({description})**:
+- **FR-003**: System MUST {capability}
 
-## Success Criteria
+{Continue for all commits}
 
-Based on PinkieIt commit deliverables:
+**Constitutional Requirements**:
+- **FR-{N}**: System MUST replace all "PinkieIt" references with "YokaKit"
+- **FR-{N+1}**: System MUST use "yokakit" prefix for all naming
+- **FR-{N+2}**: System MUST preserve YokaKit identity
 
-- [ ] All {count} commits replayed (excluding constitutional skips)
-- [ ] YokaKit naming preserved throughout
-- [ ] Constitutional requirements met
-- [ ] All files from commits implemented
-- [ ] No out-of-scope features added
+### Key Entities *(include if feature involves data)*
+
+- **{Entity1 from commits}**: {Description of component/infrastructure}
+- **{Entity2 from commits}**: {Description with YokaKit-specific details}
+
+---
+
+## PinkieIt Commit References *(for implementation context)*
+
+{For each commit:}
+### Commit {N}: {short_hash}
+**Message**: {message}
+**Files**: {file list or count}
+**Constitutional**: {SKIP/ADAPT/Direct replay} - {reason if applicable}
+
+---
+
+## Review & Acceptance Checklist
+*GATE: Automated checks run during main() execution*
+
+### Content Quality
+- [ ] No implementation details beyond commit-level descriptions
+- [ ] Focused on {phase_type} value and improvements
+- [ ] Written for technical stakeholders
+- [ ] All mandatory sections completed
+
+### Requirement Completeness
+- [ ] No [NEEDS CLARIFICATION] markers (all commits verified)
+- [ ] Requirements testable against commit deliverables
+- [ ] Success criteria measurable
+- [ ] Scope clearly bounded ({count} commits, {duration})
+- [ ] Dependencies identified (Phase {N-1})
+
+### Constitutional Compliance
+- [ ] Identity Preservation: YokaKit naming documented
+- [ ] Historical Fidelity: All commits from PinkieIt verified
+- [ ] Audit Trail: Full commit hashes referenced
+- [ ] Constitutional skips/adaptations documented
+
+---
+
+## Execution Status
+*Updated by main() during processing*
+
+- [ ] PinkieIt commit range parsed
+- [ ] {count} commits analyzed with git show
+- [ ] Constitutional adaptations identified
+- [ ] User scenarios defined from developer workflow
+- [ ] Requirements generated from commit deliverables
+- [ ] Entities identified
+- [ ] Review checklist passed
+
+---
 
 ## Next Steps
 
-1. Run `/clarify` to verify commit range and constitutional handling
+1. Run `/clarify` to verify commit range accuracy and constitutional compliance
 2. Run `/plan` to generate commit-based implementation plan
 3. Run `/tasks` to create commit-by-commit task breakdown
 
 ---
 
-**Created**: {date}
-**PinkieIt Commits**: {start_commit}..{end_commit}
-**Constitution Version**: {version from memory/constitution.md}
+**Constitution Version**: {version from .specify/memory/constitution.md}
+**PinkieIt Commit Range**: {start_commit}..{end_commit}
+**Phase Dependencies**: Phase {N-1}
 ```
 
 ### 6. Validation Checks
