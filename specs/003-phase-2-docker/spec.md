@@ -27,15 +27,27 @@
 ---
 
 ## ⚡ Quick Guidelines
-- ✅ Focus on WHAT Docker optimizations achieve and WHY
-- ❌ Avoid specific implementation (defer to /plan and /tasks)
-- 👥 Written for technical stakeholders understanding replay methodology
+- ✅ Focus on WHAT users need and WHY
+- ❌ Avoid HOW to implement (no tech stack, APIs, code structure)
+- 👥 Written for business stakeholders, not developers
 
-### PinkieIt Commit Range
-**Start**: `b980f1eef1c628962186f7e18012c1330a55b579` (2025-06-26 19:47:40)
-**End**: `08ac3897e478078d254e1ca54c8f244216d1862b` (2025-06-26 21:55:57)
-**Total Commits**: 4
-**Estimated Duration**: 1 day (based on commit timestamps)
+### Section Requirements
+- **Mandatory sections**: Must be completed for every feature
+- **Optional sections**: Include only when relevant to the feature
+- When a section doesn't apply, remove it entirely (don't leave as "N/A")
+
+### For AI Generation
+When creating this spec from a user prompt:
+1. **Mark all ambiguities**: Use [NEEDS CLARIFICATION: specific question] for any assumption you'd need to make
+2. **Don't guess**: If the prompt doesn't specify something (e.g., "login system" without auth method), mark it
+3. **Think like a tester**: Every vague requirement should fail the "testable and unambiguous" checklist item
+4. **Common underspecified areas**:
+   - User types and permissions
+   - Data retention/deletion policies
+   - Performance targets and scale
+   - Error handling behaviors
+   - Integration requirements
+   - Security/compliance needs
 
 ---
 
@@ -101,30 +113,6 @@ As a YokaKit developer, I need optimized Docker build and deployment infrastruct
 
 ---
 
-## PinkieIt Commit References *(for implementation context)*
-
-### Commit 1: b980f1e
-**Message**: Phase 1: Docker baseline metrics and optimization foundation
-**Files**: .dockerignore (124 lines), CLAUDE.md (38 lines)
-**Constitutional**: No PinkieIt references, direct replay
-
-### Commit 2: f9340aa
-**Message**: Phase 2: Consolidate Docker architecture with multi-stage Dockerfile
-**Files**: Dockerfile (129 lines), compose.yml (renamed), .devcontainer/docker-compose.extend.yml
-**Constitutional**: **ADAPT** - pinkieit-web-app → yokakit-web-app, "PinkieIt" → "YokaKit" in comments
-
-### Commit 3: fe2acac
-**Message**: Phase 2: Optimize Dockerfile with build stage separation and cache mounts
-**Files**: Dockerfile (166 lines), ProductionLineFactory.php
-**Constitutional**: Maintain YokaKit naming from commit 2
-
-### Commit 4: 08ac389
-**Message**: Phase 2: Complete Docker optimization with multi-stage consolidation
-**Files**: Dockerfile (96 lines), compose.yml
-**Constitutional**: Maintain YokaKit naming
-
----
-
 ## Review & Acceptance Checklist
 *GATE: Automated checks run during main() execution*
 
@@ -162,14 +150,77 @@ As a YokaKit developer, I need optimized Docker build and deployment infrastruct
 
 ---
 
-## Next Steps
+## YokaKit_Replay Extensions (Commit-Based Replay)
 
-1. Run `/clarify` to verify commit range accuracy and constitutional compliance
+### PinkieIt Commit Range
+**Start**: `b980f1eef1c628962186f7e18012c1330a55b579` (2025-06-26 19:47:40)
+**End**: `08ac3897e478078d254e1ca54c8f244216d1862b` (2025-06-26 21:55:57)
+**Total Commits**: 4
+**Estimated Duration**: 1 day (based on commit timestamps)
+
+### PinkieIt Commit References
+
+#### Commit 1: b980f1e
+**Message**: Phase 1: Docker baseline metrics and optimization foundation
+**Files**: .dockerignore (124 lines), CLAUDE.md (38 lines)
+**Constitutional**: No PinkieIt references, direct replay
+
+#### Commit 2: f9340aa
+**Message**: Phase 2: Consolidate Docker architecture with multi-stage Dockerfile
+**Files**: Dockerfile (129 lines), compose.yml (renamed), .devcontainer/docker-compose.extend.yml
+**Constitutional**: **ADAPT** - pinkieit-web-app → yokakit-web-app, "PinkieIt" → "YokaKit" in comments
+
+#### Commit 3: fe2acac
+**Message**: Phase 2: Optimize Dockerfile with build stage separation and cache mounts
+**Files**: Dockerfile (166 lines), ProductionLineFactory.php
+**Constitutional**: Maintain YokaKit naming from commit 2
+
+#### Commit 4: 08ac389
+**Message**: Phase 2: Complete Docker optimization with multi-stage consolidation
+**Files**: Dockerfile (96 lines), compose.yml
+**Constitutional**: Maintain YokaKit naming
+
+### Constitutional Compliance Verification
+
+#### Commit Range Verification
+- ✅ All 4 commits verified against PinkieIt git log (b980f1e, f9340aa, fe2acac, 08ac389)
+- ✅ Commit hashes are full 40-character format
+- ✅ Commit dates accurate (2025-06-26, 19:47-21:55)
+- ✅ Commit sequence matches chronological order
+
+#### Constitutional Adaptations
+- ✅ 0 rename commits (no identity-changing commits)
+- ✅ 1 adaptation commit documented (f9340aa) with specific changes
+- ✅ PinkieIt references identified: Dockerfile comment, image/container names
+- ✅ All adaptations include file paths (Dockerfile, compose.yml, .devcontainer/docker-compose.extend.yml)
+
+#### YokaKit Naming Adaptations
+- ✅ f9340aa: Specific adaptations documented
+  - Dockerfile comment: "PinkieIt" → "YokaKit"
+  - Image name: pinkieit-web-app → yokakit-web-app
+  - Container names: pinkieit-dev/pinkieit-web-app → yokakit-dev/yokakit-web-app
+- ✅ fe2acac: Maintain YokaKit naming from f9340aa (no new PinkieIt references)
+- ✅ 08ac389: Maintain YokaKit naming (references existing naming)
+- ✅ b980f1e: No PinkieIt/YokaKit adaptations needed (CLAUDE.md update only)
+
+#### Scope Boundaries
+- ✅ All 4 commits logically belong to Docker optimization phase
+- ✅ b980f1e: Phase 1 baseline (sets foundation for Phase 2)
+- ✅ f9340aa, fe2acac, 08ac389: Phase 2 Docker consolidation and optimization
+- ✅ No dependency commits from future phases detected
+- ✅ Commit sequence: baseline → consolidation → optimization → finalization
+
+### Implementation Readiness
+- [x] All commits verified
+- [x] Constitutional strategy confirmed
+- [x] Adaptations clarified
+- [x] Scope boundaries clear
+- [x] Ready for /plan
+
+### Next Steps
+1. ~~Run `/clarify` to verify commit range accuracy and constitutional compliance~~ ✅ Complete
 2. Run `/plan` to generate commit-based implementation plan with technical context
 3. Run `/tasks` to create commit-by-commit task breakdown (expected: ~12-16 tasks for 4 commits)
 
----
-
 **Constitution Version**: v1.2.0
-**PinkieIt Commit Range**: b980f1e..08ac389
 **Phase Dependencies**: Phase 1 (CR1-CR6) Docker Foundation
