@@ -241,6 +241,24 @@ memory/
 - Phase-based team permissions with elevated access during assigned phases
 - Quality-first approach with automated validation gates
 
+## Testing Commands
+```bash
+# Run all tests
+php artisan test
+
+# Run tests in parallel (4 processes, ~66% faster)
+php artisan test --parallel --processes=4
+
+# Run tests with coverage report
+php artisan test --coverage
+
+# Run parallel tests with coverage
+php artisan test --parallel --coverage
+
+# Run Dusk browser tests
+php artisan dusk
+```
+
 ## Recent Context
 - **Phase 0 Completed**: GitHub repository infrastructure with constitutional compliance
 - **Phase 1 Completed**: Docker Foundation & Development Environment with commit-based replay
