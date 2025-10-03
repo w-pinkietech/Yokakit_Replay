@@ -1,0 +1,139 @@
+# Docker Compose Contract: YokaKit Development Environment
+# Purpose: Service definitions, networking, and volume configuration contract
+# Validation: This contract defines expected structure - implementation must conform
+
+version: '3.8'
+
+# Contract: Service Definitions
+services:
+  # Contract: Web Application Service
+  web-app:
+    # REQUIRED: Container configuration
+    container_name: "yokakit-web-app"  # MUST preserve YokaKit naming
+    image: "php:8.2-apache"            # MUST match PinkieIt pattern
+
+    # REQUIRED: Port mapping (follows PinkieIt pattern)
+    ports:
+      - "18080:80"  # External:Internal (YokaKit standard port)
+
+    # REQUIRED: Volume mounts for development
+    volumes:
+      - "app_data:/var/www/html"      # Application code
+      - "composer_cache:/root/.composer"  # Composer cache
+
+    # REQUIRED: Environment variables
+    environment:
+      - "APP_ENV=local"
+      - "APP_DEBUG=true"
+      - "DB_CONNECTION=mysql"
+      - "DB_HOST=database"
+      - "DB_PORT=3306"
+      - "DB_DATABASE=yokakit"  # MUST preserve YokaKit naming
+      - "DB_USERNAME=yokakit_user"
+      - "DB_PASSWORD=${DB_PASSWORD}"  # From .env file
+
+    # REQUIRED: Service dependencies
+    depends_on:
+      database:
+        condition: service_healthy
+
+    # REQUIRED: Network assignment
+    networks:
+      - yokakit-network
+
+    # REQUIRED: Restart policy for development
+    restart: unless-stopped
+
+    # REQUIRED: Health check for dependency management
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Contract: Database Service
+  database:
+    # REQUIRED: Container configuration
+    container_name: "yokakit-database"  # MUST preserve YokaKit naming
+    image: "mariadb:10.11.4"           # MUST match PinkieIt version
+
+    # REQUIRED: Port mapping (optional external access)
+    ports:
+      - "3306:3306"
+
+    # REQUIRED: Persistent data volume
+    volumes:
+      - "db_data:/var/lib/mysql"       # Database persistence
+      - "db_init:/docker-entrypoint-initdb.d"  # Initialization scripts
+
+    # REQUIRED: Environment variables
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}"
+      - "MYSQL_DATABASE=yokakit"       # MUST preserve YokaKit naming
+      - "MYSQL_USER=yokakit_user"
+      - "MYSQL_PASSWORD=${DB_PASSWORD}"
+
+    # REQUIRED: Network assignment
+    networks:
+      - yokakit-network
+
+    # REQUIRED: Restart policy
+    restart: unless-stopped
+
+    # REQUIRED: Health check for web-app dependency
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+# Contract: Volume Definitions
+volumes:
+  # REQUIRED: Application data volume (bind mount for development)
+  app_data:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${YOKAKIT_APP_PATH:-./YokaKit}"  # Points to YokaKit submodule
+
+  # REQUIRED: Database persistence volume
+  db_data:
+    driver: local
+    name: "yokakit-db-data"  # MUST preserve YokaKit naming
+
+  # REQUIRED: Database initialization volume
+  db_init:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "./docker/database/init"
+
+  # REQUIRED: Composer cache for faster builds
+  composer_cache:
+    driver: local
+    name: "yokakit-composer-cache"
+
+# Contract: Network Definitions
+networks:
+  # REQUIRED: Application network
+  yokakit-network:
+    driver: bridge
+    name: "yokakit-network"  # MUST preserve YokaKit naming
+    ipam:
+      config:
+        - subnet: "172.20.0.0/16"  # Avoid conflicts with common ranges
+
+# Contract: Configuration Requirements
+# VALIDATION RULES:
+# 1. All service names MUST preserve YokaKit identity (no PinkieIt references)
+# 2. Port 18080 MUST be used for web access (PinkieIt pattern compliance)
+# 3. MariaDB 10.11.4 MUST be used (proven version from PinkieIt)
+# 4. PHP 8.2 Apache MUST be base image (PinkieIt pattern)
+# 5. Health checks MUST be implemented for service dependencies
+# 6. Volumes MUST provide persistence for database and development workflow
+# 7. Environment variables MUST support secure configuration via .env
+# 8. Networks MUST isolate YokaKit environment from other projects

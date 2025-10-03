@@ -1,0 +1,305 @@
+# Validation Scripts Contract: Constitutional Compliance & Quality Assurance
+# Purpose: Automated validation for YokaKit development environment
+# Validation: Scripts must enforce constitutional requirements and quality standards
+
+# Contract: Script Definitions
+validation_scripts:
+
+  # REQUIRED: Constitutional Compliance Validation
+  constitutional_compliance:
+    script_name: "validate-constitutional-compliance"
+    script_path: "./scripts/validation/constitutional-compliance.sh"
+    purpose: "Verify constitutional requirements throughout development"
+    execution_type: ["manual", "pre_commit", "ci_cd"]
+    timeout_seconds: 120
+    exit_codes:
+      0: "All constitutional requirements satisfied"
+      1: "Identity preservation violations detected"
+      2: "Historical fidelity audit trail missing"
+      3: "Quality-first requirements not met"
+
+    validation_checks:
+      identity_preservation:
+        - check_name: "YokaKit Naming Convention"
+          command: "grep -r 'PinkieIt' --exclude-dir=.git --exclude-dir=pinkieit ."
+          expected_result: "no_matches"
+          violation_severity: "critical"
+          description: "Ensure no PinkieIt branding in YokaKit code"
+
+        - check_name: "Container Naming Compliance"
+          command: "docker-compose config | grep container_name"
+          expected_pattern: "yokakit.*"
+          violation_severity: "critical"
+          description: "All containers must use YokaKit naming"
+
+      historical_fidelity:
+        - check_name: "PinkieIt Commit References"
+          command: "git log --grep='PinkieIt commit:' --oneline | wc -l"
+          expected_result: ">= 1"
+          violation_severity: "medium"
+          description: "Audit trail must reference PinkieIt commits"
+
+        - check_name: "Constitutional Label Presence"
+          command: "gh issue list --label='constitutional:identity-preservation' --state=all"
+          expected_result: "non_empty"
+          violation_severity: "high"
+          description: "Issues must have constitutional compliance labels"
+
+  # REQUIRED: Docker Environment Validation
+  docker_environment:
+    script_name: "validate-docker-environment"
+    script_path: "./scripts/validation/docker-environment.sh"
+    purpose: "Verify Docker environment setup and functionality"
+    execution_type: ["manual", "post_setup", "periodic"]
+    timeout_seconds: 300
+    exit_codes:
+      0: "Docker environment healthy"
+      1: "Services not running properly"
+      2: "Network connectivity issues"
+      3: "Volume mount problems"
+
+    validation_checks:
+      service_health:
+        - check_name: "Web Application Service"
+          command: "docker-compose ps web-app | grep 'Up'"
+          expected_result: "service_running"
+          retry_count: 3
+          description: "Web application container must be running"
+
+        - check_name: "Database Service"
+          command: "docker-compose ps database | grep 'Up (healthy)'"
+          expected_result: "service_healthy"
+          retry_count: 5
+          description: "Database container must be running and healthy"
+
+        - check_name: "Application Response"
+          command: "curl -f http://localhost:18080/health"
+          expected_result: "http_200"
+          retry_count: 3
+          description: "Application must respond on port 18080"
+
+      volume_integrity:
+        - check_name: "Application Volume Mount"
+          command: "docker volume inspect yokakit-db-data"
+          expected_result: "volume_exists"
+          description: "Database volume must exist for persistence"
+
+        - check_name: "Code Synchronization"
+          command: "docker-compose exec web-app ls -la /var/www/html/app"
+          expected_result: "directory_exists"
+          description: "Application code must be mounted correctly"
+
+  # REQUIRED: Laravel Application Structure Validation
+  laravel_structure:
+    script_name: "validate-laravel-structure"
+    script_path: "./scripts/validation/laravel-structure.sh"
+    purpose: "Verify Laravel application structure compliance"
+    execution_type: ["manual", "post_migration", "ci_cd"]
+    timeout_seconds: 60
+    exit_codes:
+      0: "Laravel structure compliant"
+      1: "Model relocation incomplete"
+      2: "Directory structure violations"
+      3: "Dependency issues detected"
+
+    validation_checks:
+      model_relocation:
+        - check_name: "Models in Correct Directory"
+          command: "find ./YokaKit/app/Models -name '*.php' | wc -l"
+          expected_result: "> 0"
+          description: "Models must exist in app/Models directory"
+
+        - check_name: "No Models in Requests Directory"
+          command: "find ./YokaKit/app/Http/Requests -name '*Config.php' -o -name '*Model.php'"
+          expected_result: "no_matches"
+          violation_severity: "high"
+          description: "No model files should remain in Requests directory"
+
+        - check_name: "Namespace Compliance"
+          command: "grep -r 'namespace App\\Http\\Requests;' ./YokaKit/app/Models/"
+          expected_result: "no_matches"
+          description: "Model files must have correct namespace"
+
+      dependency_validation:
+        - check_name: "Composer Dependencies"
+          command: "cd ./YokaKit && composer validate"
+          expected_result: "validation_success"
+          description: "Composer configuration must be valid"
+
+        - check_name: "Laravel Framework Version"
+          command: "cd ./YokaKit && composer show laravel/framework | grep versions"
+          expected_pattern: "v10\\."
+          description: "Laravel 10.x must be installed"
+
+  # REQUIRED: Development Environment Quality
+  development_quality:
+    script_name: "validate-development-quality"
+    script_path: "./scripts/validation/development-quality.sh"
+    purpose: "Verify development tools and quality infrastructure"
+    execution_type: ["manual", "pre_commit", "periodic"]
+    timeout_seconds: 180
+    exit_codes:
+      0: "Quality standards met"
+      1: "Code formatting issues"
+      2: "Static analysis failures"
+      3: "Testing framework problems"
+
+    validation_checks:
+      code_quality:
+        - check_name: "Laravel Pint Formatting"
+          command: "cd ./YokaKit && ./vendor/bin/pint --test"
+          expected_result: "formatting_compliant"
+          auto_fix_available: true
+          description: "Code must follow Laravel formatting standards"
+
+        - check_name: "PHPStan Static Analysis"
+          command: "cd ./YokaKit && ./vendor/bin/phpstan analyse --no-progress"
+          expected_result: "analysis_clean"
+          description: "Code must pass static analysis checks"
+
+        - check_name: "PHPUnit Test Framework"
+          command: "cd ./YokaKit && php artisan test --env=testing"
+          expected_result: "tests_passing"
+          description: "Test framework must be functional"
+
+      development_tools:
+        - check_name: "DevContainer Configuration"
+          command: "test -f .devcontainer/devcontainer.json"
+          expected_result: "file_exists"
+          description: "DevContainer configuration must exist"
+
+        - check_name: "VS Code Extensions Manifest"
+          command: "jq '.customizations.vscode.extensions[]' .devcontainer/devcontainer.json"
+          expected_result: "extensions_listed"
+          description: "Required VS Code extensions must be configured"
+
+# Contract: Script Templates
+script_templates:
+
+  # REQUIRED: Constitutional compliance script template
+  constitutional_compliance_template: |
+    #!/bin/bash
+    # Constitutional Compliance Validation Script
+    # Purpose: Verify YokaKit constitutional requirements
+
+    set -e
+
+    echo "🔍 Validating Constitutional Compliance..."
+
+    # Identity Preservation Check
+    echo "📋 Checking YokaKit identity preservation..."
+    if grep -r "PinkieIt" --exclude-dir=.git --exclude-dir=pinkieit . > /dev/null; then
+        echo "❌ VIOLATION: PinkieIt references found in YokaKit code"
+        exit 1
+    fi
+    echo "✅ YokaKit identity preserved"
+
+    # Historical Fidelity Check
+    echo "📋 Checking PinkieIt audit trail..."
+    COMMIT_REFS=$(git log --grep="PinkieIt commit:" --oneline | wc -l)
+    if [ "$COMMIT_REFS" -eq 0 ]; then
+        echo "⚠️  WARNING: No PinkieIt commit references found"
+    else
+        echo "✅ Historical fidelity maintained ($COMMIT_REFS references)"
+    fi
+
+    # Constitutional Labels Check
+    echo "📋 Checking constitutional labels..."
+    if command -v gh &> /dev/null; then
+        CONSTITUTIONAL_ISSUES=$(gh issue list --label="constitutional:identity-preservation" --state=all --json number | jq length)
+        echo "✅ Constitutional compliance tracked ($CONSTITUTIONAL_ISSUES issues)"
+    else
+        echo "⚠️  WARNING: GitHub CLI not available for label validation"
+    fi
+
+    echo "🎉 Constitutional compliance validation complete"
+
+  # REQUIRED: Docker environment validation template
+  docker_environment_template: |
+    #!/bin/bash
+    # Docker Environment Validation Script
+    # Purpose: Verify Docker development environment health
+
+    set -e
+
+    echo "🐳 Validating Docker Environment..."
+
+    # Service Health Check
+    echo "📋 Checking service health..."
+    if ! docker-compose ps | grep "Up" > /dev/null; then
+        echo "❌ ERROR: Docker services not running"
+        exit 1
+    fi
+    echo "✅ Docker services running"
+
+    # Application Response Check
+    echo "📋 Checking application response..."
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+        if curl -f http://localhost:18080/health > /dev/null 2>&1; then
+            echo "✅ Application responding on port 18080"
+            break
+        fi
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        echo "⏳ Waiting for application... ($RETRY_COUNT/$MAX_RETRIES)"
+        sleep 2
+    done
+
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+        echo "❌ ERROR: Application not responding after $MAX_RETRIES attempts"
+        exit 2
+    fi
+
+    # Database Health Check
+    echo "📋 Checking database health..."
+    if docker-compose exec -T database mysqladmin ping -h localhost > /dev/null 2>&1; then
+        echo "✅ Database healthy"
+    else
+        echo "❌ ERROR: Database not responding"
+        exit 2
+    fi
+
+    echo "🎉 Docker environment validation complete"
+
+# Contract: Execution Framework
+execution_framework:
+  # REQUIRED: Validation orchestration
+  orchestration:
+    run_all_command: "./scripts/validation/run-all-validations.sh"
+    parallel_execution: false  # Run sequentially for dependency order
+    fail_fast: true           # Stop on first failure
+    report_format: "json"     # Generate machine-readable reports
+
+  # REQUIRED: Integration points
+  integration:
+    pre_commit_hook: "./scripts/validation/pre-commit-validation.sh"
+    ci_cd_integration: "./scripts/validation/ci-validation.sh"
+    manual_execution: "./scripts/validation/manual-validation.sh"
+
+  # REQUIRED: Reporting
+  reporting:
+    output_directory: "./validation-reports"
+    report_timestamp: true
+    include_remediation: true
+    constitutional_compliance_summary: true
+
+# Contract: Validation Rules Summary
+validation_rules:
+  # REQUIRED: Constitutional enforcement
+  - "All validation scripts MUST enforce constitutional requirements"
+  - "Identity preservation violations MUST be critical failures"
+  - "Historical fidelity MUST be tracked and reported"
+  - "Quality-first approach MUST be validated throughout"
+
+  # REQUIRED: Technical standards
+  - "Docker environment MUST be healthy before development"
+  - "Laravel structure MUST comply with framework conventions"
+  - "Code quality MUST meet established standards"
+  - "Development tools MUST be properly configured"
+
+  # REQUIRED: Execution standards
+  - "Scripts MUST be idempotent and safe to run repeatedly"
+  - "Exit codes MUST clearly indicate failure types"
+  - "Output MUST be clear and actionable for developers"
+  - "Validation MUST be automatable for CI/CD integration"

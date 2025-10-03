@@ -14,6 +14,15 @@
         "/mnt/shared_data/YokaKit_Replay"
       ],
       "env": {}
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--channel=stable",
+        "--headless=true",
+        "--isolated=true"
+      ]
     }
   }
 }

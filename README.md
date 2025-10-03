@@ -8,12 +8,69 @@ YokaKit_Replayは、**PinkieIt = YokaKit + 段階的改善** という開発系�
 
 PinkieItはYokaKitをベースに開発されたより進化したシステムであり、その開発履歴（git log）を辿ることで、YokaKitからPinkieItへの改善工程を完全に再現できます。このプロジェクトでは、PinkieItの開発履歴を段階的にYokaKitに適用してモダナイゼーションを実施します。
 
+### 🏗️ リポジトリの役割と関係性
+
+#### YokaKit_Replay（このリポジトリ）
+**役割**: 戦略的計画・分析・実装オーケストレーションリポジトリ
+**目的**:
+- 包括的な実装計画と設計（specs/）
+- PinkieItからの歴史的パターン分析（docs/analysis/）
+- 憲法遵守ガバナンス（memory/constitution.md）
+- GitHub管理ガイダンス（docs/github-management/）
+- 開発ワークフローオーケストレーション
+
+**開発活動**: 計画、ドキュメント、分析（アプリケーションコード変更は行わない）
+
+#### YokaKitリポジトリ（サブモジュール、独立GitHubリポジトリ）
+**役割**: 実際の開発が行われるメインリポジトリ
+**GitHub URL**: `https://github.com/YOUR_ORG/YokaKit`（独立リポジトリ）
+**目的**:
+- 本番Laravelアプリケーションコードベース
+- リプレイプロセスから改善を受け取る
+- 実際の開発のためのGitHub Issue/PR管理
+- Docker環境、構造修正、モダナイゼーションの対象
+
+**GitHub管理**:
+- **ラベル**: YokaKit_Replayから移行された4層階層
+- **Issue**: 開発タスクはここで作成（YokaKit_Replayではない）
+- **マイルストーン**: Phase 0-6追跡
+- **プルリクエスト**: コードレビューとマージワークフロー
+
+**YokaKit_Replayとの関係**: 調整のためGitサブモジュールとして参照されるが、Issue/PR管理のため独立したGitHubアイデンティティを維持
+
+#### PinkieItリポジトリ（サブモジュール、参照のみ）
+**役割**: 実証済みパターンの歴史的参照リポジトリ
+**GitHub URL**: `https://github.com/w-pinkietech/pinkieit`（読み取り専用参照）
+**目的**:
+- 実証済みモダナイゼーションパターンのソース（189コミット）
+- 監査証跡のためのコミットハッシュ参照
+- YokaKit改善のためのパターン抽出
+- 憲法遵守検証
+
+**使用方法**: 読み取り専用分析、直接コードコピー禁止（憲法要件）
+
+### 🔄 開発ワークフロー
+
+#### 計画フェーズ（YokaKit_Replay）
+1. `specs/###-feature/`に実装計画を作成
+2. コミット履歴からPinkieItパターンを調査
+3. 契約、データモデル、クイックスタートガイドを設計
+4. 憲法遵守要件を更新
+
+#### 実装フェーズ（YokaKitリポジトリ）
+1. **YokaKitリポジトリにGitHub Issueを作成**（移行されたラベルを使用）
+2. **YokaKitアプリケーションコードに変更を実装**
+3. **YokaKitリポジトリにプルリクエストを提出**
+4. **監査証跡のためコミットメッセージでPinkieItコミットを参照**
+5. **フェーズ完了後にYokaKit_Replayサブモジュール参照を更新**
+
 ### 🔄 リプレイ対象コンポーネント
 
-| コンポーネント | 役割 | 状態 |
-|---------------|------|------|
-| **PinkieIt** | 参考元システム<br>完成済みのモダンなLaravel MES | ✅ 完成済み (Laravel 10.x, Docker, CI/CD) |
-| **YokaKit** | アップデート対象システム<br>これから改善する生産進捗管理システム | 🔄 アップデート中 (Laravel 9.x → 最新版) |
+| コンポーネント | 役割 | リポジトリタイプ | 状態 |
+|---------------|------|----------------|------|
+| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | 🚧 Phase 1計画完了 |
+| **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | 🔄 アップデート中 (Laravel 9.x → 10.x) |
+| **PinkieIt** | 実証済みパターン参照 | 読み取り専用サブモジュール | ✅ 完成済み (Laravel 10.x, Docker, CI/CD) |
 
 ## 🎯 リプレイ目標
 
@@ -146,19 +203,63 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 
 ## 🏗️ アーキテクチャ
 
+### リポジトリ構造（関心の分離）
 ```text
-YokaKit_Replay/
-├── YokaKit/          # 生産進捗管理システム
-│   ├── Laravel 9.x
-│   ├── WebSocket (Laravel Echo Server)
-│   └── MQTT Client
-├── pinkieit/         # 製造実行システム
-│   ├── Laravel 10.x
-│   ├── MariaDB
-│   └── Docker環境
-├── memory/           # 共有メモリ・設定
-├── templates/        # プロジェクトテンプレート
-└── scripts/          # 自動化スクリプト
+YokaKit_Replay/                    # メタリポジトリ（計画・分析）
+├── specs/                         # 実装計画（Phase毎）
+│   ├── 001-implement-phase-0/     # Phase 0計画
+│   └── 002-phase-1-docker/        # Phase 1計画 ← 現在
+├── docs/                          # 分析・ガイダンス
+│   ├── analysis/timeline/         # PinkieItパターン抽出
+│   └── github-management/         # ラベル/Issue/マイルストーンガイド
+├── memory/constitution.md         # 憲法要件 v1.2.0
+├── templates/                     # プロジェクトテンプレート
+├── scripts/                       # 自動化スクリプト
+├── YokaKit/                       # サブモジュール → 独立リポジトリ
+└── pinkieit/                      # サブモジュール → 参照専用
+
+YokaKit/（独立GitHubリポジトリ）   # 実際の開発リポジトリ
+├── app/                           # Laravelアプリケーション
+│   ├── Models/                    # ← 移動先（Phase 1で修正）
+│   └── Http/Requests/             # ← 移動元（誤配置モデル）
+├── docker/                        # ← NEW（Phase 1で追加）
+├── .devcontainer/                 # ← NEW（Phase 1で追加）
+├── docker-compose.yml             # ← NEW（Phase 1で追加）
+└── scripts/validation/            # ← NEW（Phase 1で追加）
+
+# GitHub Issue/PR管理はYokaKitリポジトリで実施
+# コード変更もYokaKitリポジトリで実施
+# YokaKit_Replayは計画・ガイダンスのみ提供
+
+pinkieit/（読み取り専用参照）     # パターン参照リポジトリ
+├── Laravel 10.x                   # 参照：フレームワークバージョン
+├── docker/                        # 参照：Docker構成パターン
+├── .devcontainer/                 # 参照：開発環境パターン
+└── 189 commits                    # 参照：実証済み改善履歴
+```
+
+### 開発フロー（リポジトリ間連携）
+```text
+1. 計画（YokaKit_Replay）
+   /plan コマンド → specs/002-phase-1-docker/ 生成
+
+2. GitHub準備（YokaKitリポジトリ）
+   gh label create --repo YOUR_ORG/YokaKit ...
+   gh issue create --repo YOUR_ORG/YokaKit ...
+
+3. 実装（YokaKitリポジトリ）
+   cd YokaKit/
+   # Docker環境追加、モデル移動など
+   git commit -m "feat: Docker foundation (PinkieIt: a5d3b77)"
+   git push origin feature/phase-1-docker
+
+4. PR作成（YokaKitリポジトリ）
+   gh pr create --repo YOUR_ORG/YokaKit
+
+5. サブモジュール更新（YokaKit_Replay）
+   cd ../  # YokaKit_Replayに戻る
+   git add YokaKit
+   git commit -m "chore: update YokaKit to Phase 1 completion"
 ```
 
 ## ⚙️ GitHub運用方針
@@ -176,7 +277,11 @@ YokaKit_Replay/
 
 ### Issue・マイルストーン管理
 
-#### ラベル体系 (4層階層構造)
+**重要**: GitHub Issue/PR管理は**YokaKitリポジトリ**で実施
+- YokaKit_Replayは計画・ガイダンスリポジトリ（Issue管理なし）
+- YokaKitリポジトリで実際の開発Issue/PRを作成・追跡
+
+#### ラベル体系 (4層階層構造) - YokaKitリポジトリに適用
 - **Epic レベル**: `epic:phase-0` ～ `epic:phase-6` (Phase レベルの大規模機能群)
 - **Story レベル**: `story:feature`, `story:security`, `story:ci-cd`, `story:integration`, `story:documentation`
 - **Task レベル**: `task:implementation`, `task:validation`, `task:testing`
@@ -184,7 +289,9 @@ YokaKit_Replay/
 - **ステータス**: `status:needs-triage`, `status:in-progress`, `status:blocked`
 - **標準**: `enhancement`, `bug`, `documentation`, `question`
 
-#### マイルストーン
+**ラベル移行**: YokaKit_Replayで定義 → YokaKitリポジトリに`gh`コマンドで適用
+
+#### マイルストーン - YokaKitリポジトリに適用
 - **Phase 0**: GitHubリポジトリ初期化 (v0.1.0)
 - **Phase 1**: Docker Foundation & Development Environment (v0.2.0)
 - **Phase 2**: Quality Infrastructure Day (v0.3.0)
@@ -192,6 +299,21 @@ YokaKit_Replay/
 - **Phase 4**: Framework Modernization (Laravel 10.x + PHP 8.2) (v0.5.0)
 - **Phase 5**: Advanced Docker Optimization (v0.6.0)
 - **Phase 6**: CI/CD Integration & Final Polish (v1.0.0)
+
+#### Issue作成例（YokaKitリポジトリ）
+```bash
+# YokaKitリポジトリにEpic Issue作成
+gh issue create --repo YOUR_ORG/YokaKit \
+  --title "[EPIC] Phase 1: Docker Foundation & Development Environment" \
+  --label "epic:phase-1,constitutional:identity-preservation" \
+  --milestone "Phase 1: Docker Foundation"
+
+# YokaKitリポジトリにTask Issue作成
+gh issue create --repo YOUR_ORG/YokaKit \
+  --title "[TASK] Create docker-compose.yml with YokaKit naming" \
+  --label "epic:phase-1,task:implementation,constitutional:identity-preservation" \
+  --body "Reference: PinkieIt commit a5d3b77"
+```
 
 ### サブモジュール管理
 - **YokaKit更新**: 各Phase完了時に必須
@@ -349,13 +471,110 @@ docs/github-management/
 - [CI/CDワークフロー](./pinkieit/docs/CI_CD_WORKFLOW.md)
 - [Claude Code設定](./pinkieit/CLAUDE.md)
 
+## 📐 Spec作成ガイドライン（重要：Phase 1の教訓）
+
+### MUST: PinkieItの実際のコミット履歴を必ず確認
+
+**仮定に基づく計画は禁止**。PinkieItの実際のコミットを**必ず確認**してから計画を作成する。
+
+#### Phase 1で学んだ教訓
+
+**初期の誤り** ❌:
+```
+想定: "Docker Foundation" = 単純なDockerfile + docker-compose.yml
+想定: "モデル移動" = app/Http/Requests → app/Models
+結果: 仮定ベースで48タスク作成 → 不正確
+```
+
+**現実確認** ✅:
+```bash
+cd pinkieit
+git log --oneline --reverse a5d3b77..13b40d1
+
+実態:
+a5d3b77: 初期Docker（想定通り）
+643414f: YokaKit→PinkieItリネーム（スキップ必須）
+fad82e6: app/全体をapp/laravel/に移動（大規模！）
+bfd075e: docker-compose洗練（network, healthcheck）
+3a0f1cd: volume調整
+13b40d1: MQTTコンテナ追加
+```
+
+**修正後のアプローチ** ✅:
+- 各コミットを`git show {hash} --stat`で分析
+- 実際のファイル変更を理解（fad82e6は200+ファイル！）
+- コミット単位のリプレイタスク作成（47タスク）
+- 正確な期間: 2-3週間（4週間ではない）
+
+### 全フェーズ共通の必須ワークフロー
+
+#### ステップ1: 関連するPinkieItコミットを特定
+```bash
+# Phase 2（品質基盤）の例
+cd pinkieit
+git log --oneline --grep="test\|quality\|phpunit\|coverage" --reverse
+
+# または日付範囲で検索（timeline analysisから判明している場合）
+git log --oneline --after="2025-06-13" --before="2025-06-14" --reverse
+```
+
+#### ステップ2: 各コミットを詳細分析
+```bash
+git show {hash} --stat        # ファイルリスト
+git show {hash}               # 完全なdiff
+git show {hash}:path/to/file  # 特定ファイルの内容
+```
+
+#### ステップ3: 憲法要件とのマッピング
+```
+各コミットに対して:
+  IF YokaKit→PinkieItリネーム:
+    → スキップ（憲法要件III）
+  ELSE IF PinkieItブランディング追加:
+    → YokaKit名前で適応
+  ELSE:
+    → YokaKitアイデンティティ保持してリプレイ
+```
+
+#### ステップ4: コミットベースのtasks.md作成
+```markdown
+## COMMIT REPLAY 1: {hash} - {説明}
+**PinkieIt Commit**: `{完全hash}`
+**Tasks**: T001-T00X
+
+各コミットの実際の変更に基づくタスク生成
+```
+
+#### ステップ5: GitHub Issue作成前の検証
+- [ ] 全コミット分析済み？（最初と最後だけではダメ）
+- [ ] 憲法スキップ文書化済み？（643414f等）
+- [ ] 命名適応計画済み？（pinkieit → yokakit）
+- [ ] ファイルパス正確？（実際のdiff確認）
+- [ ] 依存関係明確？（コミット順序重要）
+
+### Phase 1の具体例
+
+**修正前**: Week 1-4の週ベース計画（不正確）
+**修正後**: CR1, CR3, CR4-6, PVのコミットベース（正確）
+
+```
+Story #20: CR1 (a5d3b77) - 初期Docker基盤
+Story #21: CR3 (fad82e6) - app/laravel/構造 ⚠️大規模
+Story #22: CR4-6 - 洗練とMQTT
+Story #23: PV - 検証と品質
+```
+
 ## 🤝 コントリビューション
 
-1. フィーチャーブランチ作成
-2. コード実装・テスト
-3. プルリクエスト作成
-4. CI/CD自動チェック通過
-5. コードレビュー・マージ
+### 実装フロー
+1. PinkieItコミット履歴確認（**必須**）
+2. コミットベースのタスク作成
+3. YokaKitリポジトリでGitHub Issue作成
+4. フィーチャーブランチで実装
+5. プルリクエスト作成（PinkieItコミット参照）
+6. CI/CD自動チェック通過
+7. コードレビュー・マージ
+8. YokaKit_Replayサブモジュール更新
 
 ## 📄 ライセンス
 
