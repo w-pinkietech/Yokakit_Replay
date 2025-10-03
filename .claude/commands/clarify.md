@@ -1,5 +1,5 @@
 ---
-description: Verify constitutional compliance and confirm PinkieIt commit range accuracy for replay
+description: Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec.
 ---
 
 The user input to you can be provided directly by the agent or as a command argument - you **MUST** consider it before proceeding with the prompt (if not empty).
@@ -10,142 +10,263 @@ $ARGUMENTS
 
 ## Goal
 
-Verify that the phase specification is ready for implementation by:
-1. Confirming all PinkieIt commits are accurately analyzed
-2. Validating constitutional compliance strategy
-3. Detecting any missing or out-of-scope commits
-4. Ensuring YokaKit naming adaptations are complete
+Detect and reduce ambiguity or missing decision points in the active feature specification and record the clarifications directly in the spec file.
 
-**This step is CRITICAL** to prevent Phase 1's scope creep mistake (T033-T047).
+**Note**: This clarification workflow can run BEFORE or AFTER `/plan`. If the user explicitly states they are skipping clarification (e.g., exploratory spike), you may proceed, but must warn that downstream rework risk increases.
 
-## Execution Workflow
+## Execution steps
 
 ### 1. Load Prerequisites
 
-Run the setup script to get paths:
-```bash
-.specify/scripts/bash/check-prerequisites.sh --json --paths-only
+Run `.specify/scripts/bash/check-prerequisites.sh --json --paths-only` from repo root **once** (combined `--json --paths-only` mode). Parse minimal JSON payload fields:
+- `FEATURE_DIR`
+- `FEATURE_SPEC`
+- (Optionally capture `IMPL_PLAN`, `TASKS` for future chained flows.)
+
+If JSON parsing fails, abort and instruct user to re-run `/specify` or verify feature branch environment.
+
+### 2. Perform Structured Ambiguity & Coverage Scan
+
+Load the current spec file. Perform a structured ambiguity & coverage scan using this taxonomy. For each category, mark status: **Clear / Partial / Missing**. Produce an internal coverage map used for prioritization (do not output raw map unless no questions will be asked).
+
+#### Standard Categories (for all projects)
+
+**Functional Scope & Behavior**:
+- Core user goals & success criteria
+- Explicit out-of-scope declarations
+- User roles / personas differentiation
+
+**Domain & Data Model**:
+- Entities, attributes, relationships
+- Identity & uniqueness rules
+- Lifecycle/state transitions
+- Data volume / scale assumptions
+
+**Interaction & UX Flow**:
+- Critical user journeys / sequences
+- Error/empty/loading states
+- Accessibility or localization notes
+
+**Non-Functional Quality Attributes**:
+- Performance (latency, throughput targets)
+- Scalability (horizontal/vertical, limits)
+- Reliability & availability (uptime, recovery expectations)
+- Observability (logging, metrics, tracing signals)
+- Security & privacy (authN/Z, data protection, threat assumptions)
+- Compliance / regulatory constraints (if any)
+
+**Integration & External Dependencies**:
+- External services/APIs and failure modes
+- Data import/export formats
+- Protocol/versioning assumptions
+
+**Edge Cases & Failure Handling**:
+- Negative scenarios
+- Rate limiting / throttling
+- Conflict resolution (e.g., concurrent edits)
+
+**Constraints & Tradeoffs**:
+- Technical constraints (language, storage, hosting)
+- Explicit tradeoffs or rejected alternatives
+
+**Terminology & Consistency**:
+- Canonical glossary terms
+- Avoided synonyms / deprecated terms
+
+**Completion Signals**:
+- Acceptance criteria testability
+- Measurable Definition of Done style indicators
+
+**Misc / Placeholders**:
+- TODO markers / unresolved decisions
+- Ambiguous adjectives ("robust", "intuitive") lacking quantification
+
+#### YokaKit_Replay Specific Categories (if commit-based replay)
+
+**Constitutional Compliance** (if PinkieIt commits referenced):
+- Identity preservation strategy (YokaKit vs PinkieIt naming)
+- Historical fidelity (commit range accuracy)
+- Audit trail requirements (commit hash references)
+- Branding adaptation plans
+
+**Commit Range Accuracy** (if commit-based):
+- All commits from git log accounted for
+- No extra commits in spec not in actual range
+- Commit hashes are full 40-character (not abbreviated)
+- Commit dates are accurate
+
+**YokaKit Naming Adaptations** (if from PinkieIt):
+- Specific file + change details for each adaptation
+- No vague statements ("update naming as needed")
+- Database identity preservation documented
+- Service name adaptations specified
+
+**Scope Boundaries** (if phased implementation):
+- All commits logically belong to this phase
+- Dependency commits from earlier phases identified
+- Follow-up commits for next phases deferred
+
+For each category with **Partial** or **Missing** status, add a candidate question opportunity unless:
+- Clarification would not materially change implementation or validation strategy
+- Information is better deferred to planning phase (note internally)
+
+### 3. Generate Prioritized Question Queue
+
+Generate (internally) a prioritized queue of candidate clarification questions (maximum 5). Do NOT output them all at once. Apply these constraints:
+
+- **Maximum of 5 total questions** across the whole session.
+- Each question must be answerable with EITHER:
+  * A short multiple-choice selection (2-5 distinct, mutually exclusive options), OR
+  * A one-word / short-phrase answer (explicitly constrain: "Answer in <=5 words").
+
+- Only include questions whose answers materially impact architecture, data modeling, task decomposition, test design, UX behavior, operational readiness, or compliance validation.
+
+- Ensure category coverage balance: attempt to cover the highest impact unresolved categories first; avoid asking two low-impact questions when a single high-impact area (e.g., security posture, constitutional compliance) is unresolved.
+
+- Exclude questions already answered, trivial stylistic preferences, or plan-level execution details (unless blocking correctness).
+
+- Favor clarifications that reduce downstream rework risk or prevent misaligned acceptance tests.
+
+- If more than 5 categories remain unresolved, select the top 5 by **(Impact × Uncertainty)** heuristic.
+
+**Priority Order**:
+1. **Critical Errors** (blocking issues, constitutional violations)
+2. **Constitutional Adaptations** (if commit-based replay)
+3. **Functional Ambiguities** (core behavior unclear)
+4. **Data Model** (entity definitions incomplete)
+5. **Non-Functional** (performance, security unclear)
+6. **Scope Clarifications** (boundary issues)
+
+### 4. Sequential Questioning Loop (Interactive)
+
+Present **EXACTLY ONE question at a time**.
+
+For **multiple-choice questions** render options as a Markdown table:
+
+| Option | Description |
+|--------|-------------|
+| A | <Option A description> |
+| B | <Option B description> |
+| C | <Option C description> | (add D/E as needed up to 5)
+| Short | Provide a different short answer (<=5 words) | (Include only if free-form alternative is appropriate)
+
+For **short-answer style** (no meaningful discrete options), output a single line after the question: `Format: Short answer (<=5 words)`.
+
+After the user answers:
+- Validate the answer maps to one option or fits the <=5 word constraint.
+- If ambiguous, ask for a quick disambiguation (count still belongs to same question; do not advance).
+- Once satisfactory, record it in working memory (do not yet write to disk) and move to the next queued question.
+
+Stop asking further questions when:
+- All critical ambiguities resolved early (remaining queued items become unnecessary), OR
+- User signals completion ("done", "good", "no more"), OR
+- You reach 5 asked questions.
+
+Never reveal future queued questions in advance.
+
+If no valid questions exist at start, immediately report no critical ambiguities.
+
+### 5. Integration After EACH Accepted Answer (Incremental Update)
+
+Maintain in-memory representation of the spec (loaded once at start) plus the raw file contents.
+
+For the first integrated answer in this session:
+- Ensure a `## Clarifications` section exists (create it just after the highest-level contextual/overview section per the spec template if missing).
+- Under it, create (if not present) a `### Session YYYY-MM-DD` subheading for today.
+
+Append a bullet line immediately after acceptance: `- Q: <question> → A: <final answer>`.
+
+Then immediately apply the clarification to the most appropriate section(s):
+
+**Standard Categories**:
+- **Functional ambiguity** → Update or add a bullet in Functional Requirements.
+- **User interaction / actor distinction** → Update User Stories or Actors subsection (if present) with clarified role, constraint, or scenario.
+- **Data shape / entities** → Update Data Model (add fields, types, relationships) preserving ordering; note added constraints succinctly.
+- **Non-functional constraint** → Add/modify measurable criteria in Non-Functional / Quality Attributes section (convert vague adjective to metric or explicit target).
+- **Edge case / negative flow** → Add a new bullet under Edge Cases / Error Handling (or create such subsection if template provides placeholder for it).
+- **Terminology conflict** → Normalize term across spec; retain original only if necessary by adding `(formerly referred to as "X")` once.
+
+**YokaKit_Replay Specific**:
+- **Constitutional compliance** → Update Constitutional Handling section with specific skip/adaptation details
+- **Commit range accuracy** → Update PinkieIt Reference Commits section (add/remove commits)
+- **YokaKit adaptations** → Add specific file+change details to YokaKit Adaptations section
+- **Scope boundaries** → Adjust commit list or move to different phase section
+
+If the clarification invalidates an earlier ambiguous statement, replace that statement instead of duplicating; leave no obsolete contradictory text.
+
+**Save the spec file AFTER each integration** to minimize risk of context loss (atomic overwrite).
+
+Preserve formatting: do not reorder unrelated sections; keep heading hierarchy intact.
+
+Keep each inserted clarification minimal and testable (avoid narrative drift).
+
+### 6. Validation (Performed After EACH Write Plus Final Pass)
+
+- Clarifications session contains exactly one bullet per accepted answer (no duplicates).
+- Total asked (accepted) questions ≤ 5.
+- Updated sections contain no lingering vague placeholders the new answer was meant to resolve.
+- No contradictory earlier statement remains (scan for now-invalid alternative choices removed).
+- Markdown structure valid; only allowed new headings: `## Clarifications`, `### Session YYYY-MM-DD`.
+- Terminology consistency: same canonical term used across all updated sections.
+
+### 7. Write Updated Spec
+
+Write the updated spec back to `FEATURE_SPEC`.
+
+### 8. Report Completion
+
+After questioning loop ends or early termination:
+
+- Number of questions asked & answered.
+- Path to updated spec.
+- Sections touched (list names).
+- Coverage summary table listing each taxonomy category with Status:
+  - **Resolved** (was Partial/Missing and addressed)
+  - **Deferred** (exceeds question quota or better suited for planning)
+  - **Clear** (already sufficient)
+  - **Outstanding** (still Partial/Missing but low impact)
+- If any Outstanding or Deferred remain, recommend whether to proceed to `/plan` (if not run yet) or `/tasks` (if plan complete).
+- Suggested next command.
+
+**Example Output**:
+```
+✅ Clarifications Complete
+
+Session: YYYY-MM-DD
+Questions Asked: {count}/5
+Spec File: {FEATURE_SPEC}
+
+Sections Updated:
+- Functional Requirements (added {detail})
+- Data Model (clarified {entity})
+- Constitutional Handling (specified {adaptation}) [if YokaKit_Replay]
+
+Coverage Summary:
+| Category | Status |
+|----------|--------|
+| Functional Scope | Resolved ✅ |
+| Data Model | Resolved ✅ |
+| Constitutional Compliance | Resolved ✅ | [if applicable]
+| Commit Range Accuracy | Clear ✅ | [if applicable]
+| Non-Functional | Deferred (plan phase) |
+| Edge Cases | Outstanding (low impact) |
+
+Recommendation: {Proceed to /plan | Proceed to /tasks | Run /clarify again for {category}}
+
+Next: {/plan | /tasks}
 ```
 
-Parse JSON for:
-- `FEATURE_DIR`: Specs directory for this phase
-- `FEATURE_SPEC`: Path to spec.md
+## Behavior Rules
 
-If missing, instruct user to run `/specify` first.
+- If no meaningful ambiguities found (or all potential questions would be low-impact), respond: "No critical ambiguities detected worth formal clarification." and suggest proceeding.
+- If spec file missing, instruct user to run `/specify` first (do not create a new spec here).
+- Never exceed 5 total asked questions (clarification retries for a single question do not count as new questions).
+- Avoid speculative tech stack questions unless the absence blocks functional clarity.
+- Respect user early termination signals ("stop", "done", "proceed").
+- If no questions asked due to full coverage, output a compact coverage summary (all categories Clear) then suggest advancing.
+- If quota reached with unresolved high-impact categories remaining, explicitly flag them under Deferred with rationale.
 
-### 2. Load and Analyze Spec
-
-Read `FEATURE_SPEC` and extract:
-- Phase number and name
-- PinkieIt commit range (start..end)
-- List of commits to replay
-- Constitutional skips documented
-- YokaKit adaptations planned
-
-### 3. Verify Commit Range Accuracy
-
-For the commit range specified in spec:
-
-```bash
-cd pinkieit
-git log --oneline --reverse {start_commit}..{end_commit}
-```
-
-**Check**:
-- [ ] All commits listed in spec match `git log` output
-- [ ] No extra commits in git log missing from spec
-- [ ] Commit hashes are full 40-character (not abbreviated)
-- [ ] Commit dates are accurate
-
-**If discrepancies found**:
-- List missing commits
-- List extra commits in spec
-- Ask user to confirm which is correct
-
-### 4. Constitutional Compliance Verification
-
-For each commit in the range:
-
-#### A. Checkout and Analyze
-```bash
-git checkout {commit_hash}
-git show {commit_hash} --stat
-```
-
-#### B. Check for Constitutional Issues
-
-Detect rename/branding commits:
-- Files changed include: README.md, package.json, .env.example, language files
-- Commit message contains: "rename", "rebrand", "name change"
-- Diffs show: "YokaKit" → "PinkieIt", "yokakit" → "pinkieit"
-
-**Action**: If found and NOT marked as skip → Flag for user confirmation
-
-Detect identity preservation needs:
-- Database name changes (yokakit → pinkieit)
-- Application branding (APP_NAME, copyright)
-- Service names in docker-compose.yml
-
-**Action**: If found and NOT documented in adaptations → Flag for user
-
-#### C. Verify YokaKit Adaptations
-
-For each commit needing adaptation:
-- [ ] Spec documents what to change (e.g., "pinkieit → yokakit in docker-compose.yml")
-- [ ] Adaptation is specific (file name + change)
-- [ ] No vague statements ("update naming as needed")
-
-### 5. Scope Boundary Check
-
-Verify commits are within phase boundaries:
-
-```bash
-# Check if commits belong to other phases
-git log --oneline --all | grep -A5 -B5 "{commit_hash}"
-```
-
-**Questions to ask**:
-1. Do all commits logically belong together?
-2. Are there dependency commits from earlier phases?
-3. Are there follow-up commits that should be in next phase?
-
-### 6. Generate Clarification Report
-
-Create `## Clarifications` section in spec.md (if not exists):
-
-```markdown
-## Clarifications
-
-### Session {YYYY-MM-DD}
-
-#### Commit Range Verification
-- ✅ All {count} commits verified against PinkieIt git log
-- ✅ Commit hashes are full 40-character format
-- ⚠️ Discrepancy: {details} → **Resolution**: {user answer}
-
-#### Constitutional Compliance
-- ✅ {count} rename commits identified and marked for skip
-- ✅ {count} adaptation commits documented with specific changes
-- ⚠️ Missing constitutional handling for commit {hash}: {issue} → **Resolution**: {user answer}
-
-#### YokaKit Naming Adaptations
-- ✅ All adaptations documented with file paths
-- ⚠️ Vague adaptation: "{description}" → **Clarified**: {specific change}
-
-#### Scope Boundaries
-- ✅ All commits belong to this phase
-- ⚠️ Commit {hash} may belong to {other phase} → **Decision**: {keep/move/defer}
-
-#### Ready for Planning
-- [ ] All commits verified
-- [ ] Constitutional strategy confirmed
-- [ ] Adaptations clarified
-- [ ] Scope boundaries clear
-```
-
-### 7. Interactive Clarification (Max 5 Questions)
-
-Only ask questions if issues found. Priority order:
+## YokaKit_Replay Specific Question Examples
 
 **Priority 1: Critical Errors**
 1. "Commit {hash} appears in git log but not in spec. Include it?"
@@ -173,79 +294,6 @@ Only ask questions if issues found. Priority order:
    - B: No, defer to later phase
    - C: Split (explain)
 
-### 8. Update Spec After Each Answer
+## Context for Prioritization
 
-For each clarification:
-1. Add to Clarifications section: `- Q: {question} → A: {answer}`
-2. Update relevant spec section:
-   - Commit list (add/remove)
-   - Constitutional Skips (add commit with reason)
-   - YokaKit Adaptations (add specific change)
-   - Scope Analysis (adjust if needed)
-3. Save spec.md immediately
-
-### 9. Final Validation
-
-Before completing:
-- [ ] All commits from git log accounted for (replay, skip, or defer)
-- [ ] All constitutional skips have documented reasons
-- [ ] All adaptations have specific file+change details
-- [ ] No assumptions about commit contents (all verified with `git show`)
-- [ ] Clarifications section updated with session date
-
-### 10. Completion Report
-
-Output:
-```
-✅ Constitutional Verification Complete
-
-Spec File: {FEATURE_SPEC}
-Session: {date}
-
-Commits Verified: {count}
-Constitutional Skips: {count} (with reasons)
-YokaKit Adaptations: {count} (with specifics)
-Questions Asked: {count}/5
-
-Issues Resolved:
-- {issue_1}: {resolution}
-- {issue_2}: {resolution}
-
-Status: Ready for /plan ✅
-
-Next: Run /plan to generate commit-based implementation strategy
-```
-
-## Critical Requirements
-
-**DO NOT**:
-- Skip commit verification (always run `git log`)
-- Accept abbreviated commit hashes (require full 40-char)
-- Allow vague adaptations ("update as needed")
-- Assume commits without checking actual diffs
-
-**ALWAYS**:
-- Checkout PinkieIt at each commit to verify
-- Cross-reference spec commits with actual git log
-- Document constitutional skips with specific reasons
-- Ensure all adaptations have file names and specific changes
-- Save spec.md after each clarification
-
-## If No Issues Found
-
-Output:
-```
-✅ No critical clarifications needed
-
-All commits verified against PinkieIt git log
-Constitutional handling documented
-YokaKit adaptations specified
-Scope boundaries clear
-
-Ready for /plan ✅
-```
-
-## Example Session
-
-```
-User: "/clarify"
+$ARGUMENTS
