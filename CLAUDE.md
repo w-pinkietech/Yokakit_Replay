@@ -205,6 +205,9 @@ specs/001-implement-phase-0/
 ├── quickstart.md       # Setup and validation guide
 └── contracts/          # API schemas and validation rules
 
+.specify/memory/
+└── pinkieit-commit-pr-history.md      # Complete PinkieIt commit/PR history (277 commits, 35 PRs)
+
 memory/
 └── constitution.md     # Project constitution v1.1.0
 ```
@@ -329,8 +332,13 @@ bfd075e: Enhanced docker-compose (networking, healthcheck)
 
 #### Step 1: Identify Relevant PinkieIt Commits
 ```bash
-# For Phase 2 (Quality Infrastructure)
+# Quick reference: Check complete commit/PR history first
+cat .specify/memory/pinkieit-commit-pr-history.md
+
+# Then analyze specific commits in pinkieit submodule
 cd pinkieit
+
+# For Phase 2 (Quality Infrastructure)
 git log --oneline --grep="test\|quality\|phpunit\|coverage" --reverse
 
 # Or by date range (if known from timeline analysis)

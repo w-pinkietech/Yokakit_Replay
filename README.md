@@ -349,7 +349,10 @@ gh issue create --repo YOUR_ORG/YokaKit \
 
 2. **開発履歴分析**
    ```bash
-   # PinkieItの完全な開発履歴を時系列で確認
+   # PinkieItの完全な開発履歴を確認（277コミット、35PR）
+   cat .specify/memory/pinkieit-commit-pr-history.md
+
+   # または、pinkieitサブモジュールで直接確認
    cd pinkieit && git log --oneline --reverse
 
    # YokaKit（現状）の確認
@@ -438,6 +441,9 @@ docs/github-management/
 ├── LABEL_GUIDE.md                     # ラベル体系と使用ガイドライン
 ├── ISSUE_MILESTONE_GUIDE.md           # Epic/Story/Task定義
 └── README.md                          # GitHub管理概要
+
+.specify/memory/
+└── pinkieit-commit-pr-history.md      # PinkieIt全コミット・PR履歴（277コミット、35PR）
 ```
 
 ### Git管理
@@ -459,6 +465,7 @@ docs/github-management/
 - [YokaKit技術ベースライン](./docs/analysis/current-state/yokakit-current-state-analysis.md) - 現在のシステム詳細分析
 - [戦略マスタープラン](./docs/analysis/timeline/development-timeline-analysis.md) - 段階的実装戦略
 - [PinkieIt開発履歴](./docs/analysis/timeline/pinkieit-development-timeline.md) - 実証済み改善パターン
+- [PinkieItコミット・PR履歴](./.specify/memory/pinkieit-commit-pr-history.md) - 全コミット・PR履歴（277コミット、35PR）
 - [文書品質保証](./docs/analysis/quality-assurance/document-inconsistencies-analysis.md) - 分析文書の精度検証
 
 ### GitHub管理・運用
