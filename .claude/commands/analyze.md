@@ -10,15 +10,14 @@ $ARGUMENTS
 
 ## Goal
 
-Perform non-destructive validation of phase artifacts to ensure:
-1. PinkieIt commit range accuracy (spec ↔ git log)
-2. Constitutional compliance in all documents
-3. Task breakdown completeness (all commits → tasks)
-4. Consistency across spec.md, plan.md, tasks.md
+Perform comprehensive validation of the phase specification to ensure:
+1. **Commit Range Accuracy**: All PinkieIt commits properly analyzed
+2. **Constitutional Compliance**: Identity preservation and audit trail requirements met
+3. **Scope Integrity**: No out-of-phase features included
+4. **Task Coverage**: All commits have corresponding tasks
+5. **Implementation Readiness**: All artifacts complete and consistent
 
-**This is a READ-ONLY analysis command. NO file modifications.**
-
-**Critical for replay project**: Prevent Phase 1 scope creep mistakes by validating actual commits vs documented commits.
+**This is a READ-ONLY analysis. NO files will be modified.**
 
 ## Execution Workflow
 
@@ -31,483 +30,464 @@ Run the setup script:
 
 Parse JSON for:
 - `FEATURE_DIR`: Specs directory
-- `spec.md`: Phase specification
-- `plan.md`: Implementation plan
-- `tasks.md`: Task breakdown
-- `research.md`: Commit analysis
+- `FEATURE_SPEC`: spec.md path
+- `IMPL_PLAN`: plan.md path
+- `TASKS_FILE`: tasks.md path
 
-**Verification**:
-- [ ] All required files exist
-- [ ] Constitution loaded (memory/constitution.md)
+**Abort if missing**: Instruct user to run prerequisite commands.
 
-**If missing**: Report which prerequisite command to run.
+### 2. Load All Artifacts
 
-### 2. Load Artifacts
+Read and parse:
+- **spec.md**: Phase description, commit range, clarifications
+- **plan.md**: Commit replay strategy, constitutional handling
+- **tasks.md**: Task breakdown, CR mapping
+- **research.md**: Technical analysis (if exists)
+- **constitution**: `.specify/memory/constitution.md` (non-negotiable)
 
-Read all phase documents:
+### 3. Build Semantic Models
 
-**spec.md**:
-- Phase number and name
-- PinkieIt commit range
-- Commit list
-- Constitutional clarifications
-- YokaKit adaptations
+#### Commit Inventory
+From spec.md and plan.md:
+- PinkieIt commit range (start..end)
+- Each commit's:
+  - Full hash (40-char)
+  - Short hash
+  - Date
+  - Description
+  - Constitutional status (replay | skip | adapt)
 
-**plan.md**:
-- Commit replay strategy (CR1-CRN)
-- Constitutional handling
+#### Task Inventory
+From tasks.md:
+- All tasks (T001, T002, ...)
+- Task type (Analyze | Implement | Validate | Commit | GitHub)
+- CR mapping (which commit each task belongs to)
+- File references
 - Validation criteria
 
-**tasks.md**:
-- Task breakdown (T001-T{end})
-- Commit replay mapping
-- Constitutional skip documentation
+#### Constitutional Requirements
+From constitution:
+- Identity Preservation: YokaKit naming mandatory
+- Historical Fidelity: PinkieIt commit references required
+- Audit Trail: Full commit hash references mandatory
+- Sequential Phases: No cross-phase contamination
 
-**research.md**:
-- PinkieIt commit analysis
-- Technical decisions
-- Implementation patterns
+### 4. Detection Passes
 
-**Constitution** (memory/constitution.md):
-- Identity Preservation principles
-- Historical Fidelity requirements
-- Sequential Phase constraints
+#### A. Commit Range Accuracy
 
-### 3. PinkieIt Commit Range Validation
+**Verify**:
+1. Run actual git log:
+   ```bash
+   cd pinkieit
+   git log --oneline --reverse {start_commit}..{end_commit}
+   ```
 
-**Objective**: Verify spec commits match actual PinkieIt git history
-
-#### A. Extract Spec Commit Range
-
-From spec.md:
-- Start commit: {start_hash}
-- End commit: {end_hash}
-- Documented commits: {list}
-- Constitutional skips: {list}
-
-#### B. Get Actual PinkieIt Commits
-
-```bash
-cd pinkieit
-git log --oneline --reverse {start_hash}..{end_hash}
-```
-
-#### C. Compare Spec vs Git Log
-
-**Check**:
-- [ ] All spec commits exist in git log
-- [ ] No git log commits missing from spec
-- [ ] All commit hashes are full 40-character
-- [ ] Constitutional skips documented with reasons
-
-**Report Discrepancies**:
-```markdown
-## Commit Range Validation
-
-### ✅ Matches (git log = spec)
-- {hash}: {description}
-- ...
-
-### ❌ Missing from Spec (in git log, not in spec)
-- {hash}: {description}
-  - **Risk**: Scope gap, feature missing
-  - **Action**: Add to spec or document exclusion reason
-
-### ❌ Extra in Spec (in spec, not in git log)
-- {hash}: {description}
-  - **Risk**: Invalid reference, scope creep
-  - **Action**: Remove from spec or verify hash
-
-### ⚠️ Abbreviated Hashes (not full 40-char)
-- {short_hash}: {description}
-  - **Risk**: Audit trail ambiguity
-  - **Action**: Expand to full hash
-```
-
-### 4. Constitutional Compliance Analysis
-
-**Objective**: Verify all documents follow constitutional requirements
-
-#### A. Identity Preservation Validation
-
-**Scan all documents for violations**:
-```bash
-# Check for pinkieit references in specs
-grep -ri "pinkieit" {FEATURE_DIR}/ --exclude-dir=contracts
-
-# Should only appear in:
-# - PinkieIt commit references (acceptable)
-# - Constitutional adaptation docs (acceptable)
-# - NOT in: Implementation code examples, config samples
-```
+2. Compare with spec.md commits:
+   - [ ] All git log commits listed in spec
+   - [ ] No extra commits in spec not in git log
+   - [ ] All commit hashes are full 40-character
+   - [ ] Commit dates match git log
 
 **Report**:
-```markdown
-## Constitutional: Identity Preservation
+- Missing commits (in git log, not in spec)
+- Extra commits (in spec, not in git log)
+- Abbreviated hashes (not 40-char)
 
-### ✅ Compliant
-- All PinkieIt references are in commit citations
-- All YokaKit adaptations documented
-- No identity violations in implementation examples
+**Severity**: CRITICAL (any discrepancy)
 
-### ❌ Violations
-- {file}:{line}: "pinkieit" in config example
-  - **Risk**: Constitutional violation
-  - **Action**: Replace with yokakit
+#### B. Constitutional Compliance
 
-- {file}:{line}: Database name "pinkieit"
-  - **Risk**: Identity not preserved
-  - **Action**: Change to yokakit
-```
+**Identity Preservation**:
+1. Check spec.md for YokaKit naming adaptations:
+   - [ ] pinkieit → yokakit documented
+   - [ ] PinkieIt → YokaKit documented
+   - [ ] Database identity preserved
 
-#### B. Historical Fidelity Validation
+2. Check tasks.md for constitutional validation:
+   - [ ] Each CR has validation task
+   - [ ] Validation includes `grep -ri "pinkieit"` check
+   - [ ] Commit tasks note "YokaKit identity preserved"
 
-**Check commit references**:
-- [ ] All CRs reference PinkieIt commit hashes
-- [ ] All hashes are full 40-character
-- [ ] All commit dates documented
-- [ ] No assumptions about commit contents
+**Historical Fidelity**:
+1. Check commit skip rationale:
+   - [ ] All skips have constitutional reason
+   - [ ] Rename commits marked as skip
+   - [ ] Branding commits marked for adaptation
 
-**Report**:
-```markdown
-## Constitutional: Historical Fidelity
+2. Check commit references:
+   - [ ] All tasks reference PinkieIt commit hash
+   - [ ] Commit messages template includes hash
+   - [ ] Audit trail documented
 
-### ✅ Compliant
-- All CRs reference full PinkieIt hashes
-- All commit dates documented
-- research.md based on actual git show output
+**Severity**: CRITICAL (constitutional violations)
 
-### ❌ Violations
-- CR{N}: Missing PinkieIt hash reference
-  - **Risk**: Audit trail broken
-  - **Action**: Add full commit hash
+#### C. Scope Integrity
 
-- CR{N}: Assumed feature without git verification
-  - **Risk**: Scope creep (Phase 1 mistake)
-  - **Action**: Verify with git show {hash}
-```
+**Phase Boundary Check**:
+1. Analyze commit dates:
+   - [ ] All commits within expected timeline
+   - [ ] No commits from future phases
+   - [ ] No commits from prior phases (unless dependency)
 
-#### C. Sequential Phase Validation
+2. Compare with development timeline:
+   - Read `docs/analysis/timeline/pinkieit-development-timeline.md`
+   - Verify commits belong to this phase
 
-**Check phase dependencies**:
-- [ ] Phase {N-1} completed before Phase {N}
-- [ ] No Phase {N+1} features in Phase {N}
-- [ ] Dependencies documented
+3. Check for scope creep:
+   - [ ] No features not in actual commits
+   - [ ] No assumption-based tasks
+   - [ ] All tasks traceable to specific commit
 
 **Report**:
-```markdown
-## Constitutional: Sequential Phases
+- Out-of-scope commits
+- Assumption-based features
+- Phase boundary violations
 
-### ✅ Compliant
-- Phase {N} follows Phase {N-1} completion
-- No future phase features included
-- All dependencies from previous phases documented
+**Severity**: HIGH (scope creep risks)
 
-### ❌ Violations
-- Task T{XXX}: References Phase {N+1} feature
-  - **Risk**: Phase boundary violation
-  - **Action**: Defer to Phase {N+1}
+#### D. Task Coverage
 
-- CR{N}: Depends on Phase {N+1} infrastructure
-  - **Risk**: Circular dependency
-  - **Action**: Reorder or split commits
-```
+**Commit-to-Task Mapping**:
+1. For each commit to replay:
+   - [ ] Has Analyze task
+   - [ ] Has Implement task(s)
+   - [ ] Has Validate task
+   - [ ] Has Commit task
+   - [ ] Has GitHub task (if needed)
 
-### 5. Task Coverage Analysis
-
-**Objective**: Ensure all commits mapped to tasks
-
-#### A. Build Coverage Map
-
-For each PinkieIt commit (excluding skips):
-- Extract from tasks.md: Associated tasks
-- Verify: Analyze → Implement → Validate → Commit → GitHub pattern
-- Check: All files from commit covered in tasks
-
-#### B. Detect Coverage Gaps
-
-**Missing Coverage**:
-- Commits with no tasks
-- Files in commits not in tasks
-- Validations without success criteria
-
-**Excessive Coverage**:
-- Tasks referencing non-existent commits
-- Files not in any PinkieIt commit
-- Features from assumptions (not actual commits)
+2. For each task:
+   - [ ] References specific PinkieIt commit
+   - [ ] Specifies exact files
+   - [ ] Has validation criteria
 
 **Report**:
-```markdown
-## Task Coverage Analysis
+- Commits without tasks
+- Tasks without commit references
+- Vague tasks (no file paths)
 
-### Coverage Summary
-- Total Commits: {count}
-- Constitutional Skips: {skip_count}
-- Commits to Replay: {replay_count}
-- Commits with Tasks: {covered_count}
-- Coverage: {percentage}%
+**Severity**: HIGH (incomplete implementation)
 
-### ✅ Full Coverage
-- CR1 ({hash}): T001-T005 (5 tasks)
-- CR3 ({hash}): T006-T014 (9 tasks)
-- ...
+#### E. Artifact Consistency
 
-### ❌ Missing Coverage
-- Commit {hash}: {description}
-  - **Files**: {file_list}
-  - **Risk**: Implementation gap
-  - **Action**: Add tasks for this commit
+**Cross-Document Validation**:
+1. spec.md ↔ plan.md:
+   - [ ] Same commit count
+   - [ ] Same commit hashes
+   - [ ] Same constitutional skips
 
-### ❌ Excessive Coverage
-- T{XXX}: References non-existent commit {hash}
-  - **Risk**: Scope creep (Phase 1 lesson!)
-  - **Action**: Remove task or verify commit
+2. plan.md ↔ tasks.md:
+   - [ ] All CRs in plan have tasks
+   - [ ] Task count matches complexity estimate
+   - [ ] Constitutional handling consistent
 
-- T{XXX}: Implements {file} not in any commit
-  - **Risk**: Assumption-based feature
-  - **Action**: Verify file is from actual commit
-```
-
-### 6. Cross-Artifact Consistency Check
-
-**Objective**: Ensure spec, plan, tasks are aligned
-
-#### A. Commit Count Consistency
-
-**Check**:
-- spec.md commit count
-- plan.md CR count
-- tasks.md CR count
-- All should match (excluding constitutional skips)
-
-#### B. Naming Consistency
-
-**Check**:
-- Phase number and name consistent
-- CR numbering consistent (CR1-CRN)
-- Task numbering sequential (T001-T{end})
-
-#### C. Constitutional Handling Consistency
-
-**Check**:
-- Skips documented in all files
-- Adaptations consistent across files
-- Validation criteria aligned
+3. spec.md ↔ tasks.md:
+   - [ ] Clarifications addressed in tasks
+   - [ ] Success criteria have validation tasks
 
 **Report**:
-```markdown
-## Cross-Artifact Consistency
+- Inconsistent commit counts
+- Missing CR tasks
+- Unaddressed clarifications
 
-### ✅ Consistent
-- Commit count: spec (7) = plan (7) = tasks (7)
-- Phase name: "Phase 1 Docker Foundation" in all files
-- CR numbering: CR1-CR6 sequential
+**Severity**: MEDIUM (consistency issues)
 
-### ❌ Inconsistencies
-- spec.md: 7 commits, tasks.md: 6 commits
-  - **Missing**: {commit_description}
-  - **Action**: Add missing CR to tasks.md
+#### F. Implementation Readiness
 
-- plan.md: CR3 uses {name1}, tasks.md: CR3 uses {name2}
-  - **Risk**: Confusion, tracking issues
-  - **Action**: Standardize naming
+**Required Artifacts**:
+- [ ] spec.md with Clarifications section
+- [ ] plan.md with commit replay strategy
+- [ ] tasks.md with full task breakdown
+- [ ] research.md with technical analysis
+- [ ] contracts/ (if configuration changes)
 
-- spec.md: Skip {hash} (reason A), plan.md: Skip {hash} (reason B)
-  - **Risk**: Constitutional ambiguity
-  - **Action**: Align skip reasons
-```
-
-### 7. Scope Boundary Validation
-
-**Objective**: Detect out-of-scope features (Phase 1 lesson learned)
-
-#### A. Verify All Features from Commits
-
-**Check**:
-- All tasks reference actual commit files
-- No "nice to have" features
-- No assumptions about what commit "should" contain
-
-#### B. Detect Scope Creep Indicators
-
-**Red Flags**:
-- Tasks with no PinkieIt commit reference
-- Features not in any commit diff
-- "Also implement..." without commit citation
-- Validation scripts not in commit range
+**Quality Checks**:
+- [ ] No placeholders (TODO, TBD, ???)
+- [ ] No vague descriptions ("implement feature")
+- [ ] All file paths specific
+- [ ] All validation criteria measurable
 
 **Report**:
+- Missing artifacts
+- Incomplete sections
+- Vague specifications
+
+**Severity**: HIGH (blocks implementation)
+
+### 5. Severity Assignment
+
+**CRITICAL** (blocks implementation):
+- Commit range discrepancies
+- Constitutional violations
+- Missing constitutional skips
+- Abbreviated commit hashes
+
+**HIGH** (risks quality):
+- Out-of-scope commits
+- Incomplete task coverage
+- Missing validation tasks
+- Vague task descriptions
+
+**MEDIUM** (cosmetic issues):
+- Inconsistent terminology
+- Minor documentation gaps
+- Optional artifact missing
+
+**LOW** (improvements):
+- Wording suggestions
+- Additional validation ideas
+
+### 6. Generate Analysis Report
+
+Output Markdown report (NO FILE WRITES):
+
 ```markdown
-## Scope Boundary Validation
+# Phase {N} Specification Analysis Report
 
-### ✅ In Scope
-- All tasks reference PinkieIt commits
-- All features from actual commit diffs
-- No assumed features
+**Generated**: {date}
+**Phase**: {N} - {name}
+**PinkieIt Commits**: `{start_commit}..{end_commit}`
 
-### ❌ Out of Scope (Potential Scope Creep)
-- T{XXX}: Implement DevContainer
-  - **PinkieIt**: Commit 767388b (Phase 4, not Phase 1!)
-  - **Risk**: Phase 1 mistake repeat
-  - **Action**: Remove or defer to Phase 4
+## Executive Summary
 
-- T{XXX}: Add validation scripts
-  - **PinkieIt**: No commit in range
-  - **Risk**: Assumption-based feature
-  - **Action**: Remove or find actual commit
+**Overall Status**: {READY | ISSUES FOUND | CRITICAL ISSUES}
 
-### Lesson from Phase 1
-- Removed T033-T047: DevContainer + validation scripts
-- Reason: Not in actual Phase 1 commits (a5d3b77..13b40d1)
-- Always verify: git show {hash}
-```
+**Metrics**:
+- Commits Analyzed: {count}
+- Constitutional Skips: {count}
+- Tasks Generated: {count}
+- Critical Issues: {count}
+- High Issues: {count}
+- Medium Issues: {count}
 
-### 8. Generate Analysis Report
-
-Create structured report:
-
-```markdown
-# Phase {N} Analysis Report
-
-**Date**: {date}
-**Scope**: {start_commit}..{end_commit}
-**Status**: {READY | ISSUES_FOUND | CRITICAL_ERRORS}
-
----
-
-## Summary
-
-| Category | Status | Issues | Critical |
-|----------|--------|--------|----------|
-| Commit Range Validation | ✅ | 0 | 0 |
-| Constitutional Compliance | ⚠️ | 2 | 0 |
-| Task Coverage | ✅ | 0 | 0 |
-| Cross-Artifact Consistency | ⚠️ | 1 | 0 |
-| Scope Boundaries | ✅ | 0 | 0 |
-
-**Overall**: {PASS_WITH_WARNINGS | PASS | FAIL}
+**Recommendation**: {PROCEED | FIX ISSUES | BLOCKED}
 
 ---
 
 ## Detailed Findings
 
-{Include all validation sections from steps 3-7...}
+| ID | Category | Severity | Location | Summary | Recommendation |
+|----|----------|----------|----------|---------|----------------|
+| CR1 | Commit Range | CRITICAL | spec.md:L45 | Missing commit {hash} from git log | Add commit to spec, analyze |
+| CC1 | Constitutional | CRITICAL | tasks.md:T015 | No validation task for CR3 | Add validation task |
+| SI1 | Scope Integrity | HIGH | tasks.md:T033-T047 | DevContainer is Phase 4 feature | Remove out-of-scope tasks |
+| TC1 | Task Coverage | HIGH | plan.md:CR5 | No implement tasks for CR5 | Generate tasks for commit {hash} |
+| AC1 | Artifact Consistency | MEDIUM | plan.md vs tasks.md | Different commit counts (6 vs 5) | Verify and align |
 
 ---
 
-## Metrics
+## Commit Range Validation
 
-- **Commits**: {total} ({replay} to replay, {skip} skipped)
-- **Tasks**: {task_count} ({analyze} + {implement} + {validate} + {commit} + {github})
-- **Coverage**: {percentage}% (commits with tasks)
-- **Constitutional Violations**: {count}
-- **Scope Creep Indicators**: {count}
+**Expected** (from spec.md):
+- {hash_1}: {description}
+- {hash_2}: {description}
+- {hash_N}: {description}
+
+**Actual** (from git log):
+```bash
+cd pinkieit
+git log --oneline --reverse {start}..{end}
+```
+{git_log_output}
+
+**Discrepancies**:
+- ❌ Missing: {hash} - {description}
+- ❌ Extra: {hash} - {description}
+- ✅ Matching: {count} commits
+
+---
+
+## Constitutional Compliance
+
+### Identity Preservation
+- ✅ YokaKit naming adaptations documented
+- ✅ Database identity preservation noted
+- ⚠️ Issue: {specific_issue}
+
+### Historical Fidelity
+- ✅ All commits reference PinkieIt hashes
+- ✅ Constitutional skips documented
+- ⚠️ Issue: {specific_issue}
+
+### Audit Trail
+- ✅ Commit message template includes hash
+- ✅ Phase and CR documented
+- ⚠️ Issue: {specific_issue}
+
+---
+
+## Scope Integrity
+
+**Phase Boundaries**:
+- ✅ All commits within {phase_name} timeline
+- ⚠️ Out-of-scope: {commit_hash} - {reason}
+
+**Feature Analysis**:
+- ✅ All features from actual commits
+- ⚠️ Assumption-based: {feature} - {location}
+
+---
+
+## Task Coverage
+
+**Commit Replay Coverage**:
+| CR | PinkieIt Hash | Analyze | Implement | Validate | Commit | GitHub | Status |
+|----|---------------|---------|-----------|----------|--------|--------|--------|
+| CR1 | {hash} | T001 ✅ | T002-T005 ✅ | T006 ✅ | T007 ✅ | T008 ✅ | Complete |
+| CR2 | {hash} | SKIP | - | - | - | - | Constitutional |
+| CR3 | {hash} | T009 ✅ | T010-T015 ✅ | ❌ MISSING | T016 ✅ | T017 ✅ | Incomplete |
+
+**Issues**:
+- ❌ CR3 missing validation task
+- ❌ CR5 has no implement tasks
+
+---
+
+## Artifact Consistency
+
+**spec.md ↔ plan.md**:
+- Commits: {spec_count} vs {plan_count} {✅ | ❌}
+- Skips: {spec_count} vs {plan_count} {✅ | ❌}
+- Hashes: {match_status}
+
+**plan.md ↔ tasks.md**:
+- CRs: {plan_count} vs {tasks_count} {✅ | ❌}
+- Tasks per CR: {consistent | inconsistent}
+
+---
+
+## Implementation Readiness
+
+**Required Artifacts**:
+- [x] spec.md (with Clarifications)
+- [x] plan.md (with commit replay strategy)
+- [x] tasks.md (with task breakdown)
+- [x] research.md (technical analysis)
+- [ ] contracts/ (OPTIONAL - not needed for this phase)
+
+**Quality Checks**:
+- [ ] No placeholders: {count} found
+- [ ] No vague descriptions: {count} found
+- [ ] All file paths specific: {yes | no}
+- [ ] All validations measurable: {yes | no}
 
 ---
 
 ## Next Actions
 
-### Critical (Must Fix Before /implement)
-{If any critical issues:}
-- [ ] Fix: {issue_description}
-- [ ] Action: {specific_command}
+{IF CRITICAL ISSUES:}
+❌ **BLOCKED**: Cannot proceed with implementation
 
-### Recommended (Should Fix)
-{If non-critical issues:}
-- [ ] Improve: {issue_description}
-- [ ] Action: {suggestion}
+**Required Fixes** (Priority Order):
+1. {critical_issue_1}: {remediation}
+2. {critical_issue_2}: {remediation}
 
-### Ready to Proceed
-{If no critical issues:}
-- ✅ All validations passed
-- ✅ Constitutional compliance verified
-- ✅ Task coverage complete
-- ✅ Scope boundaries clear
+**Commands**:
+```bash
+# Fix commit range
+/specify "Phase {N}: {corrected_range}"
 
-**Next**: Run /implement to begin execution
+# Re-verify
+/clarify
+
+# Regenerate plan and tasks
+/plan
+/tasks
+```
+
+{IF HIGH ISSUES ONLY:}
+⚠️ **CAUTION**: Issues found but not blocking
+
+**Recommended Fixes**:
+1. {high_issue_1}: {remediation}
+2. {high_issue_2}: {remediation}
+
+**Decision**: User may proceed with caution or fix issues first
+
+{IF NO ISSUES:}
+✅ **READY**: All validations passed
+
+**Proceed with**:
+```bash
+/implement
+```
 
 ---
 
-**Analysis Complete** | {timestamp}
+## Constitutional Compliance Score
+
+**Overall**: {percentage}%
+
+**Breakdown**:
+- Identity Preservation: {score}% {✅ | ⚠️ | ❌}
+- Historical Fidelity: {score}% {✅ | ⚠️ | ❌}
+- Audit Trail: {score}% {✅ | ⚠️ | ❌}
+- Sequential Phases: {score}% {✅ | ⚠️ | ❌}
+
+**Target**: 100% (non-negotiable)
+
+---
+
+**Analysis Complete**: {date}
+**Status**: {READY | FIX REQUIRED | BLOCKED}
 ```
 
-### 9. Output and Recommendations
+### 7. User Interaction
 
-**If Critical Issues**:
+After report output, ask:
+
 ```
-❌ Critical Issues Found
+Would you like me to:
+A) Suggest concrete fixes for the top {N} issues
+B) Proceed with implementation despite warnings
+C) Abort and require manual review
 
-Phase {N} has {count} critical issues that MUST be resolved:
-
-1. {issue_1}: {description}
-   Action: {command_to_fix}
-
-2. {issue_2}: {description}
-   Action: {command_to_fix}
-
-Do NOT proceed with /implement until resolved.
-
-Recommended workflow:
-1. Fix critical issues
-2. Rerun /analyze
-3. Verify all ✅
-4. Run /implement
+[A/B/C]
 ```
 
-**If Warnings Only**:
-```
-⚠️ Warnings Found (Non-Critical)
-
-Phase {N} has {count} warnings:
-
-{warning_list}
-
-You may proceed with /implement, but consider fixing warnings for quality.
-
-Recommended:
-- Review warnings
-- Fix if time permits
-- Proceed to /implement if acceptable
-```
-
-**If All Clear**:
-```
-✅ Phase {N} Ready for Implementation
-
-All validations passed:
-- ✅ Commit range accurate ({count} commits verified)
-- ✅ Constitutional compliance (0 violations)
-- ✅ Task coverage ({percentage}% of commits)
-- ✅ Cross-artifact consistency
-- ✅ Scope boundaries clear
-
-Next: Run /implement to begin execution
-
-Estimated Duration: {weeks} weeks
-```
+**DO NOT** automatically fix issues. User must approve.
 
 ## Critical Requirements
 
 **DO NOT**:
-- Modify any files (READ-ONLY command)
-- Skip PinkieIt git log verification
-- Assume commit contents without git show
-- Ignore constitutional violations
+- Modify any files (READ-ONLY analysis)
+- Hallucinate missing sections
+- Skip constitutional validation
+- Approve implementation with CRITICAL issues
 
 **ALWAYS**:
-- Verify spec commits against actual git log
-- Check for Phase 1 scope creep patterns
-- Validate constitutional compliance in all docs
-- Report discrepancies with specific actions
+- Verify against actual git log
+- Check full 40-character hashes
+- Validate constitutional compliance
+- Report specific line numbers/locations
+- Provide actionable recommendations
 
-## Example Usage
+## If Artifacts Missing
 
+Output:
 ```
-User: "/analyze"
-Assistant: [Performs validation, outputs report]
+❌ Cannot perform analysis
 
-User: "/analyze --focus=constitutional"
-Assistant: [Deep dive on constitutional compliance only]
+Missing prerequisites:
+- [ ] spec.md: Run /specify
+- [ ] plan.md: Run /plan
+- [ ] tasks.md: Run /tasks
+
+Complete workflow:
+1. /specify "Phase {N}: {range}"
+2. /clarify
+3. /plan
+4. /tasks
+5. /analyze (this command)
+6. /implement (after validation)
 ```
+
+## Behavior Rules
+
+- **Deterministic**: Same input → same output (consistent IDs)
+- **Non-destructive**: Never modify files
+- **Specific**: Report line numbers, not vague "issues found"
+- **Actionable**: Every issue has remediation suggestion
+- **Constitutional**: Constitution is non-negotiable authority
 
 Context for analysis: $ARGUMENTS
