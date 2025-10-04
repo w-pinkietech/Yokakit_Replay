@@ -313,7 +313,8 @@ This architecture ensures:
 - **Phase 4**: Framework Modernization & DevContainer ✅ COMPLETED (1 day, 2025-10-04) - **PHP 8.2 + Laravel 10 + Reverb**
 - **Phase 5**: Multi-Architecture Docker Support ✅ COMPLETED (4 hours, 2025-10-04) - **AMD64 + ARM64**
 - **Phase 6**: CI/CD Pipeline & Multi-Architecture Publishing ✅ COMPLETED (8 hours, 2025-10-04) - **3 GitHub Actions workflows**
-- **Phase 7**: UI Modernization 📋 PLANNING - **Bootstrap 4 + Laravel-AdminLTE 3.15.x + Frontend Optimization**
+- **Phase 7A**: Framework Upgrade 📋 PLANNING - **PHP 8.4 + Laravel 12**
+- **Phase 7B**: UI Modernization 📋 PLANNING - **Bootstrap 4 + Laravel-AdminLTE 3.15.x + Frontend Optimization**
 
 ## Repository Structure
 ```text
@@ -663,7 +664,14 @@ git show {hash}:path/to/file
 ```
 
 ## Next Steps
-- **Phase 7 Planning**: UI Modernization (Bootstrap 4 + Laravel-AdminLTE 3.15.x)
+- **Phase 7A Planning**: Framework Upgrade (PHP 8.4 + Laravel 12)
+  - **Current Status**: YokaKit on PHP 8.2 + Laravel 10 (2 major versions behind)
+  - **Latest Stable**: PHP 8.4 (Nov 2024) + Laravel 12 (2025)
+  - **Upgrade Path**: PHP 8.2 → 8.3 → 8.4, Laravel 10 → 11 → 12
+  - **Priority**: Framework upgrades BEFORE UI modernization (dependency foundation)
+  - **Security**: PHP 8.2 supported until Dec 2026, Laravel 10 until Q1 2026
+  - **PinkieIt Status**: Also on PHP 8.2 + Laravel 10 (same baseline)
+- **Phase 7B Planning**: UI Modernization (Bootstrap 4 + Laravel-AdminLTE 3.15.x)
   - **Critical Discovery**: Laravel-AdminLTE package v4 does NOT exist yet (latest: v3.15.2)
   - **Clarification**: AdminLTE template v4 exists, but Laravel integration package (jeroennoten/laravel-adminlte) only supports AdminLTE v3
   - **PinkieIt Context**: PinkieIt attempted Bootstrap 5 migration (673643b) but correctly rolled back to Bootstrap 4 (e0ec4a7) due to Laravel-AdminLTE v3 limitation

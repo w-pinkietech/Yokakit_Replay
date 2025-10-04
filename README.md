@@ -124,7 +124,15 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
    - GitHub Container Registry 統合
    - 自動キャッシュライフサイクル管理
 
-7. **Phase 7: UI Modernization** (計画中)
+7. **Phase 7A: Framework Upgrade** (計画中 - 優先)
+   - **PHP 8.2 → 8.4** + **Laravel 10 → 12** へのアップグレード
+   - **現状**: PHP 8.2 + Laravel 10（最新より2バージョン遅れ）
+   - **最新安定版**: PHP 8.4（2024年11月）、Laravel 12（2025年）
+   - **アップグレード経路**: PHP 8.2 → 8.3 → 8.4、Laravel 10 → 11 → 12
+   - **優先理由**: UIモダナイゼーション前にフレームワーク基盤を最新化
+   - 425/425テスト維持（100%）
+
+8. **Phase 7B: UI Modernization** (Phase 7A後)
    - **Bootstrap 4 + Laravel-AdminLTE 3.15.x** への最適化
    - **重要発見**: AdminLTEテンプレートv4は存在するが、Laravel統合パッケージ（jeroennoten/laravel-adminlte）はv3まで（v4は未リリース）
    - **戦略**: PinkieItのBootstrap 4最適化経験から学び、Laravel-AdminLTE 3.15.xへアップグレード
