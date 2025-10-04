@@ -122,7 +122,16 @@ This architecture ensures:
 - Audit trail maintenance through submodule references
 - YokaKit identity preservation throughout
 
-## Current Status: Phase 3 Comprehensive Testing - COMPLETE ✅
+## Current Status: Phase 4 Specification - COMPLETE ✅
+
+### Phase 4 Specification Status ✅
+- **Spec Generation**: ✅ spec.md with 6 primary commits + 3 DevContainer unified (0cc0475..cdd8d6f)
+- **DevContainer Unified Implementation**: ✅ 3 PinkieIt commits merged into single implementation (0cc0475, 65eea6a, cdd8d6f)
+- **Implementation Strategy**: ✅ DevContainer-first approach (Phase 4A → 4B)
+- **Framework Upgrade Path**: ✅ PHP 8.2 + Laravel 10.x + Laravel Reverb documented
+- **Constitutional Compliance**: ✅ YokaKit naming adaptations, no identity conflicts
+- **GitHub PR**: ✅ PR #30 merged (specs/005-phase-4-e0eaabd/spec.md)
+- **PinkieIt References**: 8 commits (0cc0475, 65eea6a, cdd8d6f, e0eaabd, 4152b54, 862d537, d4db04f, 524c1c3)
 
 ### Phase 3 Completion Status ✅
 - **Test Infrastructure**: ✅ PHPUnit configuration, test database, Factory基盤 (PR #97)
@@ -197,8 +206,8 @@ This architecture ensures:
 - **Phase 1**: Docker Foundation ✅ COMPLETED
 - **Phase 2**: Docker Architecture Optimization ✅ COMPLETED (1 day, 2025-10-03)
 - **Phase 3**: Comprehensive Testing ✅ COMPLETED (2 days, 2025-10-03~04) - **425/425 tests (100%)**
-- **Phase 4**: DevContainer & Framework Modernization (1-2 weeks) 📋 NEXT
-- **Phase 5**: Advanced Docker Optimization (1 week)
+- **Phase 4**: Framework Modernization & DevContainer ✅ SPEC COMPLETE (implementation pending)
+- **Phase 5**: Advanced Docker Optimization (1 week) 📋 NEXT
 - **Phase 6**: CI/CD Integration & Final Polish (1 week)
 
 ## Repository Structure
@@ -423,7 +432,64 @@ FOR EACH COMMIT:
     → REPLAY with YokaKit identity preserved
 ```
 
-#### Step 4: Create Commit-Based tasks.md
+#### Step 4: Determine if Commits Should Be Unified (Phase 4 Lesson)
+
+**NEW: Unified Implementation Strategy** (Learned from Phase 4 DevContainer)
+
+Sometimes multiple PinkieIt commits should be **merged into a single implementation** for YokaKit:
+
+**When to Unify Multiple Commits:**
+```
+IF multiple commits represent:
+  1. Iterative refinements of the same feature (e.g., initial + optimization + finalization)
+  AND
+  2. YokaKit has different preconditions than PinkieIt (e.g., Phase 2 already complete)
+  AND
+  3. No value in intermediate states for YokaKit
+THEN:
+  → Merge commits into unified implementation
+  → Document all source commit hashes
+  → Implement final evolved form directly
+```
+
+**Phase 4 Example - DevContainer Unification:**
+```bash
+# PinkieIt had 3 separate commits:
+0cc0475 (2025-02-20): Initial DevContainer (basic setup)
+65eea6a (2025-06-26): DevContainer optimization (after Phase 2 Docker)
+cdd8d6f (2025-06-27): DevContainer finalization (polish)
+
+# YokaKit unified implementation:
+- Merged all 3 into single "DevContainer Complete Implementation"
+- Rationale: YokaKit Phase 2 Docker already complete
+- No need for intermediate "basic" then "optimized" versions
+- Implement final form directly
+
+# Documentation in spec.md:
+#### Commit 1: 0cc0475 + 65eea6a + cdd8d6f (Unified DevContainer)
+**Full Hashes**:
+- 0cc04757... (Initial)
+- 65eea6ab... (Optimization)
+- cdd8d6f8... (Finalization)
+**Implementation Note**: Final evolved form from day one
+```
+
+**Decision Criteria:**
+
+| Scenario | Strategy | Example |
+|----------|----------|---------|
+| Sequential feature development | Replay each commit | Laravel 10 initial + completion (separate PRs) |
+| Iterative refinements with dependencies met | Unify commits | DevContainer (Phase 2 Docker already done) |
+| Bug fixes for original commits | Include in unified implementation | Optimization fixes → final form |
+| Independent features | Keep separate | PHP 8.2 upgrade vs Laravel Reverb |
+
+**Benefits of Unification:**
+- ✅ Avoid unnecessary intermediate states
+- ✅ Leverage YokaKit's advanced baseline (Phase 2 complete)
+- ✅ Cleaner implementation (one PR instead of three)
+- ✅ Maintain full audit trail (all commit hashes documented)
+
+#### Step 5: Create Commit-Based tasks.md
 ```markdown
 ## COMMIT REPLAY 1: {hash} - {description}
 **PinkieIt Commit**: `{full_hash}`
@@ -437,7 +503,7 @@ FOR EACH COMMIT:
 - [ ] T004: Commit with reference to {hash}
 ```
 
-#### Step 5: Verify Before Creating GitHub Issues
+#### Step 6: Verify Before Creating GitHub Issues
 - [ ] All commits analyzed? (not just first/last)
 - [ ] Constitutional skips documented? (643414f, etc.)
 - [ ] Naming adaptations planned? (pinkieit → yokakit)
@@ -492,12 +558,13 @@ git show {hash}:path/to/file
 ```
 
 ## Next Steps
-- **Phase 4 Planning**: Create specs/005-phase-4-devcontainer/ (DevContainer & Framework Modernization)
-- **PinkieIt Analysis**: Identify Phase 4 commit range (DevContainer implementation)
-- **Framework Upgrade**: Laravel 9.19 → 10.x migration strategy
-- **PHP Upgrade**: PHP 8.0.2 → 8.2 compatibility verification
-- **DevContainer Setup**: VS Code development environment optimization
-- **GitHub Milestone**: Close Phase 3 milestone, prepare Phase 4
+- **Phase 4 Implementation**: Execute DevContainer & Framework Modernization
+  - Phase 4A: DevContainer environment setup (unified implementation)
+  - Phase 4B: PHP 8.2 + Laravel 10.x + Laravel Reverb upgrades
+- **Run /plan**: Generate commit-based implementation plan with DevContainer-first approach
+- **Run /tasks**: Create detailed task breakdown for Phase 4A and 4B
+- **YokaKit Repository**: Prepare for framework upgrade implementation
+- **GitHub Milestone**: Close Phase 4 spec milestone, prepare Phase 4 implementation milestone
 
 ### Phase 3 Achievements Summary
 - ✅ 425/425 tests passing (100%) 🎉
