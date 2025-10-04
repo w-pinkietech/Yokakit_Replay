@@ -68,8 +68,8 @@ PinkieItはYokaKitをベースに開発されたより進化したシステム�
 
 | コンポーネント | 役割 | リポジトリタイプ | 状態 |
 |---------------|------|----------------|------|
-| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | ✅ Phase 3完了 |
-| **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | ✅ Phase 3完了<br>**425/425 tests (100%)** 🎉 |
+| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | ✅ Phase 4 spec完了 |
+| **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | ✅ Phase 3完了<br>**425/425 tests (100%)** 🎉<br>📋 Phase 4実装準備中 |
 | **PinkieIt** | 実証済みパターン参照 | 読み取り専用サブモジュール | ✅ 完成済み (Laravel 10.x, Docker, CI/CD) |
 
 ## 🎯 リプレイ目標
@@ -103,11 +103,12 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
    - ✅ テストクリーンアップ (146 行削除)
    - ✅ 6 PRs マージ (#97-#102)
 
-4. **Phase 4: Framework Modernization & DevContainer** (2025-02-20, 2025-06-16-24 パターン)
-   - DevContainer 実装 (commit 0cc0475, 2025-02-20)
-   - PHP 8.2 + Laravel 10.x アップグレード
-   - Laravel Reverb WebSocket 移行
-   - 依存関係モダナイゼーション
+4. **Phase 4: Framework Modernization & DevContainer** ✅ **SPEC完了** (2025-10-04)
+   - ✅ Spec生成完了 (specs/005-phase-4-e0eaabd/spec.md)
+   - ✅ DevContainer統合実装戦略 (3コミット統合: 0cc0475 + 65eea6a + cdd8d6f)
+   - ✅ PHP 8.2 + Laravel 10.x アップグレードパス
+   - ✅ Laravel Reverb WebSocket 移行計画
+   - 📋 実装準備中 (Phase 4A: DevContainer → Phase 4B: Framework upgrades)
 
 5. **Phase 5: Docker Optimization** (2025-06-26 - 2025-07-02 パターン)
    - Multi-stage Dockerfile
@@ -197,22 +198,26 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 
 **最終結果**: **425/425 tests passing (100%)** 🎉
 
-#### **Phase 4: DevContainer & Framework Modernization** (1-2週間)
-**Timeline**: 1-2週間
-**Pattern Source**: PinkieIt Feb 20, 2025 (DevContainer) + June 16-24, 2025 (Framework)
+#### **Phase 4: Framework Modernization & DevContainer** ✅ **SPEC完了**
+**Timeline**: 1-2 weeks (specification complete, implementation pending)
+**Pattern Source**: PinkieIt 2025-02-20, 2025-06-17-27 (8 commits: 0cc0475..cdd8d6f)
+**Spec**: [specs/005-phase-4-e0eaabd/](./specs/005-phase-4-e0eaabd/)
 
-**Week 1: DevContainer Implementation**
-- Day 1-2: DevContainer configuration (commit 0cc0475)
-- Day 3: VS Code integration and extensions
-- Day 4-5: Development workflow optimization
+**DevContainer Unified Implementation** (0cc0475 + 65eea6a + cdd8d6f):
+- VS Code devcontainer.json with Laravel extensions
+- PHP 8.2 & Laravel 10 pre-configured settings
+- Quality tools integration (PHPUnit, PHPStan, SonarLint)
+- Separate dev service (port 18081 vs 18080)
+- GitHub Codespaces support
 
-**Week 2: Framework Modernization**
-- Day 1: PHP 8.2 Upgrade (infrastructure platform)
-- Day 2-3: Laravel 10.x Migration (major framework upgrade)
-- Day 4: Dependency Updates (composer modernization)
-- Day 5: Laravel Reverb (WebSocket modernization)
+**Framework Modernization**:
+- **PHP 8.2 Upgrade** (e0eaabd): Composer requirements, Larastan migration
+- **Laravel 10.x Migration** (4152b54, 862d537): Framework + packages, PHPUnit 10, Monolog 3.x
+- **Laravel Reverb** (d4db04f, 524c1c3): Modern WebSocket, remove legacy packages
 
-#### **Phase 5: Advanced Docker Optimization** (1週間)
+**Implementation Strategy**: DevContainer-first (Phase 4A), then framework upgrades in DevContainer (Phase 4B)
+
+#### **Phase 5: Advanced Docker Optimization** (1週間) 📋 NEXT
 **Timeline**: 1週間
 **Pattern Source**: PinkieIt June 26 - July 2, 2025
 
