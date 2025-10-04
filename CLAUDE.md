@@ -82,6 +82,82 @@ YokaKit_Replay/
 4. **Reference PinkieIt commits** for audit trail in commit messages
 5. **Update YokaKit_Replay submodule** reference after phase completion
 
+### Critical Development Guidelines
+
+#### ALWAYS Use DevContainer for Development
+**MANDATORY**: All development work MUST be performed in the DevContainer environment.
+
+```bash
+# ❌ WRONG: Using host or web-app container directly
+docker exec yokakit-web-app php artisan test
+npm run dev
+
+# ✅ CORRECT: Using DevContainer
+docker exec yokakit-dev php artisan test
+docker exec yokakit-dev npm run dev
+
+# DevContainer access
+docker exec -it yokakit-dev bash
+# Or use VS Code "Reopen in Container"
+```
+
+**Why DevContainer:**
+- Complete development environment with all tools (PHP 8.2, Composer, NPM, Git)
+- VS Code integration with IntelliSense, debugging, extensions
+- Consistent environment across all developers
+- Reverb + MQTT + Queue services all running
+- Port 18081 for web access
+- Port 8081 for Reverb WebSocket
+
+#### ALWAYS Link Issues When Creating PRs
+**MANDATORY**: Every PR MUST reference related issues in the description.
+
+```bash
+# ✅ CORRECT: PR with issue references
+gh pr create --title "feat: implement feature X" --body "$(cat <<'EOF'
+## Summary
+Implementation of feature X
+
+## Related Issues
+Closes #123
+Related to #124, #125
+
+## Changes
+- Added feature X
+...
+EOF
+)"
+
+# ❌ WRONG: PR without issue references
+gh pr create --title "feat: implement feature X" --body "Implementation"
+```
+
+**Required PR Format:**
+```markdown
+## Summary
+[Brief description]
+
+## Related Issues
+Closes #XXX          # Use "Closes" for issues that will be resolved
+Fixes #XXX           # Use "Fixes" for bug fixes
+Related to #XXX      # Use "Related to" for connected issues
+Part of #XXX         # Use "Part of" for Epic/Story relationships
+
+## Changes
+[Detailed changes]
+```
+
+**Linking Keywords** (auto-close on merge):
+- `Closes #XXX`
+- `Fixes #XXX`
+- `Resolves #XXX`
+
+**Reference Keywords** (no auto-close):
+- `Related to #XXX`
+- `Part of #XXX`
+- `Addresses #XXX`
+- `See #XXX`
+
 ### Example: Phase 1 Docker Foundation
 ```bash
 # Planning (in YokaKit_Replay)
