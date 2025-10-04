@@ -68,8 +68,8 @@ PinkieItはYokaKitをベースに開発されたより進化したシステム�
 
 | コンポーネント | 役割 | リポジトリタイプ | 状態 |
 |---------------|------|----------------|------|
-| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | ✅ Phase 5完了 |
-| **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | ✅ Phase 5完了<br>**Multi-Arch Docker (AMD64/ARM64)**<br>**425/425 tests (100%)** 🎉<br>📋 Phase 6計画準備中 |
+| **YokaKit_Replay** | 計画・分析・オーケストレーション | メタリポジトリ | 🚧 Phase 6実装中 |
+| **YokaKit** | 実際の開発対象アプリケーション | 独立GitHubリポジトリ<br>（サブモジュール参照） | 🚧 Phase 6実装中<br>**GitHub Actions CI/CD** (3 workflows)<br>**Multi-Arch Docker (AMD64/ARM64)** ✅<br>**425/425 tests (100%)** 🎉 |
 | **PinkieIt** | 実証済みパターン参照 | 読み取り専用サブモジュール | ✅ 完成済み (Laravel 10.x, Docker, CI/CD) |
 
 ## 🎯 リプレイ目標
@@ -241,13 +241,22 @@ PinkieIt の 189 コミットから抽出された実証済み改善工程：
 
 **実装結果**: クロスプラットフォーム対応Dockerイメージビルド環境完成
 
-#### **Phase 6: CI/CD Integration & Final Polish** (1週間) 📋 NEXT
-**Timeline**: 1週間
-**Pattern Source**: PinkieIt July 3, 2025 + ongoing
+#### **Phase 6: CI/CD Pipeline & Multi-Architecture Publishing** 🚧 **実装中** (2025-10-04)
+**Timeline**: 6-8時間（見積）
+**Pattern Source**: PinkieIt 2025-07-04 (1 commit: 6bb70e1)
+**Spec**: [specs/007-phase-6-cicd/](./specs/007-phase-6-cicd/)
 
-- Day 1-3: Comprehensive CI/CD (multi-architecture builds, security scanning)
-- Day 4: Bootstrap 5 Migration (UI framework modernization)
-- Day 5: Final Quality Validation (all systems integration test)
+**実装状況**:
+- ✅ **GitHub Actions Workflows作成**:
+  - docker-build.yml (180行) - マルチアーキテクチャビルド
+  - docker-publish.yml (91行) - レジストリ公開
+  - cache-cleanup.yml (49行) - キャッシュライフサイクル管理
+- ✅ **憲法遵守**: ${{ github.repository }} による自動YokaKit命名
+- 🚧 **Documentation更新**: CLAUDE.md, README.md
+- 🚧 **ghcr.io権限設定**
+- 🚧 **Workflowテスト**: マニュアルディスパッチ検証
+- 🚧 **最終検証とPR**
+- **PinkieIt Reference**: 6bb70e1 (1 commit)
 
 ## 🏗️ アーキテクチャ
 
