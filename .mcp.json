@@ -23,6 +23,23 @@
         "--headless=true",
         "--isolated=true"
       ]
+    },
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_ORG",
+        "mcp/sonarqube"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "<token>",
+        "SONARQUBE_ORG": "<org>"
+      }
     }
   }
 }
