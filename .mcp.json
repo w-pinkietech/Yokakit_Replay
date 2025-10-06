@@ -37,8 +37,8 @@
         "mcp/sonarqube"
       ],
       "env": {
-        "SONARQUBE_TOKEN": "<token>",
-        "SONARQUBE_ORG": "<org>"
+        "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
+        "SONARQUBE_ORG": "${SONARQUBE_ORG}"
       }
     }
   }
